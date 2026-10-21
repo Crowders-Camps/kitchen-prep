@@ -114,6 +114,25 @@ tr.sub td{background:var(--soft);font-family:var(--f-display);text-transform:upp
 .idxtable td input{width:80px}
 .idxtable td.sm{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
 .idxtable tr.edited td.item{color:var(--flag)}
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:none;background:var(--panel);padding:5px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-checked=true]{background:var(--ink);color:var(--bg)}
+.hint{font-size:12px;color:var(--muted)}
+input.is-ovr{border-color:var(--flag);background:var(--flag-soft)}
+.switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;margin-left:auto;font-size:13px;font-weight:600}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .track{width:36px;height:20px;border-radius:999px;background:var(--line);position:relative;transition:background .15s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--panel);box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
+.switch input:checked+.track{background:var(--pine)}
+.switch input:checked+.track::after{transform:translateX(16px)}
+.switch input:focus-visible+.track{outline:2px solid var(--mustard);outline-offset:2px}
+.ticket.off{opacity:.75;border-style:dashed}
+.ticket.off .thead{border-bottom:none;background:transparent}
+.ticket.off h3{color:var(--muted);text-decoration:line-through}
+.moff{font-style:normal;font-family:var(--f-mono);font-size:11px;color:var(--flag);margin-left:4px}
+.tab.alloff b{color:var(--muted);text-decoration:line-through}
 .gripc{width:28px;padding-right:0}
 .grip{border:none;background:none;color:var(--muted);cursor:grab;padding:6px 6px;border-radius:4px;touch-action:none;display:flex;align-items:center}
 .grip:hover{color:var(--ink);background:var(--soft)}
@@ -213,7 +232,7 @@ function defaults(){
   return {counts:{rg:100,rs:5,sg:50,ss:0,gfr:1,gfs:0}, week:mondayOf(new Date()),
     times:{BREAKFAST:'9:00 AM',LUNCH:'1:00 PM',DINNER:'5:30 PM'},
     notes:{BREAKFAST:'they are always late',LUNCH:'lunch stinks',DINNER:'dinner is awesome'},
-    menus, loc, mealCount:{}, idxEdits:{}, customItems:[], tab:'MONDAY'};
+    menus, loc, mealCount:{}, serve:{}, off:{}, idxEdits:{}, customItems:[], tab:'MONDAY'};
 }
 let S;
 try{const raw=localStorage.getItem(KEY); S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults();}catch(e){S=defaults();}
@@ -225,15 +244,24 @@ function allIndex(){ return SEED.index.concat(S.customItems||[]); }
 function item(ref){ if(ref==null) return null; const base=baseItem(ref); if(!base) return null; const e=S.idxEdits[ref]; return e?{...base,...e}:base; }
 function disp(name){return name.replace(/^\([A-Z]+\)\s*/,'').trim();}
 function tot(){const c=S.counts; const r=(+c.rg||0)+(+c.rs||0), s=(+c.sg||0)+(+c.ss||0); return {r,s,all:r+s,gf:(+c.gfr||0)+(+c.gfs||0),gfs:+c.gfs||0};}
-function mealHead(k){const v=S.mealCount[k]; return (v===undefined||v===null||v==='')?tot().all:+v;}
+function serveOf(k){return S.serve[k]||'BOTH';}
+function isOn(k){return !S.off[k];}
+function baseHead(k){const T=tot(), s=serveOf(k); return s==='RIDGE'?T.r:s==='SPRINGS'?T.s:T.all;}
+function mealGF(k){const T=tot(), s=serveOf(k), r=+S.counts.gfr||0, sp=+S.counts.gfs||0; return s==='RIDGE'?r:s==='SPRINGS'?sp:r+sp;}
+function hasOverride(k){const v=S.mealCount[k]; return !(v===undefined||v===null||v==='');}
+function mealHead(k){return hasOverride(k)?+S.mealCount[k]:baseHead(k);}
+function servings(n){return n?n+(n===1?' SERVING':' SERVINGS'):'NONE';}
 function cases(n,spc){return Math.ceil(n/spc - 1e-9);}
 function calc(line,k){
   const it=item(line.ref), T=tot();
-  if(line.ov) return {prep:line.ov, send:/AS NEEDED/i.test(line.ov)?'AS NEEDED':(it&&it.spc?cases(T.s,it.spc)+' '+it.unit:'—'), kind:/AS NEEDED/i.test(line.ov)?'asneeded':'manual'};
-  if(line.gf){ return {prep:T.gf?T.gf+(T.gf===1?' SERVING':' SERVINGS'):'NONE', send:T.gfs?T.gfs+(T.gfs===1?' SERVING':' SERVINGS'):'—', kind:'calc'}; }
-  if(!it||!it.spc) return {prep:'AS NEEDED', send:'AS NEEDED', kind:'asneeded'};
-  const n=mealHead(k);
-  return {prep:cases(n,it.spc)+' '+it.unit, send:cases(T.s,it.spc)+' '+it.unit, kind:'calc'};
+  const sv=serveOf(k);
+  if(line.ov){ const an=/AS NEEDED/i.test(line.ov);
+    return {prep:line.ov, send:sv==='RIDGE'?'—':an?'AS NEEDED':sv==='SPRINGS'?line.ov:(it&&it.spc?cases(T.s,it.spc)+' '+it.unit:'—'), kind:an?'asneeded':'manual'}; }
+  if(line.gf){ const g=mealGF(k), gs=+S.counts.gfs||0;
+    return {prep:servings(g), send:sv==='RIDGE'?'—':gs?servings(gs):'—', kind:'calc'}; }
+  if(!it||!it.spc) return {prep:'AS NEEDED', send:sv==='RIDGE'?'—':'AS NEEDED', kind:'asneeded'};
+  const prep=cases(mealHead(k),it.spc)+' '+it.unit;
+  return {prep, send:sv==='RIDGE'?'—':sv==='SPRINGS'?prep:cases(T.s,it.spc)+' '+it.unit, kind:'calc'};
 }
 
 /* ---------- catalog for picker ---------- */
@@ -276,7 +304,7 @@ function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s;
 /* ---------- tabs ---------- */
 function renderTabs(){
   const el=document.getElementById('tabs');
-  el.innerHTML=DAYS.map((d,i)=>'<button class="tab" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+'</b><small>'+dayDate(i)+'</small></button>').join('')
+  el.innerHTML=DAYS.map((d,i)=>(()=>{const on=MEALS.filter(m=>isOn(d+' '+m)).length; return '<button class="tab'+(on?'':' alloff')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+'</small></button>';})()).join('')
    +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>case counts</small></button>';
   el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView();});
   document.getElementById('pdfDay').disabled=S.tab==='INDEX';
@@ -300,20 +328,25 @@ function rowHtml(line,k,i){
    +'<td><button class="x" type="button" data-del="'+i+'" aria-label="Remove '+esc(disp(line.name))+'">×</button></td></tr>';
 }
 function ticket(d,m){
-  const k=d+' '+m, lines=S.menus[k]||[], loc=S.loc[k], hv=S.mealCount[k];
-  const overridden=hv!==undefined&&hv!==null&&hv!=='';
+  const k=d+' '+m, lines=S.menus[k]||[], loc=S.loc[k], sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
+  const overridden=hasOverride(k);
+  const toggle='<label class="switch" title="Include this meal"><input type="checkbox" data-on id="on_'+kid+'"'+(on?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">'+(on?'Serving':'Off')+'</span></label>';
+  if(!on) return '<section class="ticket off" data-k="'+k+'"><div class="thead"><h3>'+m+'</h3>'+toggle+'<span class="meta">Not needed. Left off the prep sheet and PDF.</span></div></section>';
+  const seg='<div class="seg" role="radiogroup" aria-label="Campus for '+k+'">'+[['BOTH','Both'],['RIDGE','Ridge'],['SPRINGS','Springs']].map(([v,l])=>'<button type="button" role="radio" aria-checked="'+(sv===v)+'" data-serve="'+v+'">'+l+'</button>').join('')+'</div>';
   const main=lines.map((l,i)=>[l,i]).filter(x=>!x[0].gf), gf=lines.map((l,i)=>[l,i]).filter(x=>x[0].gf);
   let body='';
   if(!lines.length) body='<div class="empty">No items yet. Add one below.</div>';
   else body='<div class="tscroll"><table><thead><tr><th aria-label="Reorder"></th><th>Item</th><th>Prep</th><th>Serving</th><th>Notes</th><th>To Springs</th><th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody>'
     +main.map(x=>rowHtml(x[0],k,x[1])).join('')
-    +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="9">Allergy prep · '+tot().gf+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
+    +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="9">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
     +'</tbody></table></div>';
   return '<section class="ticket" data-k="'+k+'">'
-   +'<div class="thead"><h3>'+m+'</h3><span class="meta time">'+esc(S.times[m])+'</span>'
-   +'<button type="button" class="chip '+loc+'" data-loc title="Switch kitchen">'+loc+'</button>'
-   +'<span class="meta"><label for="hc_'+k.replace(' ','_')+'">Headcount</label><input type="number" min="0" id="hc_'+k.replace(' ','_')+'" data-hc value="'+mealHead(k)+'">'
-   +(overridden?'<button class="btn small ghost" type="button" data-hcreset>Use total</button><span class="ovr">custom</span>':'')+'</span></div>'
+   +'<div class="thead"><h3>'+m+'</h3><span class="meta time">'+esc(S.times[m])+'</span>'+toggle
+   +'<span class="meta">Kitchen <button type="button" class="chip '+loc+'" data-loc title="Switch kitchen">'+loc+'</button></span></div>'
+   +'<div class="tbar"><span class="meta">Campus</span>'+seg
+   +'<span class="meta"><label for="hc_'+kid+'">Campers</label><input type="number" min="0" id="hc_'+kid+'" data-hc value="'+mealHead(k)+'" class="'+(overridden?'is-ovr':'')+'">'
+   +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small ghost" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'total':sv.toLowerCase()+' total')+'</span>')+'</span>'
+   +'<span class="meta">GF '+mealGF(k)+'</span></div>'
    +(S.notes[m]?'<div class="tnote">Notes: '+esc(S.notes[m])+'</div>':'')
    +body
    +'<div class="addrow"><input type="text" list="catalog" data-add placeholder="Add item from index…" aria-label="Add item to '+k+'">'
@@ -324,8 +357,13 @@ function renderDay(d){
   const v=document.getElementById('view'); v.innerHTML='<div class="meals">'+MEALS.map(m=>ticket(d,m)).join('')+'</div>';
   v.querySelectorAll('.ticket').forEach(t=>{
     const k=t.dataset.k, lines=S.menus[k];
+    t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView();
+      const n=document.getElementById('on_'+k.replace(' ','_')); if(n) n.focus(); };
+    if(!isOn(k)) return;
+    t.querySelectorAll('[data-serve]').forEach(b=>b.onclick=()=>{ if(b.dataset.serve==='BOTH') delete S.serve[k]; else S.serve[k]=b.dataset.serve; save(); renderView();
+      const n=document.querySelector('.ticket[data-k="'+k+'"] [data-serve="'+b.dataset.serve+'"]'); if(n) n.focus(); });
     t.querySelector('[data-loc]').onclick=()=>{S.loc[k]=S.loc[k]==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
-    const hc=t.querySelector('[data-hc]'); hc.onchange=()=>{const v=hc.value; S.mealCount[k]=(v===''||+v===tot().all)?null:Math.max(0,+v); save(); renderView();};
+    const hc=t.querySelector('[data-hc]'); hc.onchange=()=>{const v=hc.value; S.mealCount[k]=(v===''||+v===baseHead(k))?null:Math.max(0,+v); save(); renderView();};
     const hr=t.querySelector('[data-hcreset]'); if(hr) hr.onclick=()=>{S.mealCount[k]=null; save(); renderView();};
     t.querySelectorAll('[data-ov]').forEach(el=>el.onchange=()=>{lines[+el.dataset.ov].ov=el.value.trim().toUpperCase(); save(); renderView();});
     t.querySelectorAll('[data-note]').forEach(el=>el.onchange=()=>{lines[+el.dataset.note].note=el.value; save();});
@@ -473,19 +511,22 @@ function drawDay(doc,d,first){
   doc.text(T.all+' CAMPERS    RIDGE '+T.r+'    SPRINGS '+T.s+'    RIDGE GF '+(+S.counts.gfr||0)+'    SPRINGS GF '+(+S.counts.gfs||0),40,60);
   doc.setDrawColor(30); doc.setLineWidth(1); doc.line(40,66,W-40,66);
   let y=78;
+  const offM=MEALS.filter(m=>!isOn(d+' '+m));
+  if(offM.length){doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.text('Not served today: '+offM.join(', '),40,y+4); doc.setFont('helvetica','normal'); y+=16;}
   MEALS.forEach(m=>{
     const k=d+' '+m, lines=S.menus[k]||[];
+    if(!isOn(k)) return;
     const head=[['','ITEM','PREP','SERVING','NOTES','TO SPRINGS','E','D','G','SE','SO','DIET']];
     const toRow=l=>{const it=item(l.ref), c=calc(l,k); const a=it?it.al.map(x=>x?'X':''):['','','','',''];
       return ['',disp(l.name),c.prep,it&&it.size||'',l.note||'',c.send,...a,it?(it.vegan?'VG':it.veg?'V':''):''];};
     const body=lines.filter(l=>!l.gf).map(toRow);
     const gfl=lines.filter(l=>l.gf);
-    if(gfl.length){ body.push([{content:'ALLERGY PREP  ·  '+T.gf+' GF',colSpan:12,styles:{fontStyle:'bold',fillColor:[240,240,240],textColor:[150,50,35]}}]); gfl.forEach(l=>body.push(toRow(l))); }
+    if(gfl.length){ body.push([{content:'ALLERGY PREP  ·  '+mealGF(k)+' GF',colSpan:12,styles:{fontStyle:'bold',fillColor:[240,240,240],textColor:[150,50,35]}}]); gfl.forEach(l=>body.push(toRow(l))); }
     if(!body.length) body.push([{content:'No items',colSpan:12,styles:{textColor:[120,120,120],fontStyle:'italic'}}]);
     if(y>doc.internal.pageSize.getHeight()-120){doc.addPage(); y=48;}
     doc.setFillColor(28,36,32); doc.rect(40,y,W-80,22,'F'); doc.setTextColor(255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
     doc.text(m,48,y+15); doc.setFontSize(9.5); doc.setFont('helvetica','normal');
-    doc.text((S.times[m]||'')+'    '+S.loc[k]+'    '+mealHead(k)+' HEADCOUNT',W-48,y+15,{align:'right'}); doc.setTextColor(0);
+    doc.text((S.times[m]||'')+'    '+(serveOf(k)==='BOTH'?'RIDGE + SPRINGS':serveOf(k)+' ONLY')+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+S.loc[k],W-48,y+15,{align:'right'}); doc.setTextColor(0);
     y+=22;
     if(S.notes[m]){doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.text('Notes: '+S.notes[m],48,y+13); doc.setFont('helvetica','normal'); y+=18;}
     doc.autoTable({startY:y+2,head,body,margin:{left:40,right:40},theme:'grid',
@@ -509,8 +550,8 @@ async function exportPdf(days){
   try{await dl.save({filename:name,data:doc.output('blob')}); status('Saved '+name+'. Open it and print.');}
   catch(e){ if(e&&e.code==='declined') status('Export cancelled.'); else if(e&&e.code==='rate_limited') status('A save prompt is already open. Finish that one first.',true); else if(e&&['not_granted','unavailable','capability_disabled','capability_removed'].includes(e.code)) downloadsBlocked(); else status('Could not save the PDF ('+(e&&e.code||'error')+').',true);}
 }
-document.getElementById('pdfDay').onclick=()=>{ if(S.tab!=='INDEX') exportPdf([S.tab]); };
-document.getElementById('pdfWeek').onclick=()=>exportPdf(DAYS);
+document.getElementById('pdfDay').onclick=()=>{ if(S.tab==='INDEX') return; if(!MEALS.some(m=>isOn(S.tab+' '+m))){status('All meals on this day are turned off.',true); return;} exportPdf([S.tab]); };
+document.getElementById('pdfWeek').onclick=()=>{const ds=DAYS.filter(d=>MEALS.some(m=>isOn(d+' '+m))); if(!ds.length){status('Every meal this week is turned off.',true); return;} exportPdf(ds);};
 let armed=false;
 document.getElementById('resetAll').onclick=(e)=>{const b=e.currentTarget;
   if(!armed){armed=true; b.textContent='Click again to reset'; setTimeout(()=>{armed=false; b.textContent='Reset to sheet';},3000); return;}
