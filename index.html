@@ -18,7 +18,7 @@
   --bg:#f3f4f1; --panel:#ffffff; --ink:#1c2420; --muted:#5f6b64; --line:#d9ddd7; --soft:#e9ece7;
   --pine:#1f5a43; --pine-ink:#ffffff; --pine-soft:#dceae2;
   --mustard:#e6b422; --mustard-soft:#fbf0cc;
-  --flag:#b3402f; --flag-soft:#f6dfda;
+  --flag:#b3402f; --flag-soft:#f6dfda; --sm:#3d5f8f; --sm-soft:#dfe7f2;
   --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -26,11 +26,11 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#141917; --panel:#1c2320; --ink:#e7ece8; --muted:#9aa69f; --line:#2f3934; --soft:#242c28;
   --pine:#5fb48d; --pine-ink:#0e1a14; --pine-soft:#1f3a2e; --mustard:#e8bd3c; --mustard-soft:#3a3218;
-  --flag:#e2806f; --flag-soft:#3d2420; color-scheme:dark}}
+  --flag:#e2806f; --flag-soft:#3d2420; --sm:#8fb0e0; --sm-soft:#1f2a3c; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#141917; --panel:#1c2320; --ink:#e7ece8; --muted:#9aa69f; --line:#2f3934; --soft:#242c28;
   --pine:#5fb48d; --pine-ink:#0e1a14; --pine-soft:#1f3a2e; --mustard:#e8bd3c; --mustard-soft:#3a3218;
-  --flag:#e2806f; --flag-soft:#3d2420; color-scheme:dark}
+  --flag:#e2806f; --flag-soft:#3d2420; --sm:#8fb0e0; --sm-soft:#1f2a3c; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.45;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
@@ -44,7 +44,7 @@ button,input,select{font:inherit;color:inherit}
 .btn{border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:6px;cursor:pointer;font-weight:600}
 .btn:hover{border-color:var(--pine)}
 .btn.primary{background:var(--pine);color:var(--pine-ink);border-color:var(--pine)}
-.btn.ghost{background:transparent}
+.btn.quiet{background:transparent}
 .btn.small{padding:4px 10px;font-size:12px}
 .wrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:20px;max-width:1320px;margin:0 auto;align-items:start}
 @media (max-width:900px){.wrap{grid-template-columns:minmax(0,1fr)}}
@@ -57,7 +57,7 @@ button,input,select{font:inherit;color:inherit}
 .field label{font-size:13px}
 input[type=number],input[type=text],input[type=date],select{border:1px solid var(--line);background:var(--bg);border-radius:5px;padding:6px 8px;min-width:0;width:100%}
 input[type=number]{font-family:var(--f-mono);text-align:right}
-.totals{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.totals{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .tot{background:var(--soft);border-radius:6px;padding:8px;text-align:center}
 .tot b{display:block;font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums}
 .tot span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
@@ -141,7 +141,7 @@ tr.dragging td{opacity:.35}
 tr.drop-before td{box-shadow:inset 0 3px 0 var(--mustard)}
 tr.drop-after td{box-shadow:inset 0 -3px 0 var(--mustard)}
 .ticket.drop-into{outline:2px dashed var(--mustard);outline-offset:-2px}
-.ghost{position:fixed;left:0;top:0;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-weight:600;padding:6px 12px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dragghost{position:fixed;left:0;top:0;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-weight:600;padding:6px 12px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.25);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .newitem{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
 .newitem .nh{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
 .newitem h3{font-size:18px}
@@ -156,6 +156,43 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
 .nmsg{font-size:13px;color:var(--pine)} .nmsg.err{color:var(--flag)}
 .tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--pine-soft);color:var(--pine);border-radius:3px;padding:1px 5px;margin-left:4px}
 @media (prefers-reduced-motion:no-preference){.btn,.tab{transition:border-color .15s,background .15s}}
+.camp{display:flex;flex-direction:column;gap:6px;padding-top:8px;border-top:1px solid var(--soft)}
+.camp:first-of-type{border-top:none;padding-top:0}
+.own{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500;color:var(--sm);margin-left:4px}
+.tot.sm{background:var(--sm-soft)} .tot.sm b{color:var(--sm)}
+.chip.SM{background:var(--sm-soft);color:var(--sm);border-color:var(--sm);cursor:default}
+.seg button.smopt[aria-checked=true]{background:var(--sm);color:var(--pine-ink)}
+.ticket.smt{border-color:var(--sm)}
+.ticket.smt .thead{background:var(--sm-soft)}
+.mt{display:flex;flex-direction:column;gap:8px;padding:10px 16px;border-bottom:1px dashed var(--line)}
+.mtrow{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 12px}
+.mtrow label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mtt input{width:128px}
+.mtn{flex:1 1 260px}
+.camptag{align-self:center;min-width:112px;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.04em;font-size:15px;font-weight:700}
+.camptag.RIDGE{color:var(--pine)} .camptag.SPRINGS{color:var(--ink)} .camptag.SM{color:var(--sm)}
+.camptag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:middle;background:currentColor}
+.camptag.SPRINGS::before{background:var(--mustard)}
+.idxtable{min-width:1180px}
+.idxtable td{padding:4px 6px}
+.idxtable input[type=text],.idxtable input[type=number],.idxtable select{font-size:12.5px;padding:4px 6px;background:transparent;border-color:transparent}
+.idxtable input[type=text]:hover,.idxtable input[type=number]:hover,.idxtable select:hover{border-color:var(--line)}
+.idxtable input:focus,.idxtable select:focus{background:var(--bg);border-color:var(--pine)}
+.idxtable .w-name{width:230px;font-weight:600}
+.idxtable .w-cbi{width:92px;font-family:var(--f-mono)}
+.idxtable .w-num{width:74px}
+.idxtable .w-size{width:120px}
+.idxtable .w-meal{width:170px}
+.cks{display:flex;gap:3px}
+.ck{position:relative;cursor:pointer}
+.ck input{position:absolute;opacity:0;width:1px;height:1px}
+.ck span{display:inline-block;min-width:22px;text-align:center;font-size:10px;font-weight:600;font-family:var(--f-mono);border-radius:3px;padding:3px 4px;border:1px solid var(--line);color:var(--muted)}
+.ck input:checked+span{background:var(--flag-soft);color:var(--flag);border-color:var(--flag)}
+.cks.diet .ck input:checked+span{background:var(--pine-soft);color:var(--pine);border-color:var(--pine)}
+.ck input:focus-visible+span{outline:2px solid var(--mustard);outline-offset:1px}
+.idxtable tr.saved td{background:var(--pine-soft)}
+.x.armed{color:var(--flag);background:var(--flag-soft);font-size:12px;font-weight:600}
+.cks.diet .ck input:not(:checked)+span{background:none;color:var(--muted);border-color:var(--line)}
 </style>
 
 <header class="top">
@@ -166,7 +203,7 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
   <div class="actions">
     <button class="btn primary" id="pdfDay" type="button">Export day PDF</button>
     <button class="btn" id="pdfWeek" type="button">Export week PDF</button>
-    <button class="btn ghost" id="resetAll" type="button">Reset to sheet</button>
+    <button class="btn quiet" id="resetAll" type="button">Reset menus to sheet</button>
   </div>
 </header>
 <div class="status" id="status" role="status"></div>
@@ -175,33 +212,37 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
   <aside class="panel" id="panel">
     <div class="grp">
       <h2>Headcount</h2>
-      <div class="field"><label for="c_rg">Ridge campers</label><input type="number" min="0" id="c_rg"></div>
-      <div class="field"><label for="c_rs">Ridge staff</label><input type="number" min="0" id="c_rs"></div>
-      <div class="field"><label for="c_sg">Springs campers</label><input type="number" min="0" id="c_sg"></div>
-      <div class="field"><label for="c_ss">Springs staff</label><input type="number" min="0" id="c_ss"></div>
+      <div class="camp"><span class="lbl">Ridge</span>
+        <div class="field"><label for="c_rg">Campers</label><input type="number" min="0" id="c_rg"></div>
+        <div class="field"><label for="c_rs">Staff</label><input type="number" min="0" id="c_rs"></div>
+        <div class="field"><label for="c_gfr">Gluten free</label><input type="number" min="0" id="c_gfr"></div>
+      </div>
+      <div class="camp"><span class="lbl">Springs</span>
+        <div class="field"><label for="c_sg">Campers</label><input type="number" min="0" id="c_sg"></div>
+        <div class="field"><label for="c_ss">Staff</label><input type="number" min="0" id="c_ss"></div>
+        <div class="field"><label for="c_gfs">Gluten free</label><input type="number" min="0" id="c_gfs"></div>
+      </div>
+      <div class="camp"><span class="lbl">South Mountain <i class="own">own kitchen</i></span>
+        <div class="field"><label for="c_mg">Campers</label><input type="number" min="0" id="c_mg"></div>
+        <div class="field"><label for="c_ms">Staff</label><input type="number" min="0" id="c_ms"></div>
+        <div class="field"><label for="c_gfm">Gluten free</label><input type="number" min="0" id="c_gfm"></div>
+      </div>
       <div class="totals">
         <div class="tot"><b id="t_r">0</b><span>Ridge</span></div>
         <div class="tot"><b id="t_s">0</b><span>Springs</span></div>
-        <div class="tot main"><b id="t_all">0</b><span>Total</span></div>
+        <div class="tot main"><b id="t_rs">0</b><span>Ridge + Springs</span></div>
+        <div class="tot sm"><b id="t_m">0</b><span>South Mtn</span></div>
       </div>
-    </div>
-    <div class="grp">
-      <span class="lbl">Gluten free</span>
-      <div class="field"><label for="c_gfr">Ridge GF</label><input type="number" min="0" id="c_gfr"></div>
-      <div class="field"><label for="c_gfs">Springs GF</label><input type="number" min="0" id="c_gfs"></div>
     </div>
     <div class="grp">
       <label class="lbl" for="week">Week starting (Monday)</label>
       <input type="date" id="week">
     </div>
-    <div class="grp" id="mealsets">
-      <span class="lbl">Meal times &amp; standing notes</span>
-    </div>
     <div class="formula">
       <b>How prep is figured</b><br>
-      Prep = <code>ROUNDUP(meal headcount ÷ servings per case)</code><br>
+      Prep = <code>ROUNDUP(meal campers ÷ servings per case)</code><br>
       Send to Springs = <code>ROUNDUP(Springs total ÷ servings per case)</code><br>
-      Allergy prep = GF count. Items with no servings in the index print as AS NEEDED.
+      South Mountain meals have no Send to Springs column. Allergy prep = that meal's GF count. Items with no servings print as AS NEEDED.
     </div>
   </aside>
 
@@ -223,89 +264,110 @@ const MEALS = ['BREAKFAST','LUNCH','DINNER'];
 const RIDGE_MEALS = ['MONDAY LUNCH','MONDAY DINNER','TUESDAY BREAKFAST','WEDNESDAY LUNCH','WEDNESDAY DINNER','THURSDAY BREAKFAST','FRIDAY LUNCH','FRIDAY DINNER','SATURDAY BREAKFAST'];
 const AL = ['EGG','DAIRY','GLUTEN','SESAME','SOY'];
 const AL_SHORT = ['E','D','G','SE','SO'];
-const KEY = 'prepBuilder.v1';
+const CAMP_NAME = {RIDGE:'Ridge',SPRINGS:'Springs',SM:'South Mountain'};
+const SERVE_OPTS = [['BOTH','Ridge + Springs'],['RIDGE','Ridge'],['SPRINGS','Springs'],['SM','South Mountain']];
+const DEF_TIME = {BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
+const KEY = 'prepBuilder.v2', OLDKEY = 'prepBuilder.v1';
 
 function mondayOf(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);return x.toISOString().slice(0,10);}
+function seedCatalog(){ return SEED.index.map(it=>({id:it.id,cbi:it.cbi,name:it.name,spc:it.spc,unit:it.unit,size:it.size,meal:it.meal,compound:!!it.compound,al:it.al.slice(),veg:!!it.veg,vegan:!!it.vegan})); }
+function seedMenus(){ const loc={}, menus={};
+  DAYS.forEach(d=>MEALS.forEach(m=>{const k=d+' '+m; loc[k]=RIDGE_MEALS.includes(k)?'RIDGE':'SPRINGS'; menus[k]=(SEED.menus[k]||[]).map(x=>({ref:x.ref,name:x.name,note:x.note,gf:x.gf,ov:x.ov||''}));}));
+  return {loc,menus}; }
 function defaults(){
-  const loc={}; const menus={};
-  DAYS.forEach(d=>MEALS.forEach(m=>{const k=d+' '+m; loc[k]=RIDGE_MEALS.includes(k)?'RIDGE':'SPRINGS'; menus[k]=(SEED.menus[k]||[]).map(x=>({...x}));}));
-  return {counts:{rg:100,rs:5,sg:50,ss:0,gfr:1,gfs:0}, week:mondayOf(new Date()),
-    times:{BREAKFAST:'9:00 AM',LUNCH:'1:00 PM',DINNER:'5:30 PM'},
-    notes:{BREAKFAST:'they are always late',LUNCH:'lunch stinks',DINNER:'dinner is awesome'},
-    menus, loc, mealCount:{}, serve:{}, off:{}, idxEdits:{}, customItems:[], tab:'MONDAY'};
+  const {loc,menus}=seedMenus();
+  return {counts:{rg:100,rs:5,sg:50,ss:0,mg:0,ms:0,gfr:1,gfs:0,gfm:0}, week:mondayOf(new Date()),
+    menus, loc, mealCount:{}, serve:{}, off:{}, mt:{}, catalog:seedCatalog(), tab:'MONDAY'};
+}
+function to24(s){ const m=String(s||'').trim().match(/^(\d{1,2}):(\d{2})\s*([AP])M?$/i); if(!m) return null;
+  let h=+m[1]%12; if(m[3].toUpperCase()==='P') h+=12; return String(h).padStart(2,'0')+':'+m[2]; }
+function migrate(o){
+  const S=defaults();
+  ['counts','week','menus','loc','mealCount','serve','off','tab'].forEach(f=>{ if(o[f]!==undefined) S[f]=f==='counts'?Object.assign(S.counts,o.counts):o[f]; });
+  // catalog: seed + old per-item edits + old added items
+  const ed=o.idxEdits||{};
+  S.catalog=seedCatalog().map(it=>ed[it.id]?Object.assign(it,ed[it.id]):it).concat((o.customItems||[]).map(c=>{const x={...c}; delete x.custom; delete x.loc; return x;}));
+  // old single meal times become every campus's time for that meal
+  if(o.times) MEALS.forEach(m=>{const t=to24(o.times[m]); if(t&&t!==DEF_TIME[m]) DAYS.forEach(d=>{const k=d+' '+m; S.mt[k]=S.mt[k]||{}; ['RIDGE','SPRINGS','SM'].forEach(c=>{S.mt[k][c]={time:t,note:''};});});});
+  return S;
 }
 let S;
-try{const raw=localStorage.getItem(KEY); S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults();}catch(e){S=defaults();}
+try{
+  const raw=localStorage.getItem(KEY);
+  if(raw) S=Object.assign(defaults(),JSON.parse(raw));
+  else { const old=localStorage.getItem(OLDKEY); S=old?migrate(JSON.parse(old)):defaults(); }
+}catch(e){S=defaults();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+save();
 
-/* ---------- index + math ---------- */
-function baseItem(ref){ return ref>=10000 ? (S.customItems||[]).find(x=>x.id===ref) : SEED.index[ref]; }
-function allIndex(){ return SEED.index.concat(S.customItems||[]); }
-function item(ref){ if(ref==null) return null; const base=baseItem(ref); if(!base) return null; const e=S.idxEdits[ref]; return e?{...base,...e}:base; }
-function disp(name){return name.replace(/^\([A-Z]+\)\s*/,'').trim();}
-function tot(){const c=S.counts; const r=(+c.rg||0)+(+c.rs||0), s=(+c.sg||0)+(+c.ss||0); return {r,s,all:r+s,gf:(+c.gfr||0)+(+c.gfs||0),gfs:+c.gfs||0};}
+/* ---------- catalog + math ---------- */
+let CAT=new Map();
+function reindex(){CAT=new Map(S.catalog.map(it=>[it.id,it]));}
+reindex();
+function item(ref){ return ref==null?null:(CAT.get(ref)||null); }
+function disp(name){return String(name||'').replace(/^\([A-Z]+\)\s*/,'').trim();}
+function lineName(l){const it=item(l.ref); return disp(it?it.name:l.name);}
+function C(f){return +S.counts[f]||0;}
+function tot(){const r=C('rg')+C('rs'), s=C('sg')+C('ss'), m=C('mg')+C('ms'); return {r,s,m,rs:r+s};}
 function serveOf(k){return S.serve[k]||'BOTH';}
+function campusesFor(k){const s=serveOf(k); return s==='BOTH'?['RIDGE','SPRINGS']:[s];}
+function hasSend(k){return serveOf(k)!=='SM';}
 function isOn(k){return !S.off[k];}
-function baseHead(k){const T=tot(), s=serveOf(k); return s==='RIDGE'?T.r:s==='SPRINGS'?T.s:T.all;}
-function mealGF(k){const T=tot(), s=serveOf(k), r=+S.counts.gfr||0, sp=+S.counts.gfs||0; return s==='RIDGE'?r:s==='SPRINGS'?sp:r+sp;}
+function baseHead(k){const T=tot(), s=serveOf(k); return s==='RIDGE'?T.r:s==='SPRINGS'?T.s:s==='SM'?T.m:T.rs;}
+function mealGF(k){const s=serveOf(k); return s==='RIDGE'?C('gfr'):s==='SPRINGS'?C('gfs'):s==='SM'?C('gfm'):C('gfr')+C('gfs');}
 function hasOverride(k){const v=S.mealCount[k]; return !(v===undefined||v===null||v==='');}
 function mealHead(k){return hasOverride(k)?+S.mealCount[k]:baseHead(k);}
 function servings(n){return n?n+(n===1?' SERVING':' SERVINGS'):'NONE';}
 function cases(n,spc){return Math.ceil(n/spc - 1e-9);}
 function calc(line,k){
-  const it=item(line.ref), T=tot();
-  const sv=serveOf(k);
+  const it=item(line.ref), T=tot(), sv=serveOf(k);
   if(line.ov){ const an=/AS NEEDED/i.test(line.ov);
     return {prep:line.ov, send:sv==='RIDGE'?'—':an?'AS NEEDED':sv==='SPRINGS'?line.ov:(it&&it.spc?cases(T.s,it.spc)+' '+it.unit:'—'), kind:an?'asneeded':'manual'}; }
-  if(line.gf){ const g=mealGF(k), gs=+S.counts.gfs||0;
-    return {prep:servings(g), send:sv==='RIDGE'?'—':gs?servings(gs):'—', kind:'calc'}; }
+  if(line.gf){ const gs=C('gfs'); return {prep:servings(mealGF(k)), send:sv==='RIDGE'?'—':gs?servings(gs):'—', kind:'calc'}; }
   if(!it||!it.spc) return {prep:'AS NEEDED', send:sv==='RIDGE'?'—':'AS NEEDED', kind:'asneeded'};
   const prep=cases(mealHead(k),it.spc)+' '+it.unit;
   return {prep, send:sv==='RIDGE'?'—':sv==='SPRINGS'?prep:cases(T.s,it.spc)+' '+it.unit, kind:'calc'};
 }
 
-/* ---------- catalog for picker ---------- */
+/* ---------- meal times + notes per campus ---------- */
+function mtGet(k,c){const m=k.split(' ')[1]; const v=(S.mt[k]||{})[c]; return {time:v&&v.time!=null?v.time:DEF_TIME[m], note:v&&v.note||''};}
+function mtSet(k,c,f,val){S.mt[k]=S.mt[k]||{}; const cur=mtGet(k,c); cur[f]=val; S.mt[k][c]=cur;}
+function fmt12(t){ if(!t) return ''; const [h,mi]=t.split(':').map(Number); if(isNaN(h)) return t; return ((h%12)||12)+':'+String(mi).padStart(2,'0')+(h<12?' AM':' PM'); }
+
+/* ---------- picker ---------- */
 let labelToRef={};
 function buildCatalog(){
-  const base={}; allIndex().forEach(it=>{ if(it.meal==='OLD/DO NOT USE') return; const b=disp(it.name).toUpperCase(); (base[b]=base[b]||[]).push(it); });
+  const base={}; S.catalog.forEach(it=>{ if(it.meal==='OLD/DO NOT USE') return; const b=disp(it.name).toUpperCase(); if(!b) return; (base[b]=base[b]||[]).push(it); });
   labelToRef={}; const opts=[];
   Object.keys(base).sort().forEach(b=>{
-    const seen=new Set();
-    base[b].forEach(it0=>{ const it=item(it0.id); const sig=(it.spc||'')+it.unit;
-      if(seen.has(sig)) return; seen.add(sig);
-      let label=b; if(base[b].length>1 && new Set(base[b].map(x=>(x.spc||'')+x.unit)).size>1) label=b+' · '+(it.spc?it.spc+'/'+it.unit.toLowerCase():'no count');
-      labelToRef[label]=it.id; opts.push(label);
-    });
+    const seen=new Set(), multi=new Set(base[b].map(x=>(x.spc||'')+x.unit)).size>1;
+    base[b].forEach(it=>{ const sig=(it.spc||'')+it.unit; if(seen.has(sig)) return; seen.add(sig);
+      const label=multi?b+' · '+(it.spc?it.spc+'/'+it.unit.toLowerCase():'no count'):b;
+      labelToRef[label]=it.id; opts.push(label); });
   });
   document.getElementById('catalog').innerHTML=opts.map(o=>'<option value="'+esc(o)+'"></option>').join('');
 }
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 /* ---------- dates ---------- */
 function dayDate(i){const d=new Date(S.week+'T12:00:00'); if(isNaN(d)) return ''; d.setDate(d.getDate()+i); return (d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();}
 
 /* ---------- sidebar ---------- */
-const CF=['rg','rs','sg','ss','gfr','gfs'];
+const CF=['rg','rs','gfr','sg','ss','gfs','mg','ms','gfm'];
+function fillPanel(){ CF.forEach(f=>{document.getElementById('c_'+f).value=S.counts[f]??0;}); document.getElementById('week').value=S.week; renderTotals(); }
 function initPanel(){
-  CF.forEach(f=>{const el=document.getElementById('c_'+f); el.value=S.counts[f]; el.addEventListener('input',()=>{S.counts[f]=el.value===''?0:Math.max(0,+el.value); save(); renderTotals(); renderView();});});
-  const w=document.getElementById('week'); w.value=S.week; w.addEventListener('change',()=>{S.week=w.value; save(); renderTabs(); renderView();});
-  const ms=document.getElementById('mealsets');
-  MEALS.forEach(m=>{const row=document.createElement('div'); row.className='mealset';
-    row.innerHTML='<span class="lbl">'+m+'</span><input type="text" id="time_'+m+'" aria-label="'+m+' time"><input type="text" id="note_'+m+'" aria-label="'+m+' notes" placeholder="Notes">';
-    ms.appendChild(row);
-    const t=row.querySelector('#time_'+m), n=row.querySelector('#note_'+m); t.value=S.times[m]; n.value=S.notes[m];
-    t.addEventListener('change',()=>{S.times[m]=t.value; save(); renderView();});
-    n.addEventListener('change',()=>{S.notes[m]=n.value; save(); renderView();});
-  });
-  renderTotals();
+  CF.forEach(f=>{const el=document.getElementById('c_'+f); el.addEventListener('input',()=>{S.counts[f]=el.value===''?0:Math.max(0,+el.value); save(); renderTotals(); if(S.tab!=='INDEX') renderView(); else refreshAtCol();});});
+  const w=document.getElementById('week'); w.addEventListener('change',()=>{S.week=w.value; save(); renderTabs(); renderView();});
+  fillPanel();
 }
-function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s; t_all.textContent=T.all;}
+function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s; t_rs.textContent=T.rs; t_m.textContent=T.m;}
 
 /* ---------- tabs ---------- */
 function renderTabs(){
   const el=document.getElementById('tabs');
-  el.innerHTML=DAYS.map((d,i)=>(()=>{const on=MEALS.filter(m=>isOn(d+' '+m)).length; return '<button class="tab'+(on?'':' alloff')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+'</small></button>';})()).join('')
-   +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>case counts</small></button>';
+  el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(d+' '+m)).length;
+    return '<button class="tab'+(on?'':' alloff')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+'</small></button>';}).join('')
+   +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>'+S.catalog.length+' items</small></button>';
   el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView();});
   document.getElementById('pdfDay').disabled=S.tab==='INDEX';
 }
@@ -317,60 +379,70 @@ function alCells(it){
   const d='<div class="al diet">'+(it.vegan?'<span title="Vegan">VG</span>':it.veg?'<span title="Vegetarian">V</span>':'')+'</div>';
   return '<td>'+a+'</td><td>'+d+'</td>';
 }
+const GRIP='<svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true"><g fill="currentColor"><circle cx="2.5" cy="3" r="1.4"/><circle cx="7.5" cy="3" r="1.4"/><circle cx="2.5" cy="8" r="1.4"/><circle cx="7.5" cy="8" r="1.4"/><circle cx="2.5" cy="13" r="1.4"/><circle cx="7.5" cy="13" r="1.4"/></g></svg>';
 function rowHtml(line,k,i){
-  const it=item(line.ref), c=calc(line,k);
-  const sub=it&&it.spc?it.spc+' per '+it.unit.toLowerCase():(line.ref==null?'not in index':'no servings in index');
-  return '<tr data-k="'+k+'" data-i="'+i+'"><td class="gripc"><button class="grip" type="button" data-grip title="Drag to reorder. Arrow keys also move it." aria-label="Move '+esc(disp(line.name))+'"><svg viewBox="0 0 10 16" width="10" height="16" aria-hidden="true"><g fill="currentColor"><circle cx="2.5" cy="3" r="1.4"/><circle cx="7.5" cy="3" r="1.4"/><circle cx="2.5" cy="8" r="1.4"/><circle cx="7.5" cy="8" r="1.4"/><circle cx="2.5" cy="13" r="1.4"/><circle cx="7.5" cy="13" r="1.4"/></g></svg></button></td><td class="item">'+esc(disp(line.name))+'<small>'+esc(sub)+'</small></td>'
-   +'<td class="prep"><span class="calc '+c.kind+'">'+esc(c.prep)+'</span><input type="text" data-ov="'+i+'" value="'+esc(line.ov||'')+'" placeholder="override" aria-label="Override prep for '+esc(disp(line.name))+'"></td>'
+  const it=item(line.ref), c=calc(line,k), nm=lineName(line);
+  const sub=it&&it.spc?it.spc+' per '+it.unit.toLowerCase():(it?'no servings in index':'not in index');
+  return '<tr data-k="'+k+'" data-i="'+i+'"><td class="gripc"><button class="grip" type="button" data-grip title="Drag to reorder. Arrow keys also move it." aria-label="Move '+esc(nm)+'">'+GRIP+'</button></td><td class="item">'+esc(nm)+'<small>'+esc(sub)+'</small></td>'
+   +'<td class="prep"><span class="calc '+c.kind+'">'+esc(c.prep)+'</span><input type="text" data-ov="'+i+'" value="'+esc(line.ov||'')+'" placeholder="override" aria-label="Override prep for '+esc(nm)+'"></td>'
    +'<td>'+esc(it&&it.size||'')+'</td>'
-   +'<td class="note"><input type="text" data-note="'+i+'" value="'+esc(line.note||'')+'" aria-label="Notes for '+esc(disp(line.name))+'"></td>'
-   +'<td class="send">'+esc(c.send)+'</td>'+alCells(it)
-   +'<td><button class="x" type="button" data-del="'+i+'" aria-label="Remove '+esc(disp(line.name))+'">×</button></td></tr>';
+   +'<td class="note"><input type="text" data-note="'+i+'" value="'+esc(line.note||'')+'" aria-label="Notes for '+esc(nm)+'"></td>'
+   +(hasSend(k)?'<td class="send">'+esc(c.send)+'</td>':'')+alCells(it)
+   +'<td><button class="x" type="button" data-del="'+i+'" aria-label="Remove '+esc(nm)+'">×</button></td></tr>';
 }
 function ticket(d,m){
   const k=d+' '+m, lines=S.menus[k]||[], loc=S.loc[k], sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
-  const overridden=hasOverride(k);
+  const overridden=hasOverride(k), send=hasSend(k), cols=send?9:8;
   const toggle='<label class="switch" title="Include this meal"><input type="checkbox" data-on id="on_'+kid+'"'+(on?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">'+(on?'Serving':'Off')+'</span></label>';
-  if(!on) return '<section class="ticket off" data-k="'+k+'"><div class="thead"><h3>'+m+'</h3>'+toggle+'<span class="meta">Not needed. Left off the prep sheet and PDF.</span></div></section>';
-  const seg='<div class="seg" role="radiogroup" aria-label="Campus for '+k+'">'+[['BOTH','Both'],['RIDGE','Ridge'],['SPRINGS','Springs']].map(([v,l])=>'<button type="button" role="radio" aria-checked="'+(sv===v)+'" data-serve="'+v+'">'+l+'</button>').join('')+'</div>';
+  if(!on) return '<section class="ticket off" data-k="'+k+'"><div class="thead"><h3>'+m+'</h3><span class="meta">Not needed. Left off the prep sheet and PDF.</span>'+toggle+'</div></section>';
+  const seg='<div class="seg" role="radiogroup" aria-label="Campus for '+k+'">'+SERVE_OPTS.map(([v,l])=>'<button type="button" role="radio" aria-checked="'+(sv===v)+'" data-serve="'+v+'"'+(v==='SM'?' class="smopt"':'')+'>'+l+'</button>').join('')+'</div>';
+  const kitchen=sv==='SM'?'<span class="meta">Kitchen <span class="chip SM">South Mountain</span></span>'
+    :'<span class="meta">Kitchen <button type="button" class="chip '+loc+'" data-loc title="Switch kitchen">'+loc+'</button></span>';
+  const times='<div class="mt">'+campusesFor(k).map(c=>{const v=mtGet(k,c), id=kid+'_'+c;
+    return '<div class="mtrow"><span class="camptag '+c+'">'+CAMP_NAME[c]+'</span>'
+      +'<label class="mtt"><span class="lbl">Time</span><input type="time" id="t_'+id+'" data-mt="'+c+'" data-f="time" value="'+esc(v.time)+'"></label>'
+      +'<label class="mtn"><span class="lbl">Notes</span><input type="text" id="n_'+id+'" data-mt="'+c+'" data-f="note" value="'+esc(v.note)+'" placeholder="Prints under the meal heading"></label>'
+      +'<button type="button" class="btn small quiet" data-alltime="'+c+'" title="Use this time for '+CAMP_NAME[c]+' '+m.toLowerCase()+' every day">Use time all week</button></div>';}).join('')+'</div>';
   const main=lines.map((l,i)=>[l,i]).filter(x=>!x[0].gf), gf=lines.map((l,i)=>[l,i]).filter(x=>x[0].gf);
   let body='';
   if(!lines.length) body='<div class="empty">No items yet. Add one below.</div>';
-  else body='<div class="tscroll"><table><thead><tr><th aria-label="Reorder"></th><th>Item</th><th>Prep</th><th>Serving</th><th>Notes</th><th>To Springs</th><th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody>'
+  else body='<div class="tscroll"><table><thead><tr><th aria-label="Reorder"></th><th>Item</th><th>Prep</th><th>Serving</th><th>Notes</th>'+(send?'<th>To Springs</th>':'')+'<th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody>'
     +main.map(x=>rowHtml(x[0],k,x[1])).join('')
-    +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="9">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
+    +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="'+cols+'">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
     +'</tbody></table></div>';
-  return '<section class="ticket" data-k="'+k+'">'
-   +'<div class="thead"><h3>'+m+'</h3><span class="meta time">'+esc(S.times[m])+'</span>'+toggle
-   +'<span class="meta">Kitchen <button type="button" class="chip '+loc+'" data-loc title="Switch kitchen">'+loc+'</button></span></div>'
+  return '<section class="ticket'+(sv==='SM'?' smt':'')+'" data-k="'+k+'">'
+   +'<div class="thead"><h3>'+m+'</h3>'+kitchen+toggle+'</div>'
    +'<div class="tbar"><span class="meta">Campus</span>'+seg
    +'<span class="meta"><label for="hc_'+kid+'">Campers</label><input type="number" min="0" id="hc_'+kid+'" data-hc value="'+mealHead(k)+'" class="'+(overridden?'is-ovr':'')+'">'
-   +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small ghost" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'total':sv.toLowerCase()+' total')+'</span>')+'</span>'
+   +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small quiet" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+' total</span>')+'</span>'
    +'<span class="meta">GF '+mealGF(k)+'</span></div>'
-   +(S.notes[m]?'<div class="tnote">Notes: '+esc(S.notes[m])+'</div>':'')
+   +times
    +body
    +'<div class="addrow"><input type="text" list="catalog" data-add placeholder="Add item from index…" aria-label="Add item to '+k+'">'
-   +'<button class="btn small" type="button" data-addbtn>Add item</button><button class="btn small ghost" type="button" data-addgf>Add to allergy prep</button></div>'
+   +'<button class="btn small" type="button" data-addbtn>Add item</button><button class="btn small quiet" type="button" data-addgf>Add to allergy prep</button></div>'
    +'</section>';
 }
+function refocus(sel){const n=document.querySelector(sel); if(n) n.focus();}
 function renderDay(d){
   const v=document.getElementById('view'); v.innerHTML='<div class="meals">'+MEALS.map(m=>ticket(d,m)).join('')+'</div>';
   v.querySelectorAll('.ticket').forEach(t=>{
-    const k=t.dataset.k, lines=S.menus[k];
-    t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView();
-      const n=document.getElementById('on_'+k.replace(' ','_')); if(n) n.focus(); };
+    const k=t.dataset.k, lines=S.menus[k], m=k.split(' ')[1];
+    t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView(); refocus('#on_'+k.replace(' ','_')); };
     if(!isOn(k)) return;
     t.querySelectorAll('[data-serve]').forEach(b=>b.onclick=()=>{ if(b.dataset.serve==='BOTH') delete S.serve[k]; else S.serve[k]=b.dataset.serve; save(); renderView();
-      const n=document.querySelector('.ticket[data-k="'+k+'"] [data-serve="'+b.dataset.serve+'"]'); if(n) n.focus(); });
-    t.querySelector('[data-loc]').onclick=()=>{S.loc[k]=S.loc[k]==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
+      refocus('.ticket[data-k="'+k+'"] [data-serve="'+b.dataset.serve+'"]'); });
+    const lc=t.querySelector('[data-loc]'); if(lc) lc.onclick=()=>{S.loc[k]=S.loc[k]==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
     const hc=t.querySelector('[data-hc]'); hc.onchange=()=>{const v=hc.value; S.mealCount[k]=(v===''||+v===baseHead(k))?null:Math.max(0,+v); save(); renderView();};
     const hr=t.querySelector('[data-hcreset]'); if(hr) hr.onclick=()=>{S.mealCount[k]=null; save(); renderView();};
+    t.querySelectorAll('[data-mt]').forEach(el=>el.onchange=()=>{mtSet(k,el.dataset.mt,el.dataset.f,el.dataset.f==='note'?el.value:el.value); save();});
+    t.querySelectorAll('[data-alltime]').forEach(b=>b.onclick=()=>{const c=b.dataset.alltime, tm=mtGet(k,c).time;
+      DAYS.forEach(dd=>mtSet(dd+' '+m,c,'time',tm)); save(); status(CAMP_NAME[c]+' '+m.toLowerCase()+' set to '+fmt12(tm)+' every day.');});
     t.querySelectorAll('[data-ov]').forEach(el=>el.onchange=()=>{lines[+el.dataset.ov].ov=el.value.trim().toUpperCase(); save(); renderView();});
     t.querySelectorAll('[data-note]').forEach(el=>el.onchange=()=>{lines[+el.dataset.note].note=el.value; save();});
     t.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{lines.splice(+el.dataset.del,1); save(); renderView();});
     const inp=t.querySelector('[data-add]');
     const add=(gf)=>{const v=inp.value.trim(); if(!v) return; const ref=labelToRef[v.toUpperCase()]??labelToRef[v];
-      const name=ref!=null?baseItem(ref).name:v.toUpperCase(); lines.push({ref:ref??null,name,note:'',gf:!!gf,ov:''}); save(); renderView();};
+      const name=ref!=null?item(ref).name:v.toUpperCase(); lines.push({ref:ref??null,name,note:'',gf:!!gf,ov:''}); save(); renderView();};
     t.querySelector('[data-addbtn]').onclick=()=>add(false); t.querySelector('[data-addgf]').onclick=()=>add(true);
     inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault(); add(false);}};
     t.querySelectorAll('[data-grip]').forEach(g=>{
@@ -381,7 +453,7 @@ function renderDay(d){
         while(j>=0&&j<lines.length&&lines[j].gf!==gfv) j+=dir;
         if(j<0||j>=lines.length) return;
         [lines[i],lines[j]]=[lines[j],lines[i]]; save(); renderView();
-        const n=document.querySelector('tr[data-k="'+k+'"][data-i="'+j+'"] [data-grip]'); if(n) n.focus(); });
+        refocus('tr[data-k="'+k+'"][data-i="'+j+'"] [data-grip]'); });
     });
   });
 }
@@ -392,9 +464,9 @@ function startDrag(ev,k,i,tr){
   if(ev.button!==undefined&&ev.button!==0) return;
   ev.preventDefault();
   const r=tr.getBoundingClientRect();
-  const ghost=document.createElement('div'); ghost.className='ghost'; ghost.textContent=disp(S.menus[k][i].name);
+  const ghost=document.createElement('div'); ghost.className='dragghost'; ghost.textContent=lineName(S.menus[k][i]);
   ghost.style.width=Math.min(r.width,320)+'px'; document.body.appendChild(ghost);
-  drag={k,i,tr,ghost,target:null,dy:ev.clientY-r.top,raf:0,y:ev.clientY};
+  drag={k,i,tr,ghost,target:null,raf:0,y:ev.clientY};
   tr.classList.add('dragging'); document.body.classList.add('is-dragging');
   moveDrag(ev);
   window.addEventListener('pointermove',moveDrag); window.addEventListener('pointerup',endDrag,{once:true}); window.addEventListener('pointercancel',cancelDrag,{once:true});
@@ -413,7 +485,7 @@ function moveDrag(ev){
     row.classList.add(after?'drop-after':'drop-before');
     drag.target={k:row.dataset.k,i:+row.dataset.i,after,gf:!!S.menus[row.dataset.k][+row.dataset.i].gf}; }
   else if(head){ head.classList.add('drop-after'); drag.target={k:head.dataset.k,i:null,gf:true,first:true}; }
-  else if(tk){ tk.classList.add('drop-into'); drag.target={k:tk.dataset.k,i:null,gf:false,end:true}; }
+  else if(tk&&!tk.classList.contains('off')){ tk.classList.add('drop-into'); drag.target={k:tk.dataset.k,i:null,gf:false,end:true}; }
 }
 function finish(){ if(!drag) return; cancelAnimationFrame(drag.raf); drag.ghost.remove(); drag.tr.classList.remove('dragging');
   document.body.classList.remove('is-dragging'); clearMarks(); window.removeEventListener('pointermove',moveDrag); }
@@ -425,24 +497,38 @@ function endDrag(){
   const [line]=src.splice(d.i,1); line.gf=tg.gf;
   let pos;
   if(tg.i!=null){ pos=tg.i+(tg.after?1:0); if(d.k===tg.k&&d.i<pos) pos--; }
-  else if(tg.first){ const f=dst.findIndex(x=>x.gf); pos=f<0?dst.length:f; }
   else { const f=dst.findIndex(x=>x.gf); pos=f<0?dst.length:f; }
   dst.splice(pos,0,line); save(); renderView();
-  const moved=disp(line.name); status(d.k===tg.k?'':'Moved '+moved+' to '+tg.k.toLowerCase()+'.');
+  status(d.k===tg.k?'':'Moved '+lineName(line)+' to '+tg.k.toLowerCase()+'.');
 }
 
-/* ---------- index view ---------- */
-let idxQ='';
+/* ---------- index (fully editable catalog) ---------- */
+let idxQ='', idxDelArm=null, restoreArm=false;
+function atText(it){return it.spc?cases(tot().rs,it.spc)+' '+it.unit:'—';}
+function refreshAtCol(){ document.querySelectorAll('[data-at]').forEach(td=>{const it=item(+td.dataset.at); if(it) td.textContent=atText(it);}); const h=document.getElementById('atHead'); if(h) h.textContent='At '+tot().rs; }
+function idxRow(it){
+  const id=it.id, n=esc(it.name);
+  return '<tr data-id="'+id+'">'
+   +'<td><input type="text" class="w-name" data-f="name" value="'+n+'" aria-label="Item name"></td>'
+   +'<td><input type="text" class="w-cbi" data-f="cbi" value="'+esc(it.cbi)+'" aria-label="CBI number for '+n+'"></td>'
+   +'<td><input type="number" min="0" class="w-num" data-f="spc" value="'+(it.spc??'')+'" aria-label="Servings per case for '+n+'"></td>'
+   +'<td><select data-f="unit" aria-label="Unit for '+n+'">'+['CS','PAN'].map(u=>'<option'+(u===it.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td>'
+   +'<td class="sm" data-at="'+id+'">'+atText(it)+'</td>'
+   +'<td><input type="text" class="w-size" data-f="size" value="'+esc(it.size)+'" aria-label="Serving size for '+n+'"></td>'
+   +'<td><input type="text" class="w-meal" data-f="meal" value="'+esc(it.meal)+'" aria-label="Sheet meal for '+n+'"></td>'
+   +'<td><div class="cks">'+AL.map((a,i)=>'<label class="ck" title="'+a+'"><input type="checkbox" data-f="al'+i+'"'+(it.al[i]?' checked':'')+' aria-label="'+a+' in '+n+'"><span>'+AL_SHORT[i]+'</span></label>').join('')+'</div></td>'
+   +'<td><div class="cks diet"><label class="ck" title="Vegetarian"><input type="checkbox" data-f="veg"'+(it.veg?' checked':'')+' aria-label="Vegetarian: '+n+'"><span>V</span></label><label class="ck" title="Vegan"><input type="checkbox" data-f="vegan"'+(it.vegan?' checked':'')+' aria-label="Vegan: '+n+'"><span>VG</span></label></div></td>'
+   +'<td><button class="x" type="button" data-delitem="'+id+'" aria-label="Delete '+n+'">×</button></td></tr>';
+}
+function idxRowsHtml(){
+  const q=idxQ;
+  const list=S.catalog.filter(it=>!q||(it.name+' '+it.cbi).toUpperCase().includes(q)).slice().sort((a,b)=>disp(a.name).localeCompare(disp(b.name))||a.name.localeCompare(b.name));
+  return list.length?list.map(idxRow).join(''):'<tr><td colspan="10" class="empty">No items match “'+esc(q)+'”.</td></tr>';
+}
 function renderIndex(){
   const v=document.getElementById('view');
-  const rows=allIndex().filter(it=>!idxQ||it.name.toUpperCase().includes(idxQ)).map(it0=>{const it=item(it0.id); const ed=!!S.idxEdits[it.id];
-    return '<tr class="'+(ed?'edited':'')+'"><td class="item">'+esc(it.name)+(it.custom?' <span class="tag">Added</span>':'')+'</td><td class="sm">'+esc(it.cbi)+'</td>'
-      +'<td><input type="number" min="0" data-spc="'+it.id+'" value="'+(it.spc??'')+'" aria-label="Servings per case for '+esc(it.name)+'"></td>'
-      +'<td><select data-unit="'+it.id+'" aria-label="Unit for '+esc(it.name)+'">'+['CS','PAN'].map(u=>'<option'+(u===it.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td>'
-      +'<td class="sm">'+(it.spc?cases(tot().all,it.spc)+' '+it.unit:'—')+'</td><td class="sm">'+esc(it.size)+'</td><td class="sm">'+esc(it.meal)+'</td>'
-      +alCells(it)+'<td>'+(it.custom?'<button class="btn small ghost" type="button" data-delitem="'+it.id+'">Delete</button>':ed?'<button class="btn small ghost" type="button" data-revert="'+it.id+'">Revert</button>':'')+'</td></tr>';}).join('');
-  v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3><span class="meta">Edit servings per case here. Changes apply to every meal in this browser.</span></div>'
-
+  v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3><span class="meta">Every field is editable. Changes save as you go and apply to every meal.</span>'
+   +'<button class="btn small quiet" type="button" id="restoreIdx" style="margin-left:auto">Restore sheet index</button></div>'
    +'<form class="newitem" id="newitem" novalidate><div class="nh"><h3>Add an item</h3><span class="meta">New items show up in every meal&#39;s item search.</span></div>'
    +'<div class="nf">'
    +'<label class="wide"><span class="lbl">Item name</span><input type="text" id="ni_name" required placeholder="e.g. TURKEY SLIDERS"></label>'
@@ -450,20 +536,42 @@ function renderIndex(){
    +'<label><span class="lbl">Servings per case/pan</span><input type="number" min="0" id="ni_spc" placeholder="blank = as needed"></label>'
    +'<label><span class="lbl">Unit</span><select id="ni_unit"><option>CS</option><option>PAN</option></select></label>'
    +'<label><span class="lbl">Serving size</span><input type="text" id="ni_size" placeholder="e.g. 4 OZ SCOOP"></label>'
-   +'<label><span class="lbl">Sheet meal</span><select id="ni_meal"><option value="">None</option><option>STAPLE ITEMS/MANUAL CHECK</option>'+DAYS.flatMap(d=>MEALS.map(m=>'<option>'+d+' '+m+'</option>')).join('')+'</select></label>'
-   +'<label class="chk"><input type="checkbox" id="ni_compound"> Compound recipe</label>'
+   +'<label><span class="lbl">Sheet meal</span><input type="text" id="ni_meal" placeholder="optional"></label>'
    +'</div>'
    +'<fieldset class="flags"><legend class="lbl">Allergens</legend>'+AL.map((a,i)=>'<label class="chk"><input type="checkbox" id="ni_al'+i+'"> '+a.charAt(0)+a.slice(1).toLowerCase()+'</label>').join('')+'</fieldset>'
    +'<fieldset class="flags"><legend class="lbl">Dietary</legend><label class="chk"><input type="checkbox" id="ni_veg"> Vegetarian</label><label class="chk"><input type="checkbox" id="ni_vegan"> Vegan</label></fieldset>'
    +'<div class="nfoot"><button class="btn primary" type="submit">Add to index</button><span class="nmsg" id="ni_msg" role="status"></span></div></form>'
-   +'<div class="addrow idxbar"><input type="text" id="idxq" placeholder="Search items" value="'+esc(idxQ)+'" aria-label="Search index"></div>'
-   +'<div class="tscroll"><table class="idxtable"><thead><tr><th>Item</th><th>CBI #</th><th>Servings / case</th><th>Unit</th><th>At '+tot().all+'</th><th>Serving</th><th>Sheet meal</th><th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div></div>';
-  const q=document.getElementById('idxq'); q.oninput=()=>{idxQ=q.value.trim().toUpperCase(); const p=q.selectionStart;
-    const keep=[...document.querySelectorAll('#newitem input,#newitem select')].map(el=>[el.id,el.type==='checkbox'?el.checked:el.value]);
-    renderIndex();
-    keep.forEach(([id,val])=>{const el=document.getElementById(id); if(!el) return; if(el.type==='checkbox') el.checked=val; else el.value=val;}); const n=document.getElementById('idxq'); n.focus(); n.setSelectionRange(p,p);};
-  v.querySelectorAll('[data-spc]').forEach(el=>el.onchange=()=>{const id=+el.dataset.spc; const val=el.value===''?null:+el.value; const e=S.idxEdits[id]||{}; e.spc=val>0?val:null; S.idxEdits[id]=e; save(); buildCatalog(); renderIndex();});
-  v.querySelectorAll('[data-unit]').forEach(el=>el.onchange=()=>{const id=+el.dataset.unit; const e=S.idxEdits[id]||{}; e.unit=el.value; S.idxEdits[id]=e; save(); renderIndex();});
+   +'<div class="addrow idxbar"><input type="text" id="idxq" placeholder="Search name or CBI #" value="'+esc(idxQ)+'" aria-label="Search index"><span class="hint">Allergens: E egg · D dairy · G gluten · SE sesame · SO soy</span></div>'
+   +'<div class="tscroll"><table class="idxtable"><thead><tr><th>Item</th><th>CBI #</th><th>Servings / case</th><th>Unit</th><th id="atHead">At '+tot().rs+'</th><th>Serving size</th><th>Sheet meal</th><th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody id="idxBody">'+idxRowsHtml()+'</tbody></table></div></div>';
+
+  document.getElementById('idxq').oninput=(e)=>{idxQ=e.target.value.trim().toUpperCase(); document.getElementById('idxBody').innerHTML=idxRowsHtml();};
+  const tb=document.getElementById('idxBody');
+  tb.addEventListener('change',e=>{
+    const el=e.target, f=el.dataset.f, tr=el.closest('tr[data-id]'); if(!f||!tr) return;
+    const it=item(+tr.dataset.id); if(!it) return;
+    if(f==='name'){ const nv=el.value.trim().toUpperCase(); if(!nv){el.value=it.name; status('An item needs a name. Use × to delete it instead.',true); return;} it.name=nv; el.value=nv; }
+    else if(f==='spc'){ const v=el.value===''?null:+el.value; it.spc=v>0?v:null; }
+    else if(f==='size'||f==='meal'){ it[f]=el.value.trim().toUpperCase(); el.value=it[f]; }
+    else if(f==='cbi'||f==='unit'){ it[f]=el.value.trim(); }
+    else if(f.startsWith('al')){ it.al[+f.slice(2)]=el.checked; }
+    else if(f==='veg'){ it.veg=el.checked; if(!el.checked&&it.vegan){it.vegan=false; tr.querySelector('[data-f=vegan]').checked=false;} }
+    else if(f==='vegan'){ it.vegan=el.checked; if(el.checked){it.veg=true; tr.querySelector('[data-f=veg]').checked=true;} }
+    save(); const at=tr.querySelector('[data-at]'); if(at) at.textContent=atText(it);
+    if(f==='name'||f==='spc'||f==='unit'||f==='meal') buildCatalog();
+    tr.classList.add('saved'); setTimeout(()=>tr.classList.remove('saved'),700);
+  });
+  tb.addEventListener('click',e=>{
+    const b=e.target.closest('[data-delitem]'); if(!b) return; const id=+b.dataset.delitem, it=item(id);
+    if(idxDelArm!==id){ document.querySelectorAll('[data-delitem].armed').forEach(x=>{x.classList.remove('armed'); x.textContent='×';});
+      idxDelArm=id; b.classList.add('armed'); b.textContent='Delete?'; return; }
+    idxDelArm=null; S.catalog=S.catalog.filter(x=>x.id!==id); reindex();
+    let used=0; Object.values(S.menus).forEach(ls=>ls.forEach(l=>{if(l.ref===id){l.ref=null; l.name=it.name; used++;}}));
+    save(); buildCatalog(); renderTabs(); b.closest('tr').remove();
+    status('Deleted '+disp(it.name)+'.'+(used?' It stays on '+used+' menu line'+(used>1?'s':'')+', marked “not in index”.':''));
+  });
+  const rb=document.getElementById('restoreIdx');
+  rb.onclick=()=>{ if(!restoreArm){restoreArm=true; rb.textContent='Click again to replace all index edits'; setTimeout(()=>{restoreArm=false; if(document.body.contains(rb)) rb.textContent='Restore sheet index';},3500); return;}
+    restoreArm=false; S.catalog=seedCatalog(); reindex(); save(); buildCatalog(); renderTabs(); renderIndex(); status('Index restored from the sheet. Your menus are unchanged.'); };
 
   const f=document.getElementById('newitem');
   const veg=document.getElementById('ni_veg'), vegan=document.getElementById('ni_vegan');
@@ -471,23 +579,15 @@ function renderIndex(){
   f.onsubmit=(e)=>{e.preventDefault(); const msg=document.getElementById('ni_msg');
     const name=document.getElementById('ni_name').value.trim().toUpperCase();
     if(!name){msg.textContent='Enter an item name.'; msg.className='nmsg err'; document.getElementById('ni_name').focus(); return;}
-    if(allIndex().some(x=>x.name.toUpperCase()===name)){msg.textContent=name+' is already in the index. Give it a different name.'; msg.className='nmsg err'; return;}
+    if(S.catalog.some(x=>x.name.toUpperCase()===name)){msg.textContent=name+' is already in the index. Give it a different name.'; msg.className='nmsg err'; return;}
     const spcv=document.getElementById('ni_spc').value; const spc=spcv===''||+spcv<=0?null:+spcv;
-    const ids=(S.customItems||[]).map(x=>x.id); const id=ids.length?Math.max(...ids)+1:10000;
-    const it={id,cbi:document.getElementById('ni_cbi').value.trim(),name,spc,unit:document.getElementById('ni_unit').value,
-      size:document.getElementById('ni_size').value.trim().toUpperCase(),meal:document.getElementById('ni_meal').value,loc:'',
-      compound:document.getElementById('ni_compound').checked,al:AL.map((a,i)=>document.getElementById('ni_al'+i).checked),
-      veg:veg.checked,vegan:vegan.checked,custom:true};
-    S.customItems=(S.customItems||[]).concat([it]); save(); buildCatalog(); idxQ=''; renderIndex();
+    const id=Math.max(9999,...S.catalog.map(x=>x.id))+1;
+    S.catalog.push({id,cbi:document.getElementById('ni_cbi').value.trim(),name,spc,unit:document.getElementById('ni_unit').value,
+      size:document.getElementById('ni_size').value.trim().toUpperCase(),meal:document.getElementById('ni_meal').value.trim().toUpperCase(),
+      compound:false,al:AL.map((a,i)=>document.getElementById('ni_al'+i).checked),veg:veg.checked,vegan:vegan.checked});
+    reindex(); save(); buildCatalog(); renderTabs(); idxQ=''; renderIndex();
     const m2=document.getElementById('ni_msg'); m2.textContent='Added '+name+'.'; m2.className='nmsg';
   };
-  let delArm=null;
-  v.querySelectorAll('[data-delitem]').forEach(el=>el.onclick=()=>{const id=+el.dataset.delitem;
-    if(delArm!==id){delArm=id; el.textContent='Click to confirm'; return;}
-    S.customItems=S.customItems.filter(x=>x.id!==id); delete S.idxEdits[id];
-    Object.values(S.menus).forEach(ls=>ls.forEach(l=>{if(l.ref===id) l.ref=null;}));
-    save(); buildCatalog(); renderIndex();});
-  v.querySelectorAll('[data-revert]').forEach(el=>el.onclick=()=>{delete S.idxEdits[+el.dataset.revert]; save(); buildCatalog(); renderIndex();});
 }
 function renderView(){ if(S.tab==='INDEX') renderIndex(); else renderDay(S.tab); }
 
@@ -504,11 +604,13 @@ async function downloadsBlocked(){
 }
 function drawDay(doc,d,first){
   if(!first) doc.addPage();
-  const i=DAYS.indexOf(d), T=tot(), W=doc.internal.pageSize.getWidth();
+  const i=DAYS.indexOf(d), T=tot(), W=doc.internal.pageSize.getWidth(), H=doc.internal.pageSize.getHeight();
   doc.setFont('helvetica','bold'); doc.setFontSize(18); doc.text('KITCHEN PREP SHEET',40,44);
-  doc.setFontSize(18); doc.text(d+'  '+dayDate(i),W-40,44,{align:'right'});
+  doc.text(d+'  '+dayDate(i),W-40,44,{align:'right'});
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
-  doc.text(T.all+' CAMPERS    RIDGE '+T.r+'    SPRINGS '+T.s+'    RIDGE GF '+(+S.counts.gfr||0)+'    SPRINGS GF '+(+S.counts.gfs||0),40,60);
+  let summary='RIDGE '+T.r+' (GF '+C('gfr')+')    SPRINGS '+T.s+' (GF '+C('gfs')+')    RIDGE + SPRINGS '+T.rs;
+  if(T.m||MEALS.some(m=>serveOf(d+' '+m)==='SM')) summary+='    SOUTH MOUNTAIN '+T.m+' (GF '+C('gfm')+')';
+  doc.text(summary,40,60);
   doc.setDrawColor(30); doc.setLineWidth(1); doc.line(40,66,W-40,66);
   let y=78;
   const offM=MEALS.filter(m=>!isOn(d+' '+m));
@@ -516,25 +618,34 @@ function drawDay(doc,d,first){
   MEALS.forEach(m=>{
     const k=d+' '+m, lines=S.menus[k]||[];
     if(!isOn(k)) return;
-    const head=[['','ITEM','PREP','SERVING','NOTES','TO SPRINGS','E','D','G','SE','SO','DIET']];
+    const send=hasSend(k), sv=serveOf(k);
+    const cols=[['',{cellWidth:16}],['ITEM',{cellWidth:send?118:132,fontStyle:'bold'}],['PREP',{cellWidth:62,fontStyle:'bold'}],['SERVING',{cellWidth:58}],['NOTES',{cellWidth:'auto'}]];
+    if(send) cols.push(['TO SPRINGS',{cellWidth:56}]);
+    AL_SHORT.forEach(a=>cols.push([a,{cellWidth:a.length>1?19:17,halign:'center'}])); cols.push(['DIET',{cellWidth:28,halign:'center'}]);
+    const N=cols.length, colStyles={}; cols.forEach((c,ix)=>colStyles[ix]=c[1]);
     const toRow=l=>{const it=item(l.ref), c=calc(l,k); const a=it?it.al.map(x=>x?'X':''):['','','','',''];
-      return ['',disp(l.name),c.prep,it&&it.size||'',l.note||'',c.send,...a,it?(it.vegan?'VG':it.veg?'V':''):''];};
+      const r=['',lineName(l),c.prep,it&&it.size||'',l.note||'']; if(send) r.push(c.send); return r.concat(a,[it?(it.vegan?'VG':it.veg?'V':''):'']);};
     const body=lines.filter(l=>!l.gf).map(toRow);
     const gfl=lines.filter(l=>l.gf);
-    if(gfl.length){ body.push([{content:'ALLERGY PREP  ·  '+mealGF(k)+' GF',colSpan:12,styles:{fontStyle:'bold',fillColor:[240,240,240],textColor:[150,50,35]}}]); gfl.forEach(l=>body.push(toRow(l))); }
-    if(!body.length) body.push([{content:'No items',colSpan:12,styles:{textColor:[120,120,120],fontStyle:'italic'}}]);
-    if(y>doc.internal.pageSize.getHeight()-120){doc.addPage(); y=48;}
+    if(gfl.length){ body.push([{content:'ALLERGY PREP  ·  '+mealGF(k)+' GF',colSpan:N,styles:{fontStyle:'bold',fillColor:[240,240,240],textColor:[150,50,35]}}]); gfl.forEach(l=>body.push(toRow(l))); }
+    if(!body.length) body.push([{content:'No items',colSpan:N,styles:{textColor:[120,120,120],fontStyle:'italic'}}]);
+    const camps=campusesFor(k), noteLines=camps.map(c=>{const v=mtGet(k,c); return {c,t:fmt12(v.time),n:v.note};});
+    if(y>H-140){doc.addPage(); y=48;}
     doc.setFillColor(28,36,32); doc.rect(40,y,W-80,22,'F'); doc.setTextColor(255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
     doc.text(m,48,y+15); doc.setFontSize(9.5); doc.setFont('helvetica','normal');
-    doc.text((S.times[m]||'')+'    '+(serveOf(k)==='BOTH'?'RIDGE + SPRINGS':serveOf(k)+' ONLY')+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+S.loc[k],W-48,y+15,{align:'right'}); doc.setTextColor(0);
+    const campLabel=sv==='BOTH'?'RIDGE + SPRINGS':CAMP_NAME[sv].toUpperCase()+' ONLY';
+    doc.text(campLabel+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+(sv==='SM'?'SOUTH MOUNTAIN':S.loc[k]),W-48,y+15,{align:'right'}); doc.setTextColor(0);
     y+=22;
-    if(S.notes[m]){doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.text('Notes: '+S.notes[m],48,y+13); doc.setFont('helvetica','normal'); y+=18;}
-    doc.autoTable({startY:y+2,head,body,margin:{left:40,right:40},theme:'grid',
+    doc.setFontSize(9);
+    noteLines.forEach(o=>{ doc.setFont('helvetica','bold'); const lab=CAMP_NAME[o.c].toUpperCase()+'  '+(o.t||'—'); doc.text(lab,48,y+12);
+      if(o.n){ doc.setFont('helvetica','normal'); const x0=48+doc.getTextWidth(lab)+10; const wrapped=doc.splitTextToSize(o.n,W-48-x0); doc.text(wrapped,x0,y+12); y+=12*(wrapped.length-1); }
+      y+=14; });
+    doc.setFont('helvetica','normal');
+    doc.autoTable({startY:y+2,head:[cols.map(c=>c[0])],body,margin:{left:40,right:40},theme:'grid',
       styles:{fontSize:8.5,cellPadding:3.5,lineColor:[200,200,200],lineWidth:.5,valign:'middle',textColor:[20,20,20]},
       headStyles:{fillColor:[255,255,255],textColor:[90,90,90],fontStyle:'bold',fontSize:7.5,lineWidth:{bottom:1}},
-      columnStyles:{0:{cellWidth:16},1:{cellWidth:118,fontStyle:'bold'},2:{cellWidth:62,fontStyle:'bold'},3:{cellWidth:58},4:{cellWidth:'auto'},5:{cellWidth:56},
-        6:{cellWidth:17,halign:'center'},7:{cellWidth:17,halign:'center'},8:{cellWidth:17,halign:'center'},9:{cellWidth:19,halign:'center'},10:{cellWidth:19,halign:'center'},11:{cellWidth:28,halign:'center'}},
-      didDrawCell:(dd)=>{ if(dd.section==='body'&&dd.column.index===0&&dd.row.raw.length===12){const s=8; doc.setDrawColor(60); doc.setLineWidth(.8); doc.rect(dd.cell.x+(dd.cell.width-s)/2,dd.cell.y+(dd.cell.height-s)/2,s,s);} },
+      columnStyles:colStyles,
+      didDrawCell:(dd)=>{ if(dd.section==='body'&&dd.column.index===0&&dd.row.raw.length===N){const s=8; doc.setDrawColor(60); doc.setLineWidth(.8); doc.rect(dd.cell.x+(dd.cell.width-s)/2,dd.cell.y+(dd.cell.height-s)/2,s,s);} },
       rowPageBreak:'avoid'});
     y=doc.lastAutoTable.finalY+18;
   });
@@ -554,8 +665,10 @@ document.getElementById('pdfDay').onclick=()=>{ if(S.tab==='INDEX') return; if(!
 document.getElementById('pdfWeek').onclick=()=>{const ds=DAYS.filter(d=>MEALS.some(m=>isOn(d+' '+m))); if(!ds.length){status('Every meal this week is turned off.',true); return;} exportPdf(ds);};
 let armed=false;
 document.getElementById('resetAll').onclick=(e)=>{const b=e.currentTarget;
-  if(!armed){armed=true; b.textContent='Click again to reset'; setTimeout(()=>{armed=false; b.textContent='Reset to sheet';},3000); return;}
-  S=defaults(); save(); location.reload();};
+  if(!armed){armed=true; b.textContent='Click again to reset menus'; setTimeout(()=>{armed=false; b.textContent='Reset menus to sheet';},3500); return;}
+  armed=false; b.textContent='Reset menus to sheet';
+  const cat=S.catalog, tab=S.tab; S=defaults(); S.catalog=cat; S.tab=tab; reindex(); save();
+  fillPanel(); buildCatalog(); renderTabs(); renderView(); status('Menus, headcounts and meal settings reset to the sheet. Your index edits were kept.');};
 
 initPanel(); buildCatalog(); renderTabs(); renderView();
 })();
