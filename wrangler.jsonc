@@ -1,0 +1,14 @@
+// Cloudflare deploys the save relay from this repo using these settings.
+// GITHUB_TOKEN is NOT here: add it in the Cloudflare dashboard as a Secret.
+{
+  "name": "kitchen-prep",
+  "main": "worker/worker.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  "vars": {
+    "REPO": "natecrowders/kitchen-prep",
+    "BRANCH": "live-data",
+    "DATA_PATH": "data/live.json",
+    "ALLOWED_ORIGIN": "https://natecrowders.github.io"
+  }
+}
