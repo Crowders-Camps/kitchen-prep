@@ -891,8 +891,10 @@ function loadDraft(p,label){
   reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); save();
   status('Loaded '+label+' as your draft. Push live to make it the live version again.');
 }
-let armDiscard=false, armForce=false;
+let armDiscard=false, armForce=false, syncMode=null;
 async function renderSync(mode){
+  if(mode) syncMode=mode; if(pushing||conflict) syncMode=null;
+  const typed=document.getElementById('byIn'), typedVal=typed?typed.value:null, typedFocus=typed&&document.activeElement===typed;
   const bar=document.getElementById('syncbar'), tx=document.getElementById('syncText'), act=document.getElementById('syncAct');
   const dirty=isDirty(); let state, text='', btns='';
   if(!STORE){ state=liveChecked?'local':'loading'; text=liveChecked?'Not connected to a shared version. Changes save on this device only.':'Connecting to the live version…'; }
@@ -914,10 +916,11 @@ async function renderSync(mode){
   if(STORE&&STORE.history&&LIVE) btns+='<button class="btn small quiet" type="button" data-sa="hist" aria-expanded="'+histOpen+'">Version history</button>';
   else if(STORE&&STORE.previous&&LIVE&&STORE.canWrite) btns+='<button class="btn small quiet" type="button" data-sa="prev">Undo last push</button>';
   if(STORE&&STORE.kind==='remote'&&(PREF.by||PREF.nameAsked)&&!pushing) btns+='<button class="linkbtn" type="button" data-sa="who">'+(PREF.by?'Editing as '+esc(PREF.by):'Add your name')+'</button>';
-  if(mode==='name'){
+  if(syncMode==='name'){
     btns='<form class="pinf" id="namef"><label for="byIn">Your name, shown in version history</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="name" maxlength="60"><button class="btn small primary" type="submit">Push live</button><button class="btn small quiet" type="button" id="nameSkip">Push without a name</button></form>';
   }
   bar.dataset.state=state; tx.innerHTML=text; act.innerHTML=btns;
+  const bi=document.getElementById('byIn'); if(bi&&typedVal!==null){ bi.value=typedVal; if(typedFocus) bi.focus(); }
   act.querySelectorAll('[data-sa]').forEach(b=>{ const a=b.dataset.sa;
     if(a==='auto') b.onchange=()=>{PREF.auto=b.checked; savePref(); if(PREF.auto&&isDirty()) pushLive(false,true); renderSync();};
     else b.onclick=()=>{
@@ -931,8 +934,8 @@ async function renderSync(mode){
     };
   });
   const nf=document.getElementById('namef');
-  if(nf){ nf.onsubmit=e=>{e.preventDefault(); PREF.by=document.getElementById('byIn').value.trim(); PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();};
-    document.getElementById('nameSkip').onclick=()=>{PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();}; }
+  if(nf){ nf.onsubmit=e=>{e.preventDefault(); syncMode=null; PREF.by=document.getElementById('byIn').value.trim(); PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();};
+    document.getElementById('nameSkip').onclick=()=>{syncMode=null; PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();}; }
 }
 
 /* ---------- version history ---------- */
