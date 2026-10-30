@@ -193,6 +193,73 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
 .idxtable tr.saved td{background:var(--pine-soft)}
 .x.armed{color:var(--flag);background:var(--flag-soft);font-size:12px;font-weight:600}
 .cks.diet .ck input:not(:checked)+span{background:none;color:var(--muted);border-color:var(--line)}
+.syncbar{max-width:1320px;margin:0 auto 10px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 14px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-size:13.5px}
+.syncbar .dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}
+.syncbar[data-state=live] .dot{background:var(--pine);box-shadow:0 0 0 3px var(--pine-soft)}
+.syncbar[data-state=dirty]{border-color:var(--mustard);background:var(--mustard-soft)} .syncbar[data-state=dirty] .dot{background:var(--mustard)}
+.syncbar[data-state=warn]{border-color:var(--flag);background:var(--flag-soft)} .syncbar[data-state=warn] .dot{background:var(--flag)}
+.syncbar[data-state=busy] .dot{background:var(--mustard)}
+.synctext{flex:1 1 280px;min-width:0}
+.syncact{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.autosw{margin-left:0;font-weight:500;font-size:12.5px}
+.pinf{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:12.5px}
+.pinf input{width:120px}
+.viewbar{max-width:1320px;margin:0 auto 14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 20px}
+.vgrp{display:flex;align-items:center;gap:8px;min-width:0}
+.seg.multi button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.kvsw{margin-left:0}
+.linkgrp{margin-left:auto;flex-wrap:wrap}
+.linkout{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:all}
+.fnote{font-size:13px;color:var(--muted);margin:-4px 0 10px}
+.linkbtn{border:none;background:none;color:var(--pine);text-decoration:underline;cursor:pointer;padding:0;font-weight:600}
+.kvsum{max-width:1320px;margin:0 auto;display:none;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted);padding-bottom:12px}
+.kvsum b{font-family:var(--f-mono);color:var(--ink);font-size:17px}
+.kvsum .smv b{color:var(--sm)} .kvsum .wk{margin-left:auto}
+body.kv .kvsum{display:flex}
+body.kv .panel,body.kv #resetAll,body.kv .tab.idx{display:none}
+body.kv .wrap{grid-template-columns:minmax(0,1fr)}
+.mtrow.ro{align-items:baseline}
+.rotime{font-family:var(--f-mono);font-size:15px}
+.ronote{color:var(--ink);font-size:14px}
+.rotable{min-width:680px}
+.rotable td{padding:8px}
+.rotable td.item{font-size:15px}
+.rock{width:28px}
+.rock .box{display:inline-block;width:14px;height:14px;border:1.5px solid var(--muted);border-radius:3px}
+.ticket.ro .thead{gap:6px 18px}
+body.kv .syncact{display:none}
+.histpanel{max-width:1320px;margin:0 auto 12px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+.hhead{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:8px}
+.hhead h2{font-size:18px}
+.hhead .x{margin-left:auto}
+.hlist{list-style:none;margin:0;padding:0;max-height:320px;overflow:auto}
+.hlist li{display:grid;grid-template-columns:52px minmax(0,1fr) auto auto;align-items:center;gap:12px;padding:7px 0;border-top:1px solid var(--soft)}
+.hv{font-family:var(--f-mono);font-weight:600}
+.hw{font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ht{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.hcur{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--pine);background:var(--pine-soft);border-radius:999px;padding:3px 10px}
+@media (max-width:560px){.hlist li{grid-template-columns:44px minmax(0,1fr)}.hlist li .ht{grid-column:2}.hlist li>button,.hlist li .hcur{grid-column:2;justify-self:start}}
+.ck.ret span{min-width:0;padding:3px 7px;font-family:var(--f-body)}
+.ck.ret input:checked+span{background:var(--soft);color:var(--ink);border-color:var(--muted)}
+.idxtable tr.retired td input[type=text],.idxtable tr.retired td input[type=number]{color:var(--muted);text-decoration:line-through}
+.weeknav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:10px}
+.wklabel{font-family:var(--f-display);font-size:20px;text-transform:uppercase;letter-spacing:.03em;min-width:0}
+.jump{display:flex;align-items:center;gap:6px;margin-left:auto}
+.jump input{width:auto}
+.tab.nomenu small{opacity:.6}
+.tab.today{border-color:var(--pine)}
+.tab.today[aria-selected=true]{border-color:var(--ink)}
+.copybtn{margin-left:auto}
+.copybtn+.switch{margin-left:0}
+.copyp{display:flex;flex-direction:column;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--mustard-soft)}
+.cph{font-size:14px}
+.cpf{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px}
+.cpf label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.cpf label.chk{flex-direction:row;align-items:center}
+.cpf input[type=date],.cpf select{width:auto;background:var(--panel)}
+.cpfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.cpinfo{font-size:13px;color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 </style>
 
 <header class="top">
@@ -203,10 +270,35 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
   <div class="actions">
     <button class="btn primary" id="pdfDay" type="button">Export day PDF</button>
     <button class="btn" id="pdfWeek" type="button">Export week PDF</button>
-    <button class="btn quiet" id="resetAll" type="button">Reset menus to sheet</button>
   </div>
 </header>
+<div class="syncbar" id="syncbar" data-state="local">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="synctext" id="syncText">Loading the live version…</span>
+  <span class="syncact" id="syncAct"></span>
+</div>
+<section class="histpanel" id="histPanel" hidden aria-label="Version history"></section>
 <div class="status" id="status" role="status"></div>
+
+<div class="viewbar" id="viewbar">
+  <div class="vgrp"><span class="lbl">Show campus</span>
+    <div class="seg" role="radiogroup" aria-label="Show campus" id="fCampus">
+      <button type="button" role="radio" data-fc="all">All</button><button type="button" role="radio" data-fc="ridge">Ridge</button><button type="button" role="radio" data-fc="springs">Springs</button><button type="button" role="radio" data-fc="sm" class="smopt">South Mtn</button>
+    </div>
+  </div>
+  <div class="vgrp"><span class="lbl">Meals</span>
+    <div class="seg multi" id="fMeals" aria-label="Meals to show">
+      <button type="button" aria-pressed="true" data-fm="breakfast">Breakfast</button><button type="button" aria-pressed="true" data-fm="lunch">Lunch</button><button type="button" aria-pressed="true" data-fm="dinner">Dinner</button>
+    </div>
+  </div>
+  <label class="switch kvsw" title="Read-only layout for the kitchen line"><input type="checkbox" id="fView"><span class="track" aria-hidden="true"></span><span class="swl">Kitchen view</span></label>
+  <div class="vgrp linkgrp">
+    <button type="button" class="btn small" id="copyLink">Copy link to this view</button>
+    <code class="linkout" id="linkOut"></code>
+  </div>
+</div>
+
+<div class="kvsum" id="kvsum"></div>
 
 <div class="wrap">
   <aside class="panel" id="panel">
@@ -234,10 +326,6 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
         <div class="tot sm"><b id="t_m">0</b><span>South Mtn</span></div>
       </div>
     </div>
-    <div class="grp">
-      <label class="lbl" for="week">Week starting (Monday)</label>
-      <input type="date" id="week">
-    </div>
     <div class="formula">
       <b>How prep is figured</b><br>
       Prep = <code>ROUNDUP(meal campers ÷ servings per case)</code><br>
@@ -247,6 +335,13 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
   </aside>
 
   <main style="min-width:0">
+    <div class="weeknav">
+      <button class="btn small" type="button" id="wkPrev" aria-label="Previous week">‹ Prev week</button>
+      <b class="wklabel" id="wkLabel"></b>
+      <button class="btn small" type="button" id="wkNext" aria-label="Next week">Next week ›</button>
+      <button class="btn small quiet" type="button" id="wkToday">Today</button>
+      <label class="jump"><span class="lbl">Go to date</span><input type="date" id="jump"></label>
+    </div>
     <nav class="tabs" id="tabs" role="tablist"></nav>
     <div id="view"></div>
   </main>
@@ -254,11 +349,9 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
 
 <datalist id="catalog"></datalist>
 
-<script type="application/json" id="seed">{"index":[{"id":0,"cbi":"10024672","name":"(FRIDAY) APPLES","spc":600,"unit":"CS","size":"","meal":"FRIDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":1,"cbi":"220082","name":"(FRIDAY) BACON","spc":80,"unit":"CS","size":"","meal":"FRIDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":2,"cbi":"10019166","name":"(FRIDAY) BONELESS WING CHICKEN","spc":40,"unit":"CS","size":"4 OZ SCOOP","meal":"FRIDAY DINNER","loc":"RIDGE","compound":false,"al":[true,true,true,false,true],"veg":false,"vegan":false},{"id":3,"cbi":"312204","name":"(FRIDAY) BUNS","spc":96,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":false},{"id":4,"cbi":"188133","name":"(FRIDAY) CHEESE OMELET","spc":130,"unit":"CS","size":"","meal":"FRIDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":5,"cbi":"94031","name":"(FRIDAY) CHIPS","spc":60,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":6,"cbi":"10094679","name":"(FRIDAY) SAUSAGE","spc":96,"unit":"CS","size":"1 OR 2","meal":"FRIDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":7,"cbi":"10035508","name":"(FRIDAY) SCRAMBLED EGG","spc":192,"unit":"PAN","size":"4 OZ SCOOP","meal":"FRIDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":false,"vegan":false},{"id":8,"cbi":"156111","name":"(MARINARA) PENNE","spc":60,"unit":"PAN","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":true,"vegan":false},{"id":9,"cbi":"220082","name":"(MONDAY) BACON","spc":80,"unit":"CS","size":"3 PIECES","meal":"MONDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":10,"cbi":"312204","name":"(MONDAY) BUNS","spc":96,"unit":"CS","size":"1 BUN","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":false},{"id":11,"cbi":"10144662","name":"(MONDAY) EGG BITES","spc":60,"unit":"CS","size":"1 OR 2 PIECES","meal":"MONDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":12,"cbi":"10068044","name":"(MONDAY) FRENCH TOAST STICKS","spc":140,"unit":"CS","size":"4 STICKS","meal":"MONDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":13,"cbi":"10019166","name":"(MONDAY) GF BONELESS WING CHICKEN","spc":40,"unit":"CS","size":"4 OZ SCOOP","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[true,false,false,false,true],"veg":false,"vegan":false},{"id":14,"cbi":"10153444","name":"(MONDAY) GF WRAP","spc":72,"unit":"CS","size":"1","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":15,"cbi":"415020","name":"(MONDAY) ORANGE SLICES","spc":678,"unit":"CS","size":"","meal":"MONDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":16,"cbi":"272075","name":"(MONDAY) POTATO WEDGES","spc":100,"unit":"CS","size":"4 OZ","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":17,"cbi":"220082","name":"(SATURDAY) BACON","spc":80,"unit":"CS","size":"","meal":"SATURDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":18,"cbi":"426013","name":"(SATURDAY) BANANA","spc":300,"unit":"CS","size":"","meal":"SATURDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":19,"cbi":"10003640","name":"(SATURDAY) BREAKFAST POTATOES","spc":110,"unit":"CS","size":"4 OZ SCOOP","meal":"SATURDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":20,"cbi":"312204","name":"(SATURDAY) BUNS","spc":96,"unit":"CS","size":"1 BUN","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,true,true,false,true],"veg":true,"vegan":false},{"id":21,"cbi":"10109879","name":"(SATURDAY) BURGERS","spc":35,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":22,"cbi":"188133","name":"(SATURDAY) CHEESE OMELET","spc":130,"unit":"CS","size":"","meal":"SATURDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":23,"cbi":"10008576","name":"(SATURDAY) CINNAMON ROLL","spc":100,"unit":"CS","size":"1 PIECE","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,true,true,false,true],"veg":true,"vegan":false},{"id":24,"cbi":"10144662","name":"(SATURDAY) EGG BITES","spc":60,"unit":"CS","size":"1 OR 2 PIECES","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":25,"cbi":"198031","name":"(SATURDAY) FRUIT SALAD","spc":40,"unit":"CS","size":"4 OZ","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":26,"cbi":"156111","name":"(SATURDAY) MARINARA SAUCE","spc":200,"unit":"CS","size":"","meal":"SATURDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":27,"cbi":"10091727","name":"(SATURDAY) MEATBALLS","spc":75,"unit":"CS","size":"","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[true,true,true,false,true],"veg":false,"vegan":false},{"id":28,"cbi":"10077065","name":"(SATURDAY) PARMESAN CHEESE","spc":null,"unit":"CS","size":"","meal":"SATURDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":29,"cbi":"10143022","name":"(SATURDAY) ROLL","spc":130,"unit":"CS","size":"1","meal":"SATURDAY DINNER","loc":"SPRINGS","compound":false,"al":[true,true,true,false,true],"veg":true,"vegan":false},{"id":30,"cbi":"10094679","name":"(SATURDAY) SAUSAGE","spc":96,"unit":"CS","size":"1 OR 2","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":31,"cbi":"10024672","name":"(SUNDAY) APPLES","spc":600,"unit":"CS","size":"","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":32,"cbi":"220082","name":"(SUNDAY) BACON","spc":80,"unit":"CS","size":"3 PIECES","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":33,"cbi":"312204","name":"(SUNDAY) BUNS","spc":96,"unit":"CS","size":"1 BUN","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,true,true,false,true],"veg":true,"vegan":false},{"id":34,"cbi":"10149445","name":"(SUNDAY) CHICKEN TENDERS","spc":30,"unit":"CS","size":"3 PIECES","meal":"SUNDAY DINNER","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":false,"vegan":false},{"id":35,"cbi":"823090","name":"(SUNDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":36,"cbi":"823090","name":"(SUNDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":37,"cbi":"198031","name":"(SUNDAY) FRUIT SALAD","spc":40,"unit":"CS","size":"4 OZ SCOOP","meal":"SUNDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":38,"cbi":"10003815","name":"(SUNDAY) GF CHICKEN TENDERS","spc":40,"unit":"CS","size":"","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":39,"cbi":"156111","name":"(SUNDAY) MARINARA SAUCE","spc":200,"unit":"CS","size":"","meal":"SUNDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":40,"cbi":"10091727","name":"(SUNDAY) MEATBALLS","spc":75,"unit":"CS","size":"4 MEATBALLS","meal":"SUNDAY LUNCH","loc":"SPRINGS","compound":false,"al":[true,true,true,false,true],"veg":false,"vegan":false},{"id":41,"cbi":"10077065","name":"(SUNDAY) PARMESAN CHEESE","spc":null,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":42,"cbi":"835130","name":"(SUNDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":43,"cbi":"835130","name":"(SUNDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":44,"cbi":"10094679","name":"(SUNDAY) SAUSAGE","spc":96,"unit":"CS","size":"","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":45,"cbi":"10035508","name":"(SUNDAY) SCRAMBLED EGG","spc":192,"unit":"CS","size":"","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":46,"cbi":"220082","name":"(THURSDAY) BACON","spc":80,"unit":"CS","size":"3 PIECES","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":47,"cbi":"426013","name":"(THURSDAY) BANANA","spc":300,"unit":"CS","size":"","meal":"THURSDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":48,"cbi":"10149445","name":"(THURSDAY) CHICKEN TENDERS","spc":25,"unit":"CS","size":"3 PIECES","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":false,"vegan":false},{"id":49,"cbi":"823090","name":"(THURSDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":50,"cbi":"823090","name":"(THURSDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":51,"cbi":"188133","name":"(THURSDAY) EGG OMELET","spc":130,"unit":"CS","size":"","meal":"THURSDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":52,"cbi":"198031","name":"(THURSDAY) FRUIT SALAD","spc":40,"unit":"CS","size":"4 OZ","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":53,"cbi":"10003815","name":"(THURSDAY) GF CHICKEN TENDERS","spc":40,"unit":"CS","size":"","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":54,"cbi":"158074","name":"(THURSDAY) GREEN BEANS","spc":250,"unit":"CS","size":"4 OZ SCOOP","meal":"THURSDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":55,"cbi":"415020","name":"(THURSDAY) ORANGE SLICES","spc":678,"unit":"CS","size":"","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":56,"cbi":"835130","name":"(THURSDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":57,"cbi":"835130","name":"(THURSDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":58,"cbi":"272075","name":"(THURSDAY) POTATO WEDGES","spc":100,"unit":"CS","size":"4 OZ","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":59,"cbi":"10094679","name":"(THURSDAY) SAUSAGE","spc":96,"unit":"CS","size":"","meal":"THURSDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":60,"cbi":"10181452","name":"(THURSDAY) VERY BERRY BISCUIT","spc":100,"unit":"CS","size":"1","meal":"THURSDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,true,true,false,true],"veg":true,"vegan":false},{"id":61,"cbi":"220082","name":"(TUESDAY) BACON","spc":90,"unit":"CS","size":"3 PIECES","meal":"TUESDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":62,"cbi":"426013","name":"(TUESDAY) BANANA","spc":300,"unit":"CS","size":"","meal":"TUESDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":63,"cbi":"312204","name":"(TUESDAY) BUNS","spc":96,"unit":"CS","size":"1 BUN","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":false},{"id":64,"cbi":"10109879","name":"(TUESDAY) BURGERS","spc":35,"unit":"CS","size":"1 BURGER","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":65,"cbi":"188133","name":"(TUESDAY) CHEESE OMELET","spc":144,"unit":"CS","size":"","meal":"TUESDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":66,"cbi":"94031","name":"(TUESDAY) CHIPS","spc":60,"unit":"CS","size":"","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":67,"cbi":"823090","name":"(TUESDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":68,"cbi":"823090","name":"(TUESDAY) CUPS","spc":1000,"unit":"CS","size":"","meal":"WEDNESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":69,"cbi":"10003815","name":"(TUESDAY) GF CHICKEN TENDERS","spc":40,"unit":"CS","size":"","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":70,"cbi":"158074","name":"(TUESDAY) GREEN BEANS","spc":300,"unit":"CS","size":"","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":71,"cbi":"835130","name":"(TUESDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":72,"cbi":"835130","name":"(TUESDAY) PLATES","spc":500,"unit":"CS","size":"","meal":"WEDNESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":73,"cbi":"10094679","name":"(TUESDAY) SAUSAGE","spc":96,"unit":"CS","size":"1 OR 2","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":74,"cbi":"10024672","name":"(WEDNESDAY) APPLES","spc":600,"unit":"CS","size":"","meal":"WEDNESDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":75,"cbi":"10003640","name":"(WEDNESDAY) BREAKFAST POTATOES","spc":110,"unit":"CS","size":"","meal":"WEDNESDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":76,"cbi":"10153444","name":"(WEDNESDAY) GF WRAP","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":77,"cbi":"10077065","name":"(WEDNESDAY) PARMESAN CHEESE","spc":null,"unit":"CS","size":"","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":78,"cbi":"10143022","name":"(WEDNESDAY) ROLL","spc":130,"unit":"CS","size":"1","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[true,true,true,false,true],"veg":true,"vegan":false},{"id":79,"cbi":"10094679","name":"(WEDNESDAY) SAUSAGE","spc":96,"unit":"CS","size":"1 OR 2","meal":"WEDNESDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":80,"cbi":"10035508","name":"(WEDNESDAY) SCRAMBLED EGG","spc":200,"unit":"CS","size":"","meal":"WEDNESDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":81,"cbi":"10150158","name":"3 COMP DISH DETERGENT","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":82,"cbi":"10063784","name":"3 COMP SANITIZER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":83,"cbi":"10141659","name":"AIR FRESHENER REFILL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":84,"cbi":"10141659","name":"AIR FRESHENER REFILL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":85,"cbi":"10101921","name":"ALFREDO CHICKEN","spc":80,"unit":"CS","size":"4 OZ SCOOP","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,true],"veg":false,"vegan":false},{"id":86,"cbi":"10109976","name":"ALFREDO SAUCE","spc":200,"unit":"CS","size":"","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,true],"veg":false,"vegan":false},{"id":87,"cbi":"10134886","name":"ALUMINUM FOIL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":88,"cbi":"","name":"APPLE COBBLER","spc":100,"unit":"PAN","size":"4OZ SCOOP","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":true,"al":[true,true,true,false,true],"veg":true,"vegan":false},{"id":89,"cbi":"10040214","name":"FRUIT PUNCH","spc":120,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":90,"cbi":"10040214","name":"FRUIT PUNCH","spc":120,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":91,"cbi":"10040215","name":"APPLE JUICE","spc":120,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":92,"cbi":"10040215","name":"APPLE JUICE","spc":120,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":93,"cbi":"10049255","name":"BALSAMIC VINAIGRETTE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,true],"veg":true,"vegan":true},{"id":94,"cbi":"10049255","name":"BALSAMIC VINAIGRETTE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,true],"veg":true,"vegan":true},{"id":95,"cbi":"122028","name":"BANANA PEPPERS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":96,"cbi":"122028","name":"BANANA PEPPERS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":97,"cbi":"10049083","name":"BBQ CUP","spc":100,"unit":"CS","size":"","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":98,"cbi":"10026249","name":"BBQ SAUCE","spc":null,"unit":"CS","size":"","meal":"THURSDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":99,"cbi":"318027","name":"BISCUIT","spc":200,"unit":"CS","size":"1 BISCUIT","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,true,true,false,false],"veg":true,"vegan":false},{"id":100,"cbi":"158065","name":"BLACK BEANS","spc":500,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":101,"cbi":"835205","name":"BOWLS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":102,"cbi":"835205","name":"BOWLS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":103,"cbi":"198031","name":"FRUIT SALAD","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":104,"cbi":"10054724","name":"BROCCOLI","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":105,"cbi":"10054724","name":"BROCCOLI","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":106,"cbi":"437900","name":"BURGER LETTUCE","spc":650,"unit":"CS","size":"","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":107,"cbi":"190020","name":"BUTTER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":108,"cbi":"19002","name":"BUTTER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":109,"cbi":"480050","name":"CARROT STICKS","spc":140,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":110,"cbi":"432310","name":"CELERY STICKS","spc":140,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":111,"cbi":"168521","name":"CHEESE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":112,"cbi":"168521","name":"CHEESE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":113,"cbi":"102232","name":"CHERRY COKE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":114,"cbi":"466050","name":"CHERRY TOMATO","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":115,"cbi":"466050","name":"CHERRY TOMATO","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":116,"cbi":"10149444","name":"CHICKEN SANDWICH FILETS","spc":40,"unit":"CS","size":"1 PIECE","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,true,true,false,false],"veg":false,"vegan":false},{"id":117,"cbi":"10181826","name":"CHOCOLATE MILK","spc":140,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":118,"cbi":"10181826","name":"CHOCOLATE MILK","spc":140,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":119,"cbi":"","name":"CHOCOLATE OREO PUDDING","spc":200,"unit":"CS","size":"4 OZ SCOOP","meal":"THURSDAY DINNER","loc":"SPRINGS","compound":true,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":120,"cbi":"10008576","name":"CINNAMON ROLL","spc":100,"unit":"CS","size":"","meal":"TUESDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,true,true,true,false],"veg":true,"vegan":false},{"id":121,"cbi":"36181","name":"CINNAMON TOAST CRUNCH","spc":80,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":122,"cbi":"858065","name":"CLING WRAP","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":123,"cbi":"858065","name":"CLING WRAP","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":124,"cbi":"10047065","name":"COFFEE CUPS 8OZ","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":125,"cbi":"10047065","name":"COFFEE CUPS 8OZ","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":126,"cbi":"30013","name":"COFFEE FILTERS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":127,"cbi":"30013","name":"COFFEE FILTERS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":128,"cbi":"102236","name":"COKE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":129,"cbi":"102260","name":"COKE ZERO","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":130,"cbi":"1989009","name":"COLE SLAW","spc":250,"unit":"CS","size":"4 OZ SCOOP","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":true,"vegan":false},{"id":131,"cbi":"10057174","name":"CRAISINS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":132,"cbi":"10057174","name":"CRAISINS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":133,"cbi":"10067481","name":"CREAM CHEESE FROSTING","spc":300,"unit":"CS","size":"","meal":"TUESDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,true,false,false,true],"veg":true,"vegan":false},{"id":134,"cbi":"10111666","name":"CRINKLE FRIES","spc":100,"unit":"CS","size":"4 OZ","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,true],"veg":true,"vegan":true},{"id":135,"cbi":"432385","name":"CUCUMBER, SLICED","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":136,"cbi":"432385","name":"CUCUMBER, SLICED","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":137,"cbi":"823090","name":"CUPS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":138,"cbi":"823090","name":"CUPS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":139,"cbi":"270022","name":"CURLY FRIES","spc":90,"unit":"CS","size":"","meal":"SUNDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":140,"cbi":"10091370","name":"DEGREASER FLOOR CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":141,"cbi":"10091370","name":"DEGREASER FLOOR CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":142,"cbi":"102205","name":"DIET COKE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":143,"cbi":"10125402","name":"DISPOSABLE FULL PAN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":144,"cbi":"10125402","name":"DISPOSABLE FULL PAN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":145,"cbi":"10125370","name":"DISPOSABLE HALF PAN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":146,"cbi":"10125370","name":"DISPOSABLE HALF PAN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":147,"cbi":"102237","name":"FANTA ORANGE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":148,"cbi":"10108838","name":"FLOOR CLEANER CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":149,"cbi":"10108838","name":"FLOOR CLEANER CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":150,"cbi":"10111214","name":"FORKS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":151,"cbi":"10111214","name":"FORKS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":152,"cbi":"10163490","name":"FRENCH FRY SEASONING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":153,"cbi":"10163490","name":"FRENCH FRY SEASONING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":154,"cbi":"230044","name":"FRIED CHICKEN","spc":30,"unit":"CS","size":"","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":false,"vegan":false},{"id":155,"cbi":"276038","name":"FRIED RICE","spc":48,"unit":"CS","size":"","meal":"FRIDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,true,true],"veg":true,"vegan":true},{"id":156,"cbi":"88092","name":"FRUIT CUP","spc":48,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":157,"cbi":"36173","name":"FRUIT LOOPS","spc":80,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":158,"cbi":"10139776","name":"GARLIC HERB SEASONING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":159,"cbi":"10139776","name":"GARLIC HERB SEASONING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":160,"cbi":"10026251","name":"GARLIC PARM SAUCE","spc":null,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,true,false,false,true],"veg":true,"vegan":false},{"id":161,"cbi":"10129385","name":"GF BUN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":162,"cbi":"","name":"GF MEATBALLS","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":163,"cbi":"","name":"GF MUFFIN","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":164,"cbi":"10038855","name":"GF PASTA","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":165,"cbi":"10040211","name":"GLAZE","spc":300,"unit":"CS","size":"","meal":"THURSDAY BREAKFAST","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":166,"cbi":"708230","name":"GLOVES MED.","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":167,"cbi":"708232","name":"GLOVES LG.","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":168,"cbi":"708234","name":"GLOVES XL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":169,"cbi":"66022","name":"GRAVY","spc":450,"unit":"CS","size":"3 OZ SCOOP","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,true,false,false],"veg":true,"vegan":true},{"id":170,"cbi":"10125486","name":"GRILLED CHICKEN","spc":45,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":171,"cbi":"10097479","name":"GRILLED CHICKEN BREAST","spc":30,"unit":"CS","size":"","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":172,"cbi":"10130200","name":"GROUND COFFEE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":173,"cbi":"10130200","name":"GROUND COFFEE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":174,"cbi":"292041","name":"GUACAMOLE","spc":200,"unit":"CS","size":"3 OZ SCOOP","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":175,"cbi":"10081575","name":"HALF AND HALF","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":false,"vegan":false},{"id":176,"cbi":"10081575","name":"HALF AND HALF","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":false,"vegan":false},{"id":177,"cbi":"10063797","name":"HAND SOAP","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":178,"cbi":"10063797","name":"HAND SOAP","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":179,"cbi":"188002","name":"HARD BOILED EGG","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":true,"vegan":false},{"id":180,"cbi":"188002","name":"HARD BOILED EGG","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[true,false,false,false,false],"veg":true,"vegan":false},{"id":181,"cbi":"10142077","name":"HONEY","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":182,"cbi":"10159001","name":"HONEY MUSTARD","spc":100,"unit":"CS","size":"","meal":"THURSDAY LUNCH","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":true,"vegan":false},{"id":183,"cbi":"312098","name":"HOT DOG ROLL TOP SLICE","spc":72,"unit":"CS","size":"","meal":"SUNDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,true,false,true],"veg":true,"vegan":true},{"id":184,"cbi":"78031","name":"ITALIAN DRESSING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":185,"cbi":"78031","name":"ITALIAN DRESSING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":186,"cbi":"106030","name":"JELLY","spc":200,"unit":"CS","size":"","meal":"SUNDAY BREAKFAST","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":187,"cbi":"","name":"KALE SALAD","spc":200,"unit":"PAN","size":"4 OZ SCOOP","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":true,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":188,"cbi":"10118862","name":"KETCHUP","spc":1000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":189,"cbi":"78031","name":"KNIVES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":190,"cbi":"78031","name":"KNIVES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":191,"cbi":"10065609","name":"KOREAN BBQ SAUCE","spc":null,"unit":"CS","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,true,true,true],"veg":true,"vegan":true},{"id":192,"cbi":"10111218","name":"LETTUCE MIX","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":193,"cbi":"10111218","name":"LETTUCE MIX","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":194,"cbi":"436520","name":"LETTUCE SHREDDED","spc":400,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":195,"cbi":"10144862","name":"MAC AND CHEESE","spc":80,"unit":"CS","size":"4 OZ SCOOP","meal":"THURSDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":196,"cbi":"10063640","name":"MACHINE DETERGENT","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":197,"cbi":"10063749","name":"MACHINE RINSE AID","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":198,"cbi":"10064342","name":"MACHINE SANITIZER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":199,"cbi":"10054712","name":"MANGO CHUNKS","spc":75,"unit":"CS","size":"","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":200,"cbi":"","name":"MAPLE BACON DONUTS","spc":36,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":201,"cbi":"10053145","name":"MASHED POTATOES","spc":80,"unit":"CS","size":"","meal":"TUESDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":202,"cbi":"10135259","name":"MAYO","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":203,"cbi":"","name":"MILK","spc":48,"unit":"CS","size":"COLD BAR ITEM","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":false,"vegan":false},{"id":204,"cbi":"102253","name":"MINUTE MAID LEMONADE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":205,"cbi":"10135260","name":"MUSTARD","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":206,"cbi":"841004","name":"NAPKINS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":207,"cbi":"841004","name":"NAPKINS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":208,"cbi":"10105629","name":"NORMANDY BLEND VEG","spc":95,"unit":"CS","size":"","meal":"SUNDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":209,"cbi":"","name":"NOT CHICK-FIL-A SAUCE","spc":null,"unit":"CS","size":"SQUEEZE BOTTLE","meal":"MONDAY LUNCH","loc":"RIDGE","compound":true,"al":[true,false,false,false,false],"veg":false,"vegan":false},{"id":210,"cbi":"10147542","name":"OAT MILK","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":211,"cbi":"114010","name":"OIL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":212,"cbi":"296004","name":"ONION RINGS","spc":35,"unit":"CS","size":"4 OZ","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,true,true,false,false],"veg":true,"vegan":false},{"id":213,"cbi":"48118","name":"ORANGE SAUCE","spc":250,"unit":"CS","size":"","meal":"FRIDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,true,true,true],"veg":true,"vegan":false},{"id":214,"cbi":"415020","name":"ORANGE SLICES","spc":400,"unit":"CS","size":"","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":215,"cbi":"10133885","name":"PAPER TOWELS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":216,"cbi":"10133885","name":"PAPER TOWELS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":217,"cbi":"10125148","name":"PARCHMENT PAPER HALF SIZE","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":218,"cbi":"10063469","name":"PEACH COBBLER","spc":230,"unit":"PAN","size":"","meal":"SUNDAY DINNER","loc":"SPRINGS","compound":true,"al":[true,true,true,false,true],"veg":true,"vegan":false},{"id":219,"cbi":"109076","name":"PENNE","spc":160,"unit":"CS","size":"","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[true,false,true,false,false],"veg":true,"vegan":false},{"id":220,"cbi":"136158","name":"PEPPER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":221,"cbi":"136158","name":"PEPPER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":222,"cbi":"266033","name":"PEPPERS + ONIONS","spc":150,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":223,"cbi":"","name":"PICKLED RED ONION","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":true,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":224,"cbi":"124002","name":"PICKLES","spc":240,"unit":"CS","size":"","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":225,"cbi":"10047378","name":"PITA BREAD","spc":120,"unit":"CS","size":"1 PIECE","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,true,true,true],"veg":true,"vegan":true},{"id":226,"cbi":"10101921","name":"PITA CHICKEN","spc":45,"unit":"CS","size":"4 OZ SCOOP","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":227,"cbi":"198047","name":"POTATO SALAD","spc":100,"unit":"CS","size":"4 OZ SCOOP","meal":"SATURDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,true],"veg":true,"vegan":true},{"id":228,"cbi":"102287","name":"POWERADE BLUE","spc":1600,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":229,"cbi":"10063370","name":"PULLED PORK","spc":350,"unit":"CS","size":"4 OZ SCOOP","meal":"THURSDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":230,"cbi":"10135010","name":"PURELL WIPES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":231,"cbi":"10135010","name":"PURELL WIPES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":232,"cbi":"1008941","name":"QUESO","spc":200,"unit":"CS","size":"","meal":"FRIDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,true,false,true,true],"veg":false,"vegan":false},{"id":233,"cbi":"78078","name":"RANCH CUPS","spc":100,"unit":"CS","size":"1","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[true,true,false,false,true],"veg":true,"vegan":false},{"id":234,"cbi":"78081","name":"RANCH DRESSING","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[true,true,false,false,true],"veg":true,"vegan":false},{"id":235,"cbi":"10138998","name":"RAPID SPRAY CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":236,"cbi":"10138998","name":"RAPID SPRAY CHEMICAL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":237,"cbi":"530205","name":"RATIONAL BLUE TABS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":238,"cbi":"530200","name":"RATIONAL RED TABS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":239,"cbi":"10006336","name":"RED PEPPER HUMMUS","spc":260,"unit":"CS","size":"2 OZ SCOOP","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,true,false],"veg":true,"vegan":true},{"id":240,"cbi":"10103304","name":"SALSA CUP","spc":100,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":241,"cbi":"10128308","name":"SALT","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":242,"cbi":"154120","name":"SCALLOPED POTATOES","spc":200,"unit":"CS","size":"","meal":"SUNDAY DINNER","loc":"SPRINGS","compound":false,"al":[false,true,false,false,true],"veg":true,"vegan":false},{"id":243,"cbi":"10035508","name":"SCRAMBLED EGG","spc":230,"unit":"CS","size":"1 EGG","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[true,true,false,false,false],"veg":true,"vegan":false},{"id":244,"cbi":"168521","name":"SHREDDED CHEESE","spc":400,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":245,"cbi":"436520","name":"SHREDDED LETTUCE","spc":750,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":246,"cbi":"10024347","name":"SLICED CHEESE","spc":200,"unit":"CS","size":"1 SLICE","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":247,"cbi":"476335","name":"SLICED TOMATO","spc":400,"unit":"CS","size":"","meal":"TUESDAY LUNCH","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":248,"cbi":"10072261","name":"SOUR CREAM CUPS","spc":150,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":249,"cbi":"18123","name":"SPLENDA","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":250,"cbi":"10111215","name":"SPOONS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":251,"cbi":"116010","name":"SPRAY OIL","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":252,"cbi":"102239","name":"SPRITE","spc":4000,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":253,"cbi":"10054724","name":"STEAMED BROCCOLI","spc":200,"unit":"CS","size":"4OZ SCOOP","meal":"WEDNESDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":254,"cbi":"18087","name":"SUGAR PACKETS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":255,"cbi":"10169634","name":"SWEET CARROTS","spc":160,"unit":"PAN","size":"4 OZ SCOOP","meal":"FRIDAY DINNER","loc":"RIDGE","compound":true,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":256,"cbi":"18117","name":"SWEET N LOW","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":257,"cbi":"272405","name":"SWEET POTATO CASSEROLE","spc":94,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":258,"cbi":"10160405","name":"SYRUP","spc":100,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":259,"cbi":"10125576","name":"TACO BEEF","spc":90,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":260,"cbi":"292053","name":"TACO SHELLS","spc":144,"unit":"CS","size":"","meal":"MONDAY DINNER","loc":"RIDGE","compound":false,"al":[false,false,true,false,false],"veg":true,"vegan":true},{"id":261,"cbi":"10125327","name":"TERIYAKI SAUCE GF","spc":null,"unit":"PAN","size":"","meal":"MONDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":262,"cbi":"833154","name":"TO-GO BOXES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":263,"cbi":"833154","name":"TO-GO BOXES","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":264,"cbi":"854385","name":"TOILET PAPER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":265,"cbi":"854385","name":"TOILET PAPER","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":266,"cbi":"10107841","name":"TORTILLA CHIPS","spc":100,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":267,"cbi":"292140","name":"TORTILLA STRIPS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":true,"vegan":true},{"id":268,"cbi":"10016742","name":"TRASH BAGS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":269,"cbi":"10016742","name":"TRASH BAGS","spc":null,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":270,"cbi":"294040","name":"TZATZIKI SAUCE","spc":175,"unit":"CS","size":"2 OZ SCOOP","meal":"WEDNESDAY LUNCH","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":true,"vegan":false},{"id":271,"cbi":"","name":"WATERMELON","spc":40,"unit":"CS","size":"","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":272,"cbi":"10172623","name":"WHITE MILK","spc":140,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"SPRINGS","compound":false,"al":[false,true,false,false,false],"veg":false,"vegan":false},{"id":273,"cbi":"10172623","name":"WHITE MILK","spc":140,"unit":"CS","size":"","meal":"STAPLE ITEMS/MANUAL CHECK","loc":"RIDGE","compound":false,"al":[false,true,false,false,false],"veg":false,"vegan":false},{"id":274,"cbi":"10138861","name":"WHITE RICE","spc":400,"unit":"PAN","size":"4 OZ","meal":"OLD/DO NOT USE","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":275,"cbi":"10031198","name":"CHOCOLATE PUDDING","spc":200,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":276,"cbi":"8025","name":"OREO CRUMBLES","spc":200,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":277,"cbi":"10147131","name":"KALE CHOPPED","spc":300,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":278,"cbi":"10104854","name":"CHIC PEA","spc":300,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":279,"cbi":"172018","name":"FETA CHEESE","spc":200,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":280,"cbi":"10026249","name":"BBQ  GALLON","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":281,"cbi":"10044624","name":"MAYO GALLON","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[true,false,false,false,false],"veg":false,"vegan":false},{"id":282,"cbi":"76110","name":"HONEY MUSTARD GAL","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":283,"cbi":"445010","name":"ONION","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":284,"cbi":"62094","name":"RED WINE VINEGAR","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":285,"cbi":"10169634","name":"CARROTS","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":286,"cbi":"10142077","name":"HONEY","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":287,"cbi":"132082","name":"CAKE MIX","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[true,true,true,false,true],"veg":false,"vegan":false},{"id":288,"cbi":"10063469","name":"PEACH PIE FILLING","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":289,"cbi":"10063470","name":"APPLE PIE FILLING","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false},{"id":290,"cbi":"10056909","name":"WHITE WINE VINEGAR","spc":null,"unit":"CS","size":"","meal":"","loc":"SPRINGS","compound":false,"al":[false,false,false,false,false],"veg":false,"vegan":false}],"menus":{"MONDAY BREAKFAST":[{"ref":9,"name":"(MONDAY) BACON","note":"there is already a pan in the fridge to reheat","gf":false,"ov":""},{"ref":11,"name":"(MONDAY) EGG BITES","note":"","gf":false,"ov":""},{"ref":12,"name":"(MONDAY) FRENCH TOAST STICKS","note":"","gf":false,"ov":""},{"ref":258,"name":"SYRUP","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":""},{"ref":15,"name":"(MONDAY) ORANGE SLICES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}],"MONDAY LUNCH":[{"ref":13,"name":"(MONDAY) GF BONELESS WING CHICKEN","note":"","gf":false,"ov":""},{"ref":191,"name":"KOREAN BBQ SAUCE","note":"","gf":false,"ov":"AS NEEDED"},{"ref":160,"name":"GARLIC PARM SAUCE","note":"","gf":false,"ov":"AS NEEDED"},{"ref":261,"name":"TERIYAKI SAUCE GF","note":"","gf":false,"ov":"AS NEEDED"},{"ref":110,"name":"CELERY STICKS","note":"","gf":false,"ov":"AS NEEDED"},{"ref":109,"name":"CARROT STICKS","note":"","gf":false,"ov":"AS NEEDED"},{"ref":233,"name":"RANCH CUPS","note":"","gf":false,"ov":""},{"ref":16,"name":"(MONDAY) POTATO WEDGES","note":"","gf":false,"ov":""}],"MONDAY DINNER":[{"ref":259,"name":"TACO BEEF","note":"","gf":false,"ov":""},{"ref":100,"name":"BLACK BEANS","note":"","gf":false,"ov":""},{"ref":248,"name":"SOUR CREAM CUPS","note":"","gf":false,"ov":""},{"ref":240,"name":"SALSA CUP","note":"","gf":false,"ov":""},{"ref":260,"name":"TACO SHELLS","note":"","gf":false,"ov":""},{"ref":245,"name":"SHREDDED LETTUCE","note":"","gf":false,"ov":""},{"ref":174,"name":"GUACAMOLE","note":"","gf":false,"ov":""},{"ref":244,"name":"SHREDDED CHEESE","note":"","gf":false,"ov":""},{"ref":null,"name":"GF WRAP","note":"","gf":true,"ov":""}],"TUESDAY BREAKFAST":[{"ref":61,"name":"(TUESDAY) BACON","note":"","gf":false,"ov":""},{"ref":65,"name":"(TUESDAY) CHEESE OMELET","note":"","gf":false,"ov":""},{"ref":120,"name":"CINNAMON ROLL","note":"","gf":false,"ov":""},{"ref":133,"name":"CREAM CHEESE FROSTING","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":""},{"ref":62,"name":"(TUESDAY) BANANA","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}],"TUESDAY LUNCH":[{"ref":64,"name":"(TUESDAY) BURGERS","note":"","gf":false,"ov":""},{"ref":63,"name":"(TUESDAY) BUNS","note":"","gf":false,"ov":""},{"ref":66,"name":"(TUESDAY) CHIPS","note":"","gf":false,"ov":""},{"ref":247,"name":"SLICED TOMATO","note":"","gf":false,"ov":""},{"ref":246,"name":"SLICED CHEESE","note":"","gf":false,"ov":""},{"ref":106,"name":"BURGER LETTUCE","note":"","gf":false,"ov":""},{"ref":130,"name":"COLE SLAW","note":"","gf":false,"ov":""},{"ref":214,"name":"ORANGE SLICES","note":"","gf":false,"ov":""},{"ref":188,"name":"KETCHUP","note":"","gf":false,"ov":"AS NEEDED"},{"ref":202,"name":"MAYO","note":"","gf":false,"ov":"AS NEEDED"},{"ref":205,"name":"MUSTARD","note":"","gf":false,"ov":"AS NEEDED"},{"ref":161,"name":"GF BUN","note":"","gf":true,"ov":"AS NEEDED"}],"TUESDAY DINNER":[{"ref":154,"name":"FRIED CHICKEN","note":"","gf":false,"ov":""},{"ref":201,"name":"MASHED POTATOES","note":"","gf":false,"ov":""},{"ref":70,"name":"(TUESDAY) GREEN BEANS","note":"","gf":false,"ov":""},{"ref":88,"name":"APPLE COBBLER","note":"","gf":false,"ov":""},{"ref":69,"name":"(TUESDAY) GF CHICKEN TENDERS","note":"","gf":true,"ov":""}],"WEDNESDAY BREAKFAST":[{"ref":79,"name":"(WEDNESDAY) SAUSAGE","note":"","gf":false,"ov":""},{"ref":80,"name":"(WEDNESDAY) SCRAMBLED EGG","note":"","gf":false,"ov":""},{"ref":75,"name":"(WEDNESDAY) BREAKFAST POTATOES","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":""},{"ref":74,"name":"(WEDNESDAY) APPLES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}],"WEDNESDAY LUNCH":[{"ref":226,"name":"PITA CHICKEN","note":"","gf":false,"ov":""},{"ref":225,"name":"PITA BREAD","note":"","gf":false,"ov":""},{"ref":239,"name":"RED PEPPER HUMMUS","note":"","gf":false,"ov":""},{"ref":270,"name":"TZATZIKI SAUCE","note":"","gf":false,"ov":""},{"ref":187,"name":"KALE SALAD","note":"","gf":false,"ov":""},{"ref":212,"name":"ONION RINGS","note":"","gf":false,"ov":""},{"ref":null,"name":"GF WRAP","note":"","gf":true,"ov":""}],"WEDNESDAY DINNER":[{"ref":219,"name":"PENNE","note":"","gf":false,"ov":""},{"ref":85,"name":"ALFREDO CHICKEN","note":"","gf":false,"ov":""},{"ref":86,"name":"ALFREDO SAUCE","note":"","gf":false,"ov":""},{"ref":253,"name":"STEAMED BROCCOLI","note":"","gf":false,"ov":""},{"ref":78,"name":"(WEDNESDAY) ROLL","note":"","gf":false,"ov":""},{"ref":77,"name":"(WEDNESDAY) PARMESAN CHEESE","note":"","gf":false,"ov":"AS NEEDED"},{"ref":164,"name":"GF PASTA","note":"","gf":true,"ov":"AS NEEDED"},{"ref":null,"name":"GF ROLL","note":"","gf":true,"ov":""}],"THURSDAY BREAKFAST":[{"ref":59,"name":"(THURSDAY) SAUSAGE","note":"","gf":false,"ov":""},{"ref":51,"name":"(THURSDAY) EGG OMELET","note":"","gf":false,"ov":""},{"ref":60,"name":"(THURSDAY) VERY BERRY BISCUIT","note":"","gf":false,"ov":""},{"ref":165,"name":"GLAZE","note":"","gf":false,"ov":""},{"ref":47,"name":"(THURSDAY) BANANA","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}],"THURSDAY LUNCH":[{"ref":48,"name":"(THURSDAY) CHICKEN TENDERS","note":"","gf":false,"ov":""},{"ref":134,"name":"CRINKLE FRIES","note":"","gf":false,"ov":""},{"ref":55,"name":"(THURSDAY) ORANGE SLICES","note":"","gf":false,"ov":""},{"ref":182,"name":"HONEY MUSTARD","note":"","gf":false,"ov":""},{"ref":97,"name":"BBQ CUP","note":"","gf":false,"ov":""},{"ref":null,"name":"RANCH CUP","note":"","gf":false,"ov":""},{"ref":188,"name":"KETCHUP","note":"","gf":false,"ov":""},{"ref":53,"name":"(THURSDAY) GF CHICKEN TENDERS","note":"","gf":true,"ov":"AS NEEDED"}],"THURSDAY DINNER":[{"ref":229,"name":"PULLED PORK","note":"","gf":false,"ov":""},{"ref":195,"name":"MAC AND CHEESE","note":"","gf":false,"ov":""},{"ref":54,"name":"(THURSDAY) GREEN BEANS","note":"","gf":false,"ov":""},{"ref":98,"name":"BBQ SAUCE","note":"","gf":false,"ov":""},{"ref":119,"name":"CHOCOLATE OREO PUDDING","note":"","gf":false,"ov":""}],"FRIDAY BREAKFAST":[{"ref":7,"name":"(FRIDAY) SCRAMBLED EGG","note":"","gf":false,"ov":""},{"ref":1,"name":"(FRIDAY) BACON","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":"AS NEEDED"},{"ref":0,"name":"(FRIDAY) APPLES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":"AS NEEDED"}],"FRIDAY LUNCH":[{"ref":170,"name":"GRILLED CHICKEN","note":"","gf":false,"ov":""},{"ref":222,"name":"PEPPERS + ONIONS","note":"","gf":false,"ov":""},{"ref":3,"name":"(FRIDAY) BUNS","note":"","gf":false,"ov":""},{"ref":232,"name":"QUESO","note":"","gf":false,"ov":""},{"ref":5,"name":"(FRIDAY) CHIPS","note":"","gf":false,"ov":""},{"ref":156,"name":"FRUIT CUP","note":"","gf":false,"ov":""},{"ref":161,"name":"GF BUN","note":"","gf":true,"ov":""}],"FRIDAY DINNER":[{"ref":2,"name":"(FRIDAY) BONELESS WING CHICKEN","note":"","gf":false,"ov":""},{"ref":213,"name":"ORANGE SAUCE","note":"","gf":false,"ov":""},{"ref":155,"name":"FRIED RICE","note":"","gf":false,"ov":""},{"ref":255,"name":"SWEET CARROTS","note":"","gf":false,"ov":""},{"ref":null,"name":"GF BONELESS WING CHICKEN","note":"","gf":true,"ov":""},{"ref":null,"name":"GF TERIYAKI","note":"","gf":true,"ov":""},{"ref":274,"name":"WHITE RICE","note":"","gf":true,"ov":""}],"SATURDAY BREAKFAST":[{"ref":17,"name":"(SATURDAY) BACON","note":"","gf":false,"ov":""},{"ref":22,"name":"(SATURDAY) CHEESE OMELET","note":"","gf":false,"ov":""},{"ref":19,"name":"(SATURDAY) BREAKFAST POTATOES","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":""},{"ref":18,"name":"(SATURDAY) BANANA","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""},{"ref":null,"name":"OAT MILK SERVINGS","note":"","gf":true,"ov":""}],"SATURDAY LUNCH":[{"ref":116,"name":"CHICKEN SANDWICH FILETS","note":"","gf":false,"ov":""},{"ref":20,"name":"(SATURDAY) BUNS","note":"","gf":false,"ov":""},{"ref":224,"name":"PICKLES","note":"","gf":false,"ov":""},{"ref":209,"name":"NOT CHICK-FIL-A SAUCE","note":"","gf":false,"ov":""},{"ref":227,"name":"POTATO SALAD","note":"","gf":false,"ov":""},{"ref":199,"name":"MANGO CHUNKS","note":"","gf":false,"ov":""},{"ref":188,"name":"KETCHUP","note":"","gf":false,"ov":""},{"ref":202,"name":"MAYO","note":"","gf":false,"ov":""},{"ref":205,"name":"MUSTARD","note":"","gf":false,"ov":""},{"ref":161,"name":"GF BUN","note":"","gf":true,"ov":"AS NEEDED"},{"ref":171,"name":"GRILLED CHICKEN BREAST","note":"","gf":true,"ov":""}],"SATURDAY DINNER":[{"ref":26,"name":"(SATURDAY) MARINARA SAUCE","note":"","gf":false,"ov":""},{"ref":null,"name":"SPAGHETTI","note":"","gf":false,"ov":""},{"ref":27,"name":"(SATURDAY) MEATBALLS","note":"","gf":false,"ov":""},{"ref":29,"name":"(SATURDAY) ROLL","note":"","gf":false,"ov":""},{"ref":28,"name":"(SATURDAY) PARMESAN CHEESE","note":"","gf":false,"ov":""},{"ref":null,"name":"GF MEATBALL","note":"","gf":true,"ov":""},{"ref":null,"name":"GF ROLL","note":"","gf":true,"ov":""},{"ref":164,"name":"GF PASTA","note":"","gf":true,"ov":""}],"SUNDAY BREAKFAST":[{"ref":44,"name":"(SUNDAY) SAUSAGE","note":"","gf":false,"ov":""},{"ref":45,"name":"(SUNDAY) SCRAMBLED EGG","note":"","gf":false,"ov":""},{"ref":99,"name":"BISCUIT","note":"","gf":false,"ov":""},{"ref":186,"name":"JELLY","note":"","gf":false,"ov":""},{"ref":169,"name":"GRAVY","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":""},{"ref":31,"name":"(SUNDAY) APPLES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""},{"ref":210,"name":"OAT MILK","note":"","gf":true,"ov":""}],"SUNDAY LUNCH":[{"ref":40,"name":"(SUNDAY) MEATBALLS","note":"","gf":false,"ov":""},{"ref":39,"name":"(SUNDAY) MARINARA SAUCE","note":"","gf":false,"ov":""},{"ref":null,"name":"HOAGIE ROLL","note":"","gf":false,"ov":""},{"ref":null,"name":"PARMESAN CHEESE","note":"","gf":false,"ov":""},{"ref":139,"name":"CURLY FRIES","note":"","gf":false,"ov":""},{"ref":37,"name":"(SUNDAY) FRUIT SALAD","note":"","gf":false,"ov":""},{"ref":null,"name":"GF BONELESS WING CHICKEN","note":"","gf":true,"ov":""},{"ref":161,"name":"GF BUN","note":"","gf":true,"ov":""}],"SUNDAY DINNER":[{"ref":34,"name":"(SUNDAY) CHICKEN TENDERS","note":"","gf":false,"ov":""},{"ref":242,"name":"SCALLOPED POTATOES","note":"","gf":false,"ov":""},{"ref":208,"name":"NORMANDY BLEND VEG","note":"","gf":false,"ov":""},{"ref":218,"name":"PEACH COBBLER","note":"","gf":false,"ov":""},{"ref":38,"name":"(SUNDAY) GF CHICKEN TENDERS","note":"","gf":true,"ov":""}]}}</script>
 <script>
 (function(){
 "use strict";
-const SEED = JSON.parse(document.getElementById('seed').textContent);
 const DAYS = ['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'];
 const MEALS = ['BREAKFAST','LUNCH','DINNER'];
 const RIDGE_MEALS = ['MONDAY LUNCH','MONDAY DINNER','TUESDAY BREAKFAST','WEDNESDAY LUNCH','WEDNESDAY DINNER','THURSDAY BREAKFAST','FRIDAY LUNCH','FRIDAY DINNER','SATURDAY BREAKFAST'];
@@ -267,48 +360,73 @@ const AL_SHORT = ['E','D','G','SE','SO'];
 const CAMP_NAME = {RIDGE:'Ridge',SPRINGS:'Springs',SM:'South Mountain'};
 const SERVE_OPTS = [['BOTH','Ridge + Springs'],['RIDGE','Ridge'],['SPRINGS','Springs'],['SM','South Mountain']];
 const DEF_TIME = {BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
-const KEY = 'prepBuilder.v2', OLDKEY = 'prepBuilder.v1';
+const KEY = 'prepBuilder.v2', SYNCKEY = 'prepBuilder.sync', PREFKEY = 'prepBuilder.prefs';
+const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog'];
+const KEYED = ['menus','loc','mealCount','serve','off','mt'];
+/* Where the live version is kept. On the website: the GitHub save relay (worker/worker.js),
+   whose address goes here. Inside a Claude artifact: that artifact's shared database. */
+const REMOTE_URL = 'https://kitchen-prep.nate-5ff.workers.dev';
+const PAGE_URL = '__PAGE_URL__';
+const DAY_TOK = ['mon','tue','wed','thu','fri','sat','sun'];
 
-function mondayOf(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);return x.toISOString().slice(0,10);}
-function seedCatalog(){ return SEED.index.map(it=>({id:it.id,cbi:it.cbi,name:it.name,spc:it.spc,unit:it.unit,size:it.size,meal:it.meal,compound:!!it.compound,al:it.al.slice(),veg:!!it.veg,vegan:!!it.vegan})); }
-function seedMenus(){ const loc={}, menus={};
-  DAYS.forEach(d=>MEALS.forEach(m=>{const k=d+' '+m; loc[k]=RIDGE_MEALS.includes(k)?'RIDGE':'SPRINGS'; menus[k]=(SEED.menus[k]||[]).map(x=>({ref:x.ref,name:x.name,note:x.note,gf:x.gf,ov:x.ov||''}));}));
-  return {loc,menus}; }
+function pd(s){return new Date(s+'T12:00:00');}
+function iso(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');}
+function addDays(s,n){const x=pd(s); x.setDate(x.getDate()+n); return iso(x);}
+function todayISO(){return iso(new Date());}
+function mondayOf(s){const x=typeof s==='string'?pd(s):new Date(s); x.setHours(12); x.setDate(x.getDate()-((x.getDay()+6)%7)); return iso(x);}
+function weekdayOf(s){return DAYS[(pd(s).getDay()+6)%7];}
+/* meals are stored by calendar date: "2026-11-14 LUNCH" */
+function dk(d){return addDays(S.week,DAYS.indexOf(d));}
+function K(d,m){return dk(d)+' '+m;}
+function fmtLong(s){return pd(s).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric',year:'numeric'});}
+/* older saves keyed meals by weekday ("MONDAY LUNCH") for one week; move them to real dates */
+const OLDKEY_RE=/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY) (BREAKFAST|LUNCH|DINNER)$/;
+function toDated(st,week){ if(!st) return st; const wk=mondayOf(week||todayISO());
+  KEYED.forEach(f=>{ const o=st[f]; if(!o||typeof o!=='object') return; const n={};
+    Object.keys(o).forEach(key=>{ const mm=key.match(OLDKEY_RE); n[mm?addDays(wk,DAYS.indexOf(mm[1]))+' '+mm[2]:key]=o[key]; }); st[f]=n; });
+  return st; }
+
+/* Everything real (index, menus, headcounts) comes from the live version on GitHub.
+   This blank starting point is only used until it loads. */
 function defaults(){
-  const {loc,menus}=seedMenus();
-  return {counts:{rg:100,rs:5,sg:50,ss:0,mg:0,ms:0,gfr:1,gfs:0,gfm:0}, week:mondayOf(new Date()),
-    menus, loc, mealCount:{}, serve:{}, off:{}, mt:{}, catalog:seedCatalog(), tab:'MONDAY'};
-}
-function to24(s){ const m=String(s||'').trim().match(/^(\d{1,2}):(\d{2})\s*([AP])M?$/i); if(!m) return null;
-  let h=+m[1]%12; if(m[3].toUpperCase()==='P') h+=12; return String(h).padStart(2,'0')+':'+m[2]; }
-function migrate(o){
-  const S=defaults();
-  ['counts','week','menus','loc','mealCount','serve','off','tab'].forEach(f=>{ if(o[f]!==undefined) S[f]=f==='counts'?Object.assign(S.counts,o.counts):o[f]; });
-  // catalog: seed + old per-item edits + old added items
-  const ed=o.idxEdits||{};
-  S.catalog=seedCatalog().map(it=>ed[it.id]?Object.assign(it,ed[it.id]):it).concat((o.customItems||[]).map(c=>{const x={...c}; delete x.custom; delete x.loc; return x;}));
-  // old single meal times become every campus's time for that meal
-  if(o.times) MEALS.forEach(m=>{const t=to24(o.times[m]); if(t&&t!==DEF_TIME[m]) DAYS.forEach(d=>{const k=d+' '+m; S.mt[k]=S.mt[k]||{}; ['RIDGE','SPRINGS','SM'].forEach(c=>{S.mt[k][c]={time:t,note:''};});});});
-  return S;
+  return {counts:{rg:0,rs:0,sg:0,ss:0,mg:0,ms:0,gfr:0,gfs:0,gfm:0}, week:mondayOf(new Date()),
+    menus:{}, loc:{}, mealCount:{}, serve:{}, off:{}, mt:{}, catalog:[], tab:'MONDAY'};
 }
 let S;
 try{
   const raw=localStorage.getItem(KEY);
-  if(raw) S=Object.assign(defaults(),JSON.parse(raw));
-  else { const old=localStorage.getItem(OLDKEY); S=old?migrate(JSON.parse(old)):defaults(); }
+  S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults(); toDated(S,S.week);
 }catch(e){S=defaults();}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-save();
+function sharedOf(s){const o={}; SHARED.forEach(k=>o[k]=s[k]);
+  const mn={}; Object.keys(s.menus||{}).sort().forEach(k=>{ if(s.menus[k]&&s.menus[k].length) mn[k]=s.menus[k]; }); o.menus=mn; return o;}
+function sharedJSON(){return JSON.stringify(sharedOf(S));}
+const PRISTINE=JSON.stringify(sharedOf(defaults()));
+/* sync bookkeeping: which live version this browser's copy is based on */
+let SY={baseV:0, baseJSON:PRISTINE};
+try{const r=localStorage.getItem(SYNCKEY); if(r) SY=Object.assign(SY,JSON.parse(r));
+  const b=JSON.parse(SY.baseJSON); if(b&&b.menus&&Object.keys(b.menus).some(k=>OLDKEY_RE.test(k))) SY.baseJSON=JSON.stringify(sharedOf(Object.assign(defaults(),toDated(b,S.week))));}catch(e){}
+let PREF={campus:'all', meals:['breakfast','lunch','dinner'], view:false, auto:false, by:'', nameAsked:false};
+try{const r=localStorage.getItem(PREFKEY); if(r) PREF=Object.assign(PREF,JSON.parse(r));}catch(e){}
+function savePref(){try{localStorage.setItem(PREFKEY,JSON.stringify(PREF));}catch(e){}}
+function isDirty(){return sharedJSON()!==SY.baseJSON;}
+let liveErr=false, autoTimer=null, STORE=null, LIVE=null, liveChecked=false, pushing=false, conflict=null;
+function save(){
+  try{localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem(SYNCKEY,JSON.stringify(SY));}catch(e){}
+  renderSync(); if(typeof renderTabs==='function'&&document.getElementById('tabs').children.length) renderTabs();
+  if(PREF.auto&&STORE&&STORE.canWrite&&isDirty()){ clearTimeout(autoTimer); autoTimer=setTimeout(()=>pushLive(false,true),2000); }
+}
 
 /* ---------- catalog + math ---------- */
 let CAT=new Map();
 function reindex(){CAT=new Map(S.catalog.map(it=>[it.id,it]));}
 reindex();
+function isRetired(it){return !!(it.retired||it.meal==='OLD/DO NOT USE');}
 function item(ref){ return ref==null?null:(CAT.get(ref)||null); }
 function disp(name){return String(name||'').replace(/^\([A-Z]+\)\s*/,'').trim();}
 function lineName(l){const it=item(l.ref); return disp(it?it.name:l.name);}
 function C(f){return +S.counts[f]||0;}
 function tot(){const r=C('rg')+C('rs'), s=C('sg')+C('ss'), m=C('mg')+C('ms'); return {r,s,m,rs:r+s};}
+function locOf(k){ if(S.loc[k]) return S.loc[k]; const [ds,m]=k.split(' '); return RIDGE_MEALS.includes(weekdayOf(ds)+' '+m)?'RIDGE':'SPRINGS'; }
 function serveOf(k){return S.serve[k]||'BOTH';}
 function campusesFor(k){const s=serveOf(k); return s==='BOTH'?['RIDGE','SPRINGS']:[s];}
 function hasSend(k){return serveOf(k)!=='SM';}
@@ -337,7 +455,7 @@ function fmt12(t){ if(!t) return ''; const [h,mi]=t.split(':').map(Number); if(i
 /* ---------- picker ---------- */
 let labelToRef={};
 function buildCatalog(){
-  const base={}; S.catalog.forEach(it=>{ if(it.meal==='OLD/DO NOT USE') return; const b=disp(it.name).toUpperCase(); if(!b) return; (base[b]=base[b]||[]).push(it); });
+  const base={}; S.catalog.forEach(it=>{ if(isRetired(it)) return; const b=disp(it.name).toUpperCase(); if(!b) return; (base[b]=base[b]||[]).push(it); });
   labelToRef={}; const opts=[];
   Object.keys(base).sort().forEach(b=>{
     const seen=new Set(), multi=new Set(base[b].map(x=>(x.spc||'')+x.unit)).size>1;
@@ -354,22 +472,30 @@ function dayDate(i){const d=new Date(S.week+'T12:00:00'); if(isNaN(d)) return ''
 
 /* ---------- sidebar ---------- */
 const CF=['rg','rs','gfr','sg','ss','gfs','mg','ms','gfm'];
-function fillPanel(){ CF.forEach(f=>{document.getElementById('c_'+f).value=S.counts[f]??0;}); document.getElementById('week').value=S.week; renderTotals(); }
+function fillPanel(){ CF.forEach(f=>{document.getElementById('c_'+f).value=S.counts[f]??0;}); renderTotals(); }
 function initPanel(){
   CF.forEach(f=>{const el=document.getElementById('c_'+f); el.addEventListener('input',()=>{S.counts[f]=el.value===''?0:Math.max(0,+el.value); save(); renderTotals(); if(S.tab!=='INDEX') renderView(); else refreshAtCol();});});
-  const w=document.getElementById('week'); w.addEventListener('change',()=>{S.week=w.value; save(); renderTabs(); renderView();});
+  const go=(dateStr)=>{ if(!dateStr) return; S.week=mondayOf(dateStr); S.tab=weekdayOf(dateStr); save(); renderTabs(); renderView(); setHash(); };
+  window.goToDate=go;
+  document.getElementById('wkPrev').onclick=()=>{S.week=addDays(S.week,-7); save(); renderTabs(); renderView(); setHash();};
+  document.getElementById('wkNext').onclick=()=>{S.week=addDays(S.week,7); save(); renderTabs(); renderView(); setHash();};
+  document.getElementById('wkToday').onclick=()=>go(todayISO());
+  document.getElementById('jump').onchange=e=>go(e.target.value);
   fillPanel();
 }
-function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s; t_rs.textContent=T.rs; t_m.textContent=T.m;}
+function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s; t_rs.textContent=T.rs; t_m.textContent=T.m; renderKvSum();}
 
 /* ---------- tabs ---------- */
 function renderTabs(){
   const el=document.getElementById('tabs');
-  el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(d+' '+m)).length;
-    return '<button class="tab'+(on?'':' alloff')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+'</small></button>';}).join('')
+  const td=todayISO();
+  el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(K(d,m))).length, n=MEALS.reduce((a,m)=>a+((S.menus[K(d,m)]||[]).length),0), isToday=dk(d)===td;
+    return '<button class="tab'+(on?'':' alloff')+(n?'':' nomenu')+(isToday?' today':'')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+(n?'':' · empty')+'</small></button>';}).join('')
    +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>'+S.catalog.length+' items</small></button>';
-  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView();});
+  el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView(); setHash();});
   document.getElementById('pdfDay').disabled=S.tab==='INDEX';
+  document.getElementById('wkLabel').textContent='Week of '+pd(S.week).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('jump').value=S.tab==='INDEX'?S.week:dk(S.tab);
 }
 
 /* ---------- day view ---------- */
@@ -391,7 +517,7 @@ function rowHtml(line,k,i){
    +'<td><button class="x" type="button" data-del="'+i+'" aria-label="Remove '+esc(nm)+'">×</button></td></tr>';
 }
 function ticket(d,m){
-  const k=d+' '+m, lines=S.menus[k]||[], loc=S.loc[k], sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
+  const k=K(d,m), lines=S.menus[k]||[], loc=locOf(k), sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
   const overridden=hasOverride(k), send=hasSend(k), cols=send?9:8;
   const toggle='<label class="switch" title="Include this meal"><input type="checkbox" data-on id="on_'+kid+'"'+(on?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">'+(on?'Serving':'Off')+'</span></label>';
   if(!on) return '<section class="ticket off" data-k="'+k+'"><div class="thead"><h3>'+m+'</h3><span class="meta">Not needed. Left off the prep sheet and PDF.</span>'+toggle+'</div></section>';
@@ -411,7 +537,8 @@ function ticket(d,m){
     +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="'+cols+'">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
     +'</tbody></table></div>';
   return '<section class="ticket'+(sv==='SM'?' smt':'')+'" data-k="'+k+'">'
-   +'<div class="thead"><h3>'+m+'</h3>'+kitchen+toggle+'</div>'
+   +'<div class="thead"><h3>'+m+'</h3>'+kitchen+'<button type="button" class="btn small copybtn" data-copy aria-expanded="'+(copyK===k)+'"'+(lines.length?'':' disabled title="Add items first"')+'>Copy to…</button>'+toggle+'</div>'
+   +(copyK===k?copyPanel(k):'')
    +'<div class="tbar"><span class="meta">Campus</span>'+seg
    +'<span class="meta"><label for="hc_'+kid+'">Campers</label><input type="number" min="0" id="hc_'+kid+'" data-hc value="'+mealHead(k)+'" class="'+(overridden?'is-ovr':'')+'">'
    +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small quiet" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+' total</span>')+'</span>'
@@ -422,21 +549,78 @@ function ticket(d,m){
    +'<button class="btn small" type="button" data-addbtn>Add item</button><button class="btn small quiet" type="button" data-addgf>Add to allergy prep</button></div>'
    +'</section>';
 }
+let copyK=null;
+function copyPanel(k){
+  const [ds,m]=k.split(' '), kid=k.replace(' ','_'), n=(S.menus[k]||[]).length;
+  return '<form class="copyp" data-copyform novalidate>'
+   +'<div class="cph"><b>Copy '+n+' item'+(n===1?'':'s')+'</b> from '+esc(fmtLong(ds))+' '+m.toLowerCase()+'</div>'
+   +'<div class="cpf"><label><span class="lbl">To date</span><input type="date" id="cpd_'+kid+'" required value="'+addDays(ds,7)+'"></label>'
+   +'<label><span class="lbl">Meal</span><select id="cpm_'+kid+'">'+MEALS.map(x=>'<option value="'+x+'"'+(x===m?' selected':'')+'>'+x.charAt(0)+x.slice(1).toLowerCase()+'</option>').join('')+'</select></label>'
+   +'<label><span class="lbl">If that meal already has items</span><select id="cpr_'+kid+'"><option value="add">Add these after them</option><option value="replace">Replace them</option></select></label>'
+   +'<label class="chk"><input type="checkbox" id="cps_'+kid+'" checked> Also copy campus, camper count, kitchen, times and notes</label></div>'
+   +'<div class="cpfoot"><button class="btn small primary" type="submit">Copy</button><button class="btn small quiet" type="button" data-copycancel>Cancel</button><span class="cpinfo" id="cpi_'+kid+'" role="status"></span></div></form>';
+}
+function copyMeal(k,ds,m,mode,settings){
+  const tk=ds+' '+m; if(tk===k) return {err:'That is the same meal. Pick another date or meal.'};
+  const clones=(S.menus[k]||[]).map(l=>JSON.parse(JSON.stringify(l)));
+  const had=(S.menus[tk]||[]).length;
+  S.menus[tk]=mode==='replace'?clones:(S.menus[tk]||[]).concat(clones);
+  if(settings){
+    ['serve','loc','mealCount'].forEach(f=>{ if(S[f][k]!==undefined&&S[f][k]!==null) S[f][tk]=S[f][k]; else delete S[f][tk]; });
+    if(S.mt[k]) S.mt[tk]=JSON.parse(JSON.stringify(S.mt[k])); else delete S.mt[tk];
+  }
+  delete S.off[tk];
+  return {tk,had,n:clones.length};
+}
 function refocus(sel){const n=document.querySelector(sel); if(n) n.focus();}
+const FC={ridge:'RIDGE',springs:'SPRINGS',sm:'SM'};
+function shown(k){const m=k.split(' ')[1].toLowerCase(); return PREF.meals.includes(m)&&(PREF.campus==='all'||campusesFor(k).includes(FC[PREF.campus]));}
+function filterNote(){const bits=[]; if(PREF.campus!=='all') bits.push(CAMP_NAME[FC[PREF.campus]]+' only'); if(PREF.meals.length<3) bits.push(PREF.meals.map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')); return bits.join(' · ');}
+function ticketRO(d,m){
+  const k=K(d,m), lines=S.menus[k]||[], sv=serveOf(k), send=hasSend(k);
+  if(!isOn(k)) return '<section class="ticket off ro"><div class="thead"><h3>'+m+'</h3><span class="meta">Not served</span></div></section>';
+  const camps=campusesFor(k).filter(c=>PREF.campus==='all'||c===FC[PREF.campus]);
+  const tl='<div class="mt">'+camps.map(c=>{const v=mtGet(k,c); return '<div class="mtrow ro"><span class="camptag '+c+'">'+CAMP_NAME[c]+'</span><b class="rotime">'+esc(fmt12(v.time)||'—')+'</b>'+(v.note?'<span class="ronote">'+esc(v.note)+'</span>':'')+'</div>';}).join('')+'</div>';
+  const row=l=>{const it=item(l.ref), c=calc(l,k); return '<tr><td class="rock"><span class="box" aria-hidden="true"></span></td><td class="item">'+esc(lineName(l))+'</td><td class="prep"><span class="calc '+c.kind+'">'+esc(c.prep)+'</span></td><td>'+esc(it&&it.size||'')+'</td><td>'+esc(l.note||'')+'</td>'+(send?'<td class="send">'+esc(c.send)+'</td>':'')+alCells(it)+'</tr>';};
+  const main=lines.filter(l=>!l.gf), gf=lines.filter(l=>l.gf), cols=send?8:7;
+  const body=lines.length?'<div class="tscroll"><table class="rotable"><thead><tr><th></th><th>Item</th><th>Prep</th><th>Serving</th><th>Notes</th>'+(send?'<th>To Springs</th>':'')+'<th>Allergens</th><th>Diet</th></tr></thead><tbody>'
+    +main.map(row).join('')+(gf.length?'<tr class="sub"><td colspan="'+cols+'">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(row).join(''):'')+'</tbody></table></div>':'<div class="empty">No items.</div>';
+  return '<section class="ticket ro'+(sv==='SM'?' smt':'')+'"><div class="thead"><h3>'+m+'</h3><span class="meta"><b>'+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+'</b></span><span class="meta">'+mealHead(k)+' campers'+(hasOverride(k)?' (override)':'')+' · GF '+mealGF(k)+'</span><span class="meta">Kitchen: '+(sv==='SM'?'South Mountain':CAMP_NAME[locOf(k)])+'</span></div>'+tl+body+'</section>';
+}
 function renderDay(d){
-  const v=document.getElementById('view'); v.innerHTML='<div class="meals">'+MEALS.map(m=>ticket(d,m)).join('')+'</div>';
+  const v=document.getElementById('view'); const ms=MEALS.filter(m=>shown(K(d,m)));
+  const fn=filterNote();
+  v.innerHTML=(fn?'<div class="fnote">Filtered: '+esc(fn)+' · <button type="button" class="linkbtn" id="clearF">Show everything</button></div>':'')
+    +'<div class="meals">'+(ms.length?ms.map(m=>PREF.view?ticketRO(d,m):ticket(d,m)).join(''):'<div class="ticket"><div class="empty">No meals on '+d.charAt(0)+d.slice(1).toLowerCase()+' match this filter.</div></div>')+'</div>';
+  const cf=document.getElementById('clearF'); if(cf) cf.onclick=()=>{PREF.campus='all'; PREF.meals=['breakfast','lunch','dinner']; savePref(); applyPrefsUI(); renderView();};
+  if(PREF.view) return;
   v.querySelectorAll('.ticket').forEach(t=>{
-    const k=t.dataset.k, lines=S.menus[k], m=k.split(' ')[1];
+    const k=t.dataset.k, m=k.split(' ')[1]; const lines=S.menus[k]||(S.menus[k]=[]);
     t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView(); refocus('#on_'+k.replace(' ','_')); };
     if(!isOn(k)) return;
+    const cb=t.querySelector('[data-copy]'); if(cb) cb.onclick=()=>{ copyK=copyK===k?null:k; renderView(); if(copyK) refocus('#cpd_'+k.replace(' ','_')); };
+    const cf=t.querySelector('[data-copyform]');
+    if(cf){ const kid=k.replace(' ','_');
+      cf.querySelector('[data-copycancel]').onclick=()=>{copyK=null; renderView();};
+      const info=()=>{ const ds=document.getElementById('cpd_'+kid).value, mm=document.getElementById('cpm_'+kid).value, el=document.getElementById('cpi_'+kid);
+        if(!ds){el.textContent=''; return;} const ex=(S.menus[ds+' '+mm]||[]).length; el.textContent=fmtLong(ds)+' '+mm.toLowerCase()+(ex?' already has '+ex+' item'+(ex===1?'':'s')+'.':' is empty.'); };
+      cf.addEventListener('change',info); info();
+      cf.onsubmit=e=>{ e.preventDefault();
+        const ds=document.getElementById('cpd_'+kid).value, mm=document.getElementById('cpm_'+kid).value;
+        if(!ds||isNaN(pd(ds))){ document.getElementById('cpi_'+kid).textContent='Pick a date to copy to.'; return; }
+        const r=copyMeal(k,ds,mm,document.getElementById('cpr_'+kid).value,document.getElementById('cps_'+kid).checked);
+        if(r.err){ document.getElementById('cpi_'+kid).textContent=r.err; return; }
+        copyK=null; save(); renderTabs(); renderView();
+        statusGo('Copied '+r.n+' item'+(r.n===1?'':'s')+' to '+fmtLong(ds)+' '+mm.toLowerCase()+(r.had?' (it already had '+r.had+')':'')+'.', ds);
+      }; }
     t.querySelectorAll('[data-serve]').forEach(b=>b.onclick=()=>{ if(b.dataset.serve==='BOTH') delete S.serve[k]; else S.serve[k]=b.dataset.serve; save(); renderView();
       refocus('.ticket[data-k="'+k+'"] [data-serve="'+b.dataset.serve+'"]'); });
-    const lc=t.querySelector('[data-loc]'); if(lc) lc.onclick=()=>{S.loc[k]=S.loc[k]==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
+    const lc=t.querySelector('[data-loc]'); if(lc) lc.onclick=()=>{S.loc[k]=locOf(k)==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
     const hc=t.querySelector('[data-hc]'); hc.onchange=()=>{const v=hc.value; S.mealCount[k]=(v===''||+v===baseHead(k))?null:Math.max(0,+v); save(); renderView();};
     const hr=t.querySelector('[data-hcreset]'); if(hr) hr.onclick=()=>{S.mealCount[k]=null; save(); renderView();};
     t.querySelectorAll('[data-mt]').forEach(el=>el.onchange=()=>{mtSet(k,el.dataset.mt,el.dataset.f,el.dataset.f==='note'?el.value:el.value); save();});
     t.querySelectorAll('[data-alltime]').forEach(b=>b.onclick=()=>{const c=b.dataset.alltime, tm=mtGet(k,c).time;
-      DAYS.forEach(dd=>mtSet(dd+' '+m,c,'time',tm)); save(); status(CAMP_NAME[c]+' '+m.toLowerCase()+' set to '+fmt12(tm)+' every day.');});
+      DAYS.forEach(dd=>mtSet(K(dd,m),c,'time',tm)); save(); status(CAMP_NAME[c]+' '+m.toLowerCase()+' set to '+fmt12(tm)+' every day this week.');});
     t.querySelectorAll('[data-ov]').forEach(el=>el.onchange=()=>{lines[+el.dataset.ov].ov=el.value.trim().toUpperCase(); save(); renderView();});
     t.querySelectorAll('[data-note]').forEach(el=>el.onchange=()=>{lines[+el.dataset.note].note=el.value; save();});
     t.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{lines.splice(+el.dataset.del,1); save(); renderView();});
@@ -492,7 +676,7 @@ function finish(){ if(!drag) return; cancelAnimationFrame(drag.raf); drag.ghost.
 function cancelDrag(){ finish(); drag=null; }
 function endDrag(){
   const d=drag; finish(); drag=null; if(!d||!d.target) return;
-  const src=S.menus[d.k], tg=d.target, dst=S.menus[tg.k];
+  const src=S.menus[d.k], tg=d.target, dst=S.menus[tg.k]||(S.menus[tg.k]=[]);
   if(tg.i===d.i&&tg.k===d.k) return;
   const [line]=src.splice(d.i,1); line.gf=tg.gf;
   let pos;
@@ -503,32 +687,33 @@ function endDrag(){
 }
 
 /* ---------- index (fully editable catalog) ---------- */
-let idxQ='', idxDelArm=null, restoreArm=false;
+let idxQ='', idxDelArm=null;
 function atText(it){return it.spc?cases(tot().rs,it.spc)+' '+it.unit:'—';}
 function refreshAtCol(){ document.querySelectorAll('[data-at]').forEach(td=>{const it=item(+td.dataset.at); if(it) td.textContent=atText(it);}); const h=document.getElementById('atHead'); if(h) h.textContent='At '+tot().rs; }
 function idxRow(it){
   const id=it.id, n=esc(it.name);
-  return '<tr data-id="'+id+'">'
+  return '<tr data-id="'+id+'"'+(isRetired(it)?' class="retired"':'')+'>'
    +'<td><input type="text" class="w-name" data-f="name" value="'+n+'" aria-label="Item name"></td>'
    +'<td><input type="text" class="w-cbi" data-f="cbi" value="'+esc(it.cbi)+'" aria-label="CBI number for '+n+'"></td>'
    +'<td><input type="number" min="0" class="w-num" data-f="spc" value="'+(it.spc??'')+'" aria-label="Servings per case for '+n+'"></td>'
    +'<td><select data-f="unit" aria-label="Unit for '+n+'">'+['CS','PAN'].map(u=>'<option'+(u===it.unit?' selected':'')+'>'+u+'</option>').join('')+'</select></td>'
    +'<td class="sm" data-at="'+id+'">'+atText(it)+'</td>'
    +'<td><input type="text" class="w-size" data-f="size" value="'+esc(it.size)+'" aria-label="Serving size for '+n+'"></td>'
-   +'<td><input type="text" class="w-meal" data-f="meal" value="'+esc(it.meal)+'" aria-label="Sheet meal for '+n+'"></td>'
+   +'<td><input type="text" class="w-meal" data-f="meal" value="'+esc(it.meal)+'" aria-label="Usual meal for '+n+'"></td>'
    +'<td><div class="cks">'+AL.map((a,i)=>'<label class="ck" title="'+a+'"><input type="checkbox" data-f="al'+i+'"'+(it.al[i]?' checked':'')+' aria-label="'+a+' in '+n+'"><span>'+AL_SHORT[i]+'</span></label>').join('')+'</div></td>'
    +'<td><div class="cks diet"><label class="ck" title="Vegetarian"><input type="checkbox" data-f="veg"'+(it.veg?' checked':'')+' aria-label="Vegetarian: '+n+'"><span>V</span></label><label class="ck" title="Vegan"><input type="checkbox" data-f="vegan"'+(it.vegan?' checked':'')+' aria-label="Vegan: '+n+'"><span>VG</span></label></div></td>'
+   +'<td><label class="ck ret" title="Retired items stay in the index but don’t show up when adding to a menu"><input type="checkbox" data-f="retired"'+(isRetired(it)?' checked':'')+' aria-label="Retired: '+n+'"><span>Retired</span></label></td>'
    +'<td><button class="x" type="button" data-delitem="'+id+'" aria-label="Delete '+n+'">×</button></td></tr>';
 }
 function idxRowsHtml(){
   const q=idxQ;
   const list=S.catalog.filter(it=>!q||(it.name+' '+it.cbi).toUpperCase().includes(q)).slice().sort((a,b)=>disp(a.name).localeCompare(disp(b.name))||a.name.localeCompare(b.name));
-  return list.length?list.map(idxRow).join(''):'<tr><td colspan="10" class="empty">No items match “'+esc(q)+'”.</td></tr>';
+  return list.length?list.map(idxRow).join(''):'<tr><td colspan="11" class="empty">No items match “'+esc(q)+'”.</td></tr>';
 }
 function renderIndex(){
   const v=document.getElementById('view');
   v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3><span class="meta">Every field is editable. Changes save as you go and apply to every meal.</span>'
-   +'<button class="btn small quiet" type="button" id="restoreIdx" style="margin-left:auto">Restore sheet index</button></div>'
+   +'</div>'
    +'<form class="newitem" id="newitem" novalidate><div class="nh"><h3>Add an item</h3><span class="meta">New items show up in every meal&#39;s item search.</span></div>'
    +'<div class="nf">'
    +'<label class="wide"><span class="lbl">Item name</span><input type="text" id="ni_name" required placeholder="e.g. TURKEY SLIDERS"></label>'
@@ -536,13 +721,13 @@ function renderIndex(){
    +'<label><span class="lbl">Servings per case/pan</span><input type="number" min="0" id="ni_spc" placeholder="blank = as needed"></label>'
    +'<label><span class="lbl">Unit</span><select id="ni_unit"><option>CS</option><option>PAN</option></select></label>'
    +'<label><span class="lbl">Serving size</span><input type="text" id="ni_size" placeholder="e.g. 4 OZ SCOOP"></label>'
-   +'<label><span class="lbl">Sheet meal</span><input type="text" id="ni_meal" placeholder="optional"></label>'
+   +'<label><span class="lbl">Usual meal</span><input type="text" id="ni_meal" placeholder="optional, e.g. FRIDAY LUNCH"></label>'
    +'</div>'
    +'<fieldset class="flags"><legend class="lbl">Allergens</legend>'+AL.map((a,i)=>'<label class="chk"><input type="checkbox" id="ni_al'+i+'"> '+a.charAt(0)+a.slice(1).toLowerCase()+'</label>').join('')+'</fieldset>'
    +'<fieldset class="flags"><legend class="lbl">Dietary</legend><label class="chk"><input type="checkbox" id="ni_veg"> Vegetarian</label><label class="chk"><input type="checkbox" id="ni_vegan"> Vegan</label></fieldset>'
    +'<div class="nfoot"><button class="btn primary" type="submit">Add to index</button><span class="nmsg" id="ni_msg" role="status"></span></div></form>'
    +'<div class="addrow idxbar"><input type="text" id="idxq" placeholder="Search name or CBI #" value="'+esc(idxQ)+'" aria-label="Search index"><span class="hint">Allergens: E egg · D dairy · G gluten · SE sesame · SO soy</span></div>'
-   +'<div class="tscroll"><table class="idxtable"><thead><tr><th>Item</th><th>CBI #</th><th>Servings / case</th><th>Unit</th><th id="atHead">At '+tot().rs+'</th><th>Serving size</th><th>Sheet meal</th><th>Allergens</th><th>Diet</th><th></th></tr></thead><tbody id="idxBody">'+idxRowsHtml()+'</tbody></table></div></div>';
+   +'<div class="tscroll"><table class="idxtable"><thead><tr><th>Item</th><th>CBI #</th><th>Servings / case</th><th>Unit</th><th id="atHead">At '+tot().rs+'</th><th>Serving size</th><th>Usual meal</th><th>Allergens</th><th>Diet</th><th>Status</th><th></th></tr></thead><tbody id="idxBody">'+idxRowsHtml()+'</tbody></table></div></div>';
 
   document.getElementById('idxq').oninput=(e)=>{idxQ=e.target.value.trim().toUpperCase(); document.getElementById('idxBody').innerHTML=idxRowsHtml();};
   const tb=document.getElementById('idxBody');
@@ -555,9 +740,10 @@ function renderIndex(){
     else if(f==='cbi'||f==='unit'){ it[f]=el.value.trim(); }
     else if(f.startsWith('al')){ it.al[+f.slice(2)]=el.checked; }
     else if(f==='veg'){ it.veg=el.checked; if(!el.checked&&it.vegan){it.vegan=false; tr.querySelector('[data-f=vegan]').checked=false;} }
+    else if(f==='retired'){ it.retired=el.checked; if(!el.checked&&it.meal==='OLD/DO NOT USE'){it.meal=''; const mi=tr.querySelector('[data-f=meal]'); if(mi) mi.value='';} tr.classList.toggle('retired',el.checked); }
     else if(f==='vegan'){ it.vegan=el.checked; if(el.checked){it.veg=true; tr.querySelector('[data-f=veg]').checked=true;} }
     save(); const at=tr.querySelector('[data-at]'); if(at) at.textContent=atText(it);
-    if(f==='name'||f==='spc'||f==='unit'||f==='meal') buildCatalog();
+    if(f==='name'||f==='spc'||f==='unit'||f==='meal'||f==='retired') buildCatalog();
     tr.classList.add('saved'); setTimeout(()=>tr.classList.remove('saved'),700);
   });
   tb.addEventListener('click',e=>{
@@ -569,9 +755,6 @@ function renderIndex(){
     save(); buildCatalog(); renderTabs(); b.closest('tr').remove();
     status('Deleted '+disp(it.name)+'.'+(used?' It stays on '+used+' menu line'+(used>1?'s':'')+', marked “not in index”.':''));
   });
-  const rb=document.getElementById('restoreIdx');
-  rb.onclick=()=>{ if(!restoreArm){restoreArm=true; rb.textContent='Click again to replace all index edits'; setTimeout(()=>{restoreArm=false; if(document.body.contains(rb)) rb.textContent='Restore sheet index';},3500); return;}
-    restoreArm=false; S.catalog=seedCatalog(); reindex(); save(); buildCatalog(); renderTabs(); renderIndex(); status('Index restored from the sheet. Your menus are unchanged.'); };
 
   const f=document.getElementById('newitem');
   const veg=document.getElementById('ni_veg'), vegan=document.getElementById('ni_vegan');
@@ -589,7 +772,10 @@ function renderIndex(){
     const m2=document.getElementById('ni_msg'); m2.textContent='Added '+name+'.'; m2.className='nmsg';
   };
 }
-function renderView(){ if(S.tab==='INDEX') renderIndex(); else renderDay(S.tab); }
+function renderView(){
+  if(!S.catalog.length&&!LIVE&&!liveChecked){ document.getElementById('view').innerHTML='<div class="ticket"><div class="empty">Loading the live menus and index…</div></div>'; return; }
+  if(!S.catalog.length&&!LIVE&&(liveErr||!STORE)&&liveChecked&&S.tab!=='INDEX'&&!Object.values(S.menus).some(l=>l.length)){ document.getElementById('view').innerHTML='<div class="ticket"><div class="empty">Couldn’t load the live version, and this device has no saved copy yet. Check the connection and reload the page.</div></div>'; return; }
+  if(S.tab==='INDEX') renderIndex(); else renderDay(S.tab); }
 
 /* ---------- PDF ---------- */
 function status(msg,err,fix){const s=document.getElementById('status'); s.textContent=msg; s.className='status'+(err?' err':'');
@@ -597,6 +783,7 @@ function status(msg,err,fix){const s=document.getElementById('status'); s.textCo
     btn.onclick=async()=>{try{const p=await window.claude.use('permissions'); if(!p) throw 0; await p.manage(); status('If you switched downloads on, press Export again.');}
       catch(e){status('Open the page menu at the top of this artifact, choose Permissions, and allow file downloads. Then press Export again.',true);}};
     s.appendChild(btn);}}
+function statusGo(msg,ds){ status(msg); const s=document.getElementById('status'); const b=document.createElement('button'); b.type='button'; b.className='linkbtn'; b.style.marginLeft='8px'; b.textContent='Go to '+pd(ds).toLocaleDateString(undefined,{month:'short',day:'numeric'}); b.onclick=()=>window.goToDate(ds); s.appendChild(b); }
 async function downloadsBlocked(){
   let st='unavailable'; try{const p=window.claude&&await window.claude.use('permissions'); if(p) st=await p.state('downloads');}catch(e){}
   if(st==='denied') status('File downloads are turned off for this page in your browser.',true,true);
@@ -609,15 +796,16 @@ function drawDay(doc,d,first){
   doc.text(d+'  '+dayDate(i),W-40,44,{align:'right'});
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
   let summary='RIDGE '+T.r+' (GF '+C('gfr')+')    SPRINGS '+T.s+' (GF '+C('gfs')+')    RIDGE + SPRINGS '+T.rs;
-  if(T.m||MEALS.some(m=>serveOf(d+' '+m)==='SM')) summary+='    SOUTH MOUNTAIN '+T.m+' (GF '+C('gfm')+')';
+  if(T.m||MEALS.some(m=>serveOf(K(d,m))==='SM')) summary+='    SOUTH MOUNTAIN '+T.m+' (GF '+C('gfm')+')';
+  const fn=filterNote(); if(fn) summary+='    ·  '+fn.toUpperCase();
   doc.text(summary,40,60);
   doc.setDrawColor(30); doc.setLineWidth(1); doc.line(40,66,W-40,66);
   let y=78;
-  const offM=MEALS.filter(m=>!isOn(d+' '+m));
+  const offM=MEALS.filter(m=>!isOn(K(d,m)));
   if(offM.length){doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.text('Not served today: '+offM.join(', '),40,y+4); doc.setFont('helvetica','normal'); y+=16;}
   MEALS.forEach(m=>{
-    const k=d+' '+m, lines=S.menus[k]||[];
-    if(!isOn(k)) return;
+    const k=K(d,m), lines=S.menus[k]||[];
+    if(!isOn(k)||!shown(k)) return;
     const send=hasSend(k), sv=serveOf(k);
     const cols=[['',{cellWidth:16}],['ITEM',{cellWidth:send?118:132,fontStyle:'bold'}],['PREP',{cellWidth:62,fontStyle:'bold'}],['SERVING',{cellWidth:58}],['NOTES',{cellWidth:'auto'}]];
     if(send) cols.push(['TO SPRINGS',{cellWidth:56}]);
@@ -629,12 +817,12 @@ function drawDay(doc,d,first){
     const gfl=lines.filter(l=>l.gf);
     if(gfl.length){ body.push([{content:'ALLERGY PREP  ·  '+mealGF(k)+' GF',colSpan:N,styles:{fontStyle:'bold',fillColor:[240,240,240],textColor:[150,50,35]}}]); gfl.forEach(l=>body.push(toRow(l))); }
     if(!body.length) body.push([{content:'No items',colSpan:N,styles:{textColor:[120,120,120],fontStyle:'italic'}}]);
-    const camps=campusesFor(k), noteLines=camps.map(c=>{const v=mtGet(k,c); return {c,t:fmt12(v.time),n:v.note};});
+    const camps=campusesFor(k).filter(c=>PREF.campus==='all'||c===FC[PREF.campus]), noteLines=camps.map(c=>{const v=mtGet(k,c); return {c,t:fmt12(v.time),n:v.note};});
     if(y>H-140){doc.addPage(); y=48;}
     doc.setFillColor(28,36,32); doc.rect(40,y,W-80,22,'F'); doc.setTextColor(255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
     doc.text(m,48,y+15); doc.setFontSize(9.5); doc.setFont('helvetica','normal');
     const campLabel=sv==='BOTH'?'RIDGE + SPRINGS':CAMP_NAME[sv].toUpperCase()+' ONLY';
-    doc.text(campLabel+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+(sv==='SM'?'SOUTH MOUNTAIN':S.loc[k]),W-48,y+15,{align:'right'}); doc.setTextColor(0);
+    doc.text(campLabel+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+(sv==='SM'?'SOUTH MOUNTAIN':locOf(k)),W-48,y+15,{align:'right'}); doc.setTextColor(0);
     y+=22;
     doc.setFontSize(9);
     noteLines.forEach(o=>{ doc.setFont('helvetica','bold'); const lab=CAMP_NAME[o.c].toUpperCase()+'  '+(o.t||'—'); doc.text(lab,48,y+12);
@@ -661,16 +849,241 @@ async function exportPdf(days){
   try{await dl.save({filename:name,data:doc.output('blob')}); status('Saved '+name+'. Open it and print.');}
   catch(e){ if(e&&e.code==='declined') status('Export cancelled.'); else if(e&&e.code==='rate_limited') status('A save prompt is already open. Finish that one first.',true); else if(e&&['not_granted','unavailable','capability_disabled','capability_removed'].includes(e.code)) downloadsBlocked(); else status('Could not save the PDF ('+(e&&e.code||'error')+').',true);}
 }
-document.getElementById('pdfDay').onclick=()=>{ if(S.tab==='INDEX') return; if(!MEALS.some(m=>isOn(S.tab+' '+m))){status('All meals on this day are turned off.',true); return;} exportPdf([S.tab]); };
-document.getElementById('pdfWeek').onclick=()=>{const ds=DAYS.filter(d=>MEALS.some(m=>isOn(d+' '+m))); if(!ds.length){status('Every meal this week is turned off.',true); return;} exportPdf(ds);};
-let armed=false;
-document.getElementById('resetAll').onclick=(e)=>{const b=e.currentTarget;
-  if(!armed){armed=true; b.textContent='Click again to reset menus'; setTimeout(()=>{armed=false; b.textContent='Reset menus to sheet';},3500); return;}
-  armed=false; b.textContent='Reset menus to sheet';
-  const cat=S.catalog, tab=S.tab; S=defaults(); S.catalog=cat; S.tab=tab; reindex(); save();
-  fillPanel(); buildCatalog(); renderTabs(); renderView(); status('Menus, headcounts and meal settings reset to the sheet. Your index edits were kept.');};
+const dayHas=d=>MEALS.some(m=>isOn(K(d,m))&&shown(K(d,m)));
+document.getElementById('pdfDay').onclick=()=>{ if(S.tab==='INDEX') return; if(!dayHas(S.tab)){status('No meals on this day are turned on and match the filter.',true); return;} exportPdf([S.tab]); };
+document.getElementById('pdfWeek').onclick=()=>{const ds=DAYS.filter(dayHas); if(!ds.length){status('No meals this week are turned on and match the filter.',true); return;} exportPdf(ds);};
 
-initPanel(); buildCatalog(); renderTabs(); renderView();
+/* ---------- view filters + shareable links ---------- */
+function applyPrefsUI(){
+  document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.fc===PREF.campus)));
+  document.querySelectorAll('[data-fm]').forEach(b=>b.setAttribute('aria-pressed',String(PREF.meals.includes(b.dataset.fm))));
+  document.getElementById('fView').checked=!!PREF.view;
+  document.body.classList.toggle('kv',!!PREF.view);
+  renderKvSum(); renderLinkOut();
+}
+function renderKvSum(){
+  const el=document.getElementById('kvsum'); if(!PREF.view){el.innerHTML=''; return;}
+  const T=tot(); el.innerHTML='<span><b>'+T.r+'</b> Ridge</span><span><b>'+T.s+'</b> Springs</span><span><b>'+T.rs+'</b> Ridge + Springs</span>'+(T.m?'<span class="smv"><b>'+T.m+'</b> South Mountain</span>':'')
+    +'<span>GF: Ridge '+C('gfr')+' · Springs '+C('gfs')+(T.m?' · S. Mtn '+C('gfm'):'')+'</span><span class="wk">Week of '+esc(dayDate(0))+'</span>';
+}
+function hashTokens(){
+  const t=[S.tab==='INDEX'?'index':dk(S.tab).replace(/-/g,'')];
+  if(PREF.campus!=='all') t.push(PREF.campus);
+  if(PREF.meals.length<3) t.push(...PREF.meals);
+  if(PREF.view) t.push('view');
+  return t.join('.');
+}
+function shareURL(){
+  const h='#'+hashTokens();
+  if(!window.claude) return location.origin+location.pathname+h;
+  return PAGE_URL&&PAGE_URL.indexOf('__')!==0?PAGE_URL+h:h;
+}
+function renderLinkOut(){ document.getElementById('linkOut').textContent=shareURL(); }
+function readHash(){
+  const raw=(location.hash||'').replace(/^#/,'').toLowerCase(); if(!raw) return false;
+  const toks=raw.split(/[.,_~-]+/).filter(Boolean); if(!toks.length) return false;
+  const meals=[]; let campus='all', view=false, tab=null;
+  toks.forEach(x=>{
+    const di=DAY_TOK.indexOf(x.slice(0,3));
+    if(x==='today'){tab=weekdayOf(todayISO()); S.week=mondayOf(todayISO());}
+    else if(/^\d{8}$/.test(x)){const ds=x.slice(0,4)+'-'+x.slice(4,6)+'-'+x.slice(6); if(!isNaN(pd(ds))){S.week=mondayOf(ds); tab=weekdayOf(ds);}}
+    else if(x==='index'){tab='INDEX';}
+    else if(di>=0&&DAYS[di].toLowerCase().startsWith(x)){tab=DAYS[di];}
+    else if(x==='ridge'||x==='springs'||x==='sm'){campus=x;}
+    else if(x==='southmountain'||x==='mountain'){campus='sm';}
+    else if(x==='both'||x==='all'){campus='all';}
+    else if(['breakfast','lunch','dinner','b','l','d'].includes(x)){meals.push({b:'breakfast',l:'lunch',d:'dinner'}[x]||x);}
+    else if(x==='view'||x==='kitchen'){view=true;}
+    else if(x==='edit'){view=false;}
+  });
+  if(tab) S.tab=tab;
+  PREF.campus=campus; PREF.meals=meals.length?MEALS.map(m=>m.toLowerCase()).filter(m=>meals.includes(m)):['breakfast','lunch','dinner']; PREF.view=view;
+  return true;
+}
+function setHash(){ const h='#'+hashTokens(); try{ if(location.hash!==h) history.replaceState(null,'',h); }catch(e){} renderLinkOut(); }
+function prefChanged(){ savePref(); applyPrefsUI(); setHash(); renderView(); }
+document.querySelectorAll('[data-fc]').forEach(b=>b.onclick=()=>{PREF.campus=b.dataset.fc; prefChanged();});
+document.querySelectorAll('[data-fm]').forEach(b=>b.onclick=()=>{const m=b.dataset.fm; const on=PREF.meals.includes(m);
+  if(on&&PREF.meals.length===1){status('Keep at least one meal showing.',true); return;}
+  PREF.meals=on?PREF.meals.filter(x=>x!==m):MEALS.map(x=>x.toLowerCase()).filter(x=>x===m||PREF.meals.includes(x)); prefChanged();});
+document.getElementById('fView').onchange=e=>{PREF.view=e.target.checked; prefChanged();};
+document.getElementById('copyLink').onclick=async()=>{
+  const u=shareURL(), out=document.getElementById('linkOut');
+  const note=u.charAt(0)==='#'?' Add it to the end of this page’s link.':'';
+  try{ await navigator.clipboard.writeText(u); status('Link copied: '+u+'.'+note); }
+  catch(e){ const r=document.createRange(); r.selectNodeContents(out); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); status('Press Ctrl+C (or ⌘C) to copy the selected link.'+note); }
+};
+window.addEventListener('hashchange',()=>{ if(readHash()){ savePref(); applyPrefsUI(); renderTabs(); renderView(); } });
+
+/* ---------- shared live version ---------- */
+function fmtWhen(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return ''; return d.toLocaleDateString(undefined,{month:'short',day:'numeric'})+' at '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}); }
+let byNames={};
+async function nameOf(by){ if(!by) return ''; if(!STORE||!STORE.user) return by; if(byNames[by]!==undefined) return byNames[by];
+  try{const ps=await STORE.user.profiles([by]); byNames[by]=(ps[by]&&ps[by].name)||'';}catch(e){byNames[by]='';} return byNames[by]; }
+function applyLive(doc,msg){
+  const st=toDated(JSON.parse(JSON.stringify(doc.state||{})),(doc.state&&doc.state.week)||S.week);
+  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; });
+  S.counts=Object.assign(defaults().counts,S.counts);
+  SY.baseV=doc.v; SY.baseJSON=sharedJSON(); conflict=null; LIVE=doc;
+  reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); renderKvSum(); save();
+  if(msg) status(msg);
+}
+function onLive(doc){
+  liveChecked=true; LIVE=doc&&doc.v?doc:null;
+  if(LIVE){
+    if(LIVE.v===SY.baseV){ if(!isDirty()) conflict=null; }
+    else if(!isDirty()) applyLive(LIVE, SY.baseV?'Updated to the newest live version.':'');
+    else conflict=LIVE;
+  }
+  renderSync();
+}
+async function pushLive(force,fromAuto){
+  if(!STORE||!STORE.canWrite||pushing) return;
+  if(!isDirty()&&!force&&LIVE){status('Nothing new to push. This is already the live version.'); return;}
+  if(STORE.kind==='remote'&&!PREF.by&&!PREF.nameAsked&&!fromAuto){ renderSync('name'); return; }
+  pushing=true; renderSync();
+  try{
+    const res=await STORE.push(sharedOf(S), SY.baseV, !!force);
+    if(res.conflict){ conflict=res.live||LIVE; if(res.live&&res.live.v) LIVE=res.live; if(fromAuto){PREF.auto=false; savePref();} status(fromAuto?'Automatic publishing paused: someone else published a newer version.':'Someone published a newer version while you were editing.',true); }
+    else if(res.busy){ status('Someone else is publishing right now. Try again in a few seconds.',true); }
+    else { SY.baseV=res.v; SY.baseJSON=sharedJSON(); LIVE={v:res.v,at:res.at,by:res.by,state:sharedOf(JSON.parse(JSON.stringify(S)))}; conflict=null; save(); if(histOpen) loadHistory(); if(!fromAuto) status('Pushed live. Everyone now sees version '+res.v+'.'); }
+  }catch(e){
+    const code=e&&e.code;
+    if(code==='invalid_argument'&&STORE.kind==='claude'){ STORE.canWrite=false; status('You can view the live version but not publish to it. Ask the page owner for Contributor access.',true); }
+    else if(code==='busy') status('Too many pushes in a row. Wait a minute and push again.',true);
+    else status('Could not push live ('+(code||'network error')+'). Your changes are still saved on this device.',true);
+  }
+  pushing=false; renderSync();
+}
+function discard(){ if(LIVE&&LIVE.state) applyLive(LIVE,'Discarded your changes. Showing the live version.'); else if(STORE) STORE.fetchNow().then(d=>{ if(d&&d.v) applyLive(d,'Discarded your changes. Showing the live version.'); }); }
+function loadDraft(p,label){
+  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); });
+  S.counts=Object.assign(defaults().counts,S.counts);
+  reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); save();
+  status('Loaded '+label+' as your draft. Push live to make it the live version again.');
+}
+let armDiscard=false, armForce=false, syncMode=null;
+async function renderSync(mode){
+  if(mode) syncMode=mode; if(pushing||conflict) syncMode=null;
+  const typed=document.getElementById('byIn'), typedVal=typed?typed.value:null, typedFocus=typed&&document.activeElement===typed;
+  const bar=document.getElementById('syncbar'), tx=document.getElementById('syncText'), act=document.getElementById('syncAct');
+  const dirty=isDirty(); let state, text='', btns='';
+  if(!STORE){ state=liveChecked?'local':'loading'; text=liveChecked?'Not connected to a shared version. Changes save on this device only.':'Connecting to the live version…'; }
+  else if(pushing){ state='busy'; text='Pushing live…'; }
+  else if(conflict){ state='warn';
+    const who=await nameOf(conflict.by);
+    text='A newer live version (v'+conflict.v+(who?' by '+esc(who):'')+(conflict.at?', '+fmtWhen(conflict.at):'')+') was published while you had unpublished changes.';
+    btns='<button class="btn small" type="button" data-sa="load">Load the live version</button>'+(STORE.canWrite?'<button class="btn small primary" type="button" data-sa="force">'+(armForce?'Click again to replace it':'Push mine anyway')+'</button>':''); }
+  else if(dirty){ state='dirty';
+    text=STORE.canWrite?'You have unpublished changes. Only you see them until you push live.':'You have changes on this device. You can’t publish to the live version.';
+    btns=(STORE.canWrite?'<button class="btn small primary" type="button" data-sa="push">Push live</button>':'')+(LIVE?'<button class="btn small quiet" type="button" data-sa="discard">'+(armDiscard?'Click again to discard':'Discard changes')+'</button>':''); }
+  else if(LIVE){ state='live'; const who=await nameOf(LIVE.by);
+    text='Live version '+LIVE.v+(who?' · published by '+esc(who):'')+(LIVE.at?' · '+fmtWhen(LIVE.at):'')+'. Everyone sees this.'; }
+  else { state='empty'; text=STORE.canWrite?'Nothing has been pushed live yet. Push live to share this version with everyone.':'Nothing has been published yet.';
+    if(STORE.canWrite) btns='<button class="btn small primary" type="button" data-sa="push">Push live</button>'; }
+  if(STORE&&STORE.canWrite&&!pushing&&!conflict){
+    btns+='<label class="switch autosw" title="Publish each change a couple of seconds after you make it"><input type="checkbox" data-sa="auto"'+(PREF.auto?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">Publish as I edit</span></label>';
+  }
+  if(STORE&&STORE.history&&LIVE) btns+='<button class="btn small quiet" type="button" data-sa="hist" aria-expanded="'+histOpen+'">Version history</button>';
+  else if(STORE&&STORE.previous&&LIVE&&STORE.canWrite) btns+='<button class="btn small quiet" type="button" data-sa="prev">Undo last push</button>';
+  if(STORE&&STORE.kind==='remote'&&(PREF.by||PREF.nameAsked)&&!pushing) btns+='<button class="linkbtn" type="button" data-sa="who">'+(PREF.by?'Editing as '+esc(PREF.by):'Add your name')+'</button>';
+  if(syncMode==='name'){
+    btns='<form class="pinf" id="namef"><label for="byIn">Your name, shown in version history</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="name" maxlength="60"><button class="btn small primary" type="submit">Push live</button><button class="btn small quiet" type="button" id="nameSkip">Push without a name</button></form>';
+  }
+  bar.dataset.state=state; tx.innerHTML=text; act.innerHTML=btns;
+  const bi=document.getElementById('byIn'); if(bi&&typedVal!==null){ bi.value=typedVal; if(typedFocus) bi.focus(); }
+  act.querySelectorAll('[data-sa]').forEach(b=>{ const a=b.dataset.sa;
+    if(a==='auto') b.onchange=()=>{PREF.auto=b.checked; savePref(); if(PREF.auto&&isDirty()) pushLive(false,true); renderSync();};
+    else b.onclick=()=>{
+      if(a==='push') pushLive(false);
+      else if(a==='load') applyLive(conflict,'Loaded the live version. Your unpublished changes were discarded.');
+      else if(a==='force'){ if(!armForce){armForce=true; renderSync(); setTimeout(()=>{armForce=false; renderSync();},4000); return;} armForce=false; pushLive(true); }
+      else if(a==='discard'){ if(!armDiscard){armDiscard=true; renderSync(); setTimeout(()=>{armDiscard=false; renderSync();},4000); return;} armDiscard=false; discard(); }
+      else if(a==='hist'){ histOpen=!histOpen; renderHistory(); if(histOpen) loadHistory(); renderSync(); }
+      else if(a==='who'){ renderSync('name'); const n=document.getElementById('byIn'); if(n) n.focus(); }
+      else if(a==='prev'){ STORE.previous().then(p=>{ if(!p||!p.state){status('There is no earlier version to go back to.',true); return;} loadDraft(p,'version '+p.v); }); }
+    };
+  });
+  const nf=document.getElementById('namef');
+  if(nf){ nf.onsubmit=e=>{e.preventDefault(); syncMode=null; PREF.by=document.getElementById('byIn').value.trim(); PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();};
+    document.getElementById('nameSkip').onclick=()=>{syncMode=null; PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();}; }
+}
+
+/* ---------- version history ---------- */
+let histOpen=false, histList=null, histErr='';
+async function loadHistory(){
+  histList=null; histErr=''; renderHistory();
+  try{ histList=await STORE.history(); }catch(e){ histErr='Could not load the history ('+(e&&e.code||'network error')+').'; }
+  renderHistory();
+}
+function renderHistory(){
+  const el=document.getElementById('histPanel'); el.hidden=!histOpen; if(!histOpen) return;
+  let rows;
+  if(histErr) rows='<p class="empty">'+esc(histErr)+'</p>';
+  else if(!histList) rows='<p class="empty">Loading versions…</p>';
+  else if(!histList.length) rows='<p class="empty">No versions yet.</p>';
+  else rows='<ol class="hlist">'+histList.map((h,i)=>'<li><span class="hv">v'+(h.v??'?')+'</span><span class="hw">'+esc(h.by||'Someone')+'</span><span class="ht">'+esc(fmtWhen(h.at))+'</span>'
+      +(i===0?'<span class="hcur">Live now</span>':'<button class="btn small" type="button" data-hv="'+esc(h.sha)+'">Load as draft</button>')+'</li>').join('')+'</ol>';
+  el.innerHTML='<div class="hhead"><h2>Version history</h2><span class="hint">Every push is saved. Load an older one, check it, then push live to restore it.</span><button class="x" type="button" id="histClose" aria-label="Close version history">×</button></div>'+rows;
+  document.getElementById('histClose').onclick=()=>{histOpen=false; renderHistory(); renderSync();};
+  el.querySelectorAll('[data-hv]').forEach(b=>b.onclick=async()=>{ b.disabled=true; b.textContent='Loading…';
+    try{ const d=await STORE.version(b.dataset.hv); if(!d||!d.state) throw {code:'empty'}; loadDraft(d,'version '+d.v); histOpen=false; renderHistory(); }
+    catch(e){ b.disabled=false; b.textContent='Load as draft'; status('Could not load that version ('+(e&&e.code||'network error')+').',true); } });
+}
+
+/* Store: Claude shared database */
+async function claudeStore(){
+  const db=await window.claude.use('db'); if(!db) return null;
+  const user=await window.claude.use('user');
+  let uid=null; try{uid=user?await user.id():null;}catch(e){}
+  let canW=null; try{canW=user&&user.can?await user.can('data.write'):null;}catch(e){}
+  const ref=db.doc('live/state'), prevRef=db.doc('live/previous'), tabId=Math.random().toString(36).slice(2);
+  const st={kind:'claude', user, canWrite:canW!==false,
+    fetchNow:async()=>{const s=await ref.get(); return s.exists?s.data():null;},
+    previous:async()=>{const s=await prevRef.get(); return s.exists?s.data():null;},
+    push:async(state,baseV,force)=>{
+      const lease=await ref.acquire({holder:tabId,ttlMs:8000}); if(!lease.acquired) return {busy:true};
+      const cur=await ref.get(); const curD=cur.exists?cur.data():null; const curV=curD&&curD.v||0;
+      if(curV!==baseV&&!force) return {conflict:true, live:curD};
+      if(curD&&curD.state) await prevRef.set({v:curD.v,at:curD.at||null,by:curD.by||null,state:curD.state});
+      const doc={v:curV+1, at:new Date().toISOString(), by:uid||null, state};
+      await ref.set(doc); return {v:doc.v, at:doc.at, by:doc.by};
+    }};
+  ref.onSnapshot(s=>{ if(s.metadata&&s.metadata.hasPendingWrites) return; onLive(s.exists?s.data():null); },
+    e=>{ STORE=null; liveChecked=true; renderSync(); });
+  return st;
+}
+/* Store: the GitHub save relay (worker/worker.js in the repo) */
+function remoteStore(){
+  const base=REMOTE_URL.replace(/\/+$/,'');
+  const get=async(p)=>{const r=await fetch(base+p+(p.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}); const d=await r.json().catch(()=>({})); if(!r.ok) throw {code:d.error||'http_'+r.status}; return d;};
+  const st={kind:'remote', canWrite:true,
+    fetchNow:async()=>{const d=await get('/live'); return d&&d.v?d:null;},
+    history:async()=>{const d=await get('/history'); return d.versions||[];},
+    version:async(sha)=>get('/version?sha='+encodeURIComponent(sha)),
+    push:async(state,baseV,force)=>{
+      const r=await fetch(base+'/live',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({by:PREF.by,base:baseV,force,state})});
+      const d=await r.json().catch(()=>({}));
+      if(d.error==='conflict') return {conflict:true, live:d.live};
+      if(!r.ok||d.error) throw {code:d.error||'http_'+r.status};
+      return {v:d.v, at:d.at, by:d.by}; }};
+  const poll=async()=>{ if(document.hidden||pushing) return; try{ const d=await get('/live'); const first=liveErr||!liveChecked; liveErr=false; onLive(d&&d.v?d:null); if(first&&!(d&&d.v)) renderView(); }catch(e){ const first=!liveChecked; liveErr=true; liveChecked=true; renderSync(); if(first) renderView(); } };
+  poll(); setInterval(poll,15000); document.addEventListener('visibilitychange',()=>{ if(!document.hidden) poll(); });
+  return st;
+}
+async function connect(){
+  try{
+    if(window.claude&&window.claude.use) STORE=await claudeStore();
+    else if(REMOTE_URL&&REMOTE_URL.indexOf('__')!==0) STORE=remoteStore();
+  }catch(e){ STORE=null; }
+  if(!STORE){ liveChecked=true; renderView(); }
+  renderSync();
+}
+
+if(readHash()) savePref(); else { S.week=mondayOf(todayISO()); if(S.tab!=='INDEX') S.tab=weekdayOf(todayISO()); }
+initPanel(); buildCatalog(); applyPrefsUI(); renderTabs(); renderView(); setHash(); renderSync();
+connect();
+
 })();
 </script>
 
