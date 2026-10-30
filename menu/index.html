@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camp Menu · Crowders Camps</title>
+<meta name="description" content="What's on the menu at Crowders Ridge, Crowders Springs and South Mountain Christian Camp, with allergen information.">
+<style>
+@font-face{font-family:'Aftika Soft';src:url('assets/fonts/AftikaSoft-Light.woff2') format('woff2');font-weight:300;font-display:swap}
+@font-face{font-family:'Aftika Soft';src:url('assets/fonts/AftikaSoft-Regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Aftika Soft';src:url('assets/fonts/AftikaSoft-SemiBold.woff2') format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:'Aftika Soft';src:url('assets/fonts/AftikaSoft-Bold.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Aftika Soft';src:url('assets/fonts/AftikaSoft-Black.woff2') format('woff2');font-weight:900;font-display:swap}
+/* Crowders Camps design system tokens (subset) */
+:root{
+  color-scheme:light;
+  --color-white:#FFFFFF;--color-cream:#FBF9F0;
+  --color-ink-900:#14181A;--color-ink-700:#3A4145;--color-ink-500:#68717A;--color-ink-300:#A9B0B4;--color-ink-150:#D7DBDC;--color-ink-100:#E9EBE9;
+  --color-yellow-500:#F8DA02;--color-yellow-700:#B99A00;--color-green-300:#9EDDA1;--color-green-500:#33B04A;--color-green-700:#237A2C;--color-green-800:#1C6624;
+  --color-teal-500:#00B7E0;--color-teal-700:#0A7C91;--color-coral-500:#E85D42;--color-coral-700:#B23E28;--color-coral-800:#8E3120;
+  --color-blue-500:#1470AF;--color-blue-700:#0F5689;
+  --surface-page:var(--color-cream);--surface-card:var(--color-white);--surface-sunken:var(--color-ink-100);
+  --text-primary:var(--color-ink-900);--text-secondary:var(--color-ink-700);--text-muted:var(--color-ink-500);
+  --border-subtle:var(--color-ink-100);--border-default:var(--color-ink-150);
+  --gradient-brand:linear-gradient(100deg,#F8DA02 15%,#33B04A 50%,#00B7E0 85%);
+  --camp-primary:var(--color-green-500);--camp-on-primary:var(--color-ink-900);--camp-gradient:var(--gradient-brand);
+  --action-primary-bg:var(--color-green-700);--action-primary-bg-hover:var(--color-green-800);--action-primary-fg:#fff;
+  --focus-ring:var(--color-teal-500);--logo-panel:var(--color-white);
+  --font:'Aftika Soft',ui-rounded,'Segoe UI',system-ui,sans-serif;
+  --radius-sm:10px;--radius-md:16px;--radius-lg:24px;--radius-pill:999px;
+  --shadow-sm:0 1px 2px rgba(20,24,26,.08),0 1px 1px rgba(20,24,26,.04);
+  --shadow-md:0 6px 16px rgba(20,24,26,.10),0 2px 4px rgba(20,24,26,.06);
+  --ease-out:cubic-bezier(.16,1,.3,1);--ease-bounce:cubic-bezier(.34,1.56,.64,1);
+}
+[data-camp="ridge"]{--camp-primary:var(--color-yellow-500);--camp-on-primary:var(--color-ink-900);--camp-gradient:linear-gradient(100deg,#FDEB66 15%,#F8DA02 85%);--action-primary-bg:var(--color-ink-900);--action-primary-bg-hover:var(--color-ink-700);--focus-ring:var(--color-ink-900);--logo-panel:var(--color-ink-900)}
+[data-camp="springs"]{--camp-primary:var(--color-blue-500);--camp-on-primary:#fff;--camp-gradient:linear-gradient(100deg,#00B7E0 15%,#1470AF 85%);--action-primary-bg:var(--color-blue-500);--action-primary-bg-hover:var(--color-blue-700);--focus-ring:var(--color-blue-500)}
+[data-camp="south-mountain"]{--camp-primary:var(--color-green-500);--camp-on-primary:var(--color-ink-900);--camp-gradient:linear-gradient(100deg,#F8DA02 15%,#33B04A 85%);--action-primary-bg:var(--color-green-700);--action-primary-bg-hover:var(--color-green-800);--focus-ring:var(--color-green-700)}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--surface-page);color:var(--text-primary);font-family:var(--font);font-weight:300;font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body.embed{background:transparent}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--focus-ring);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding:20px max(16px,env(safe-area-inset-right,0px)) 40px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
+
+/* gradient frame header */
+.frame{background:var(--camp-gradient);padding:clamp(10px,2.6vw,18px) clamp(12px,3.4vw,24px);border-radius:var(--radius-lg)}
+.panel{background:var(--logo-panel);border-radius:var(--radius-md);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 20px;padding:clamp(14px,3vw,22px) clamp(16px,3.5vw,28px)}
+.panel img{display:block;height:clamp(40px,8vw,64px);width:auto;max-width:100%}
+.kicker{font-weight:900;text-transform:uppercase;letter-spacing:-.01em;font-size:clamp(22px,4.4vw,34px);line-height:.95;color:var(--text-primary)}
+[data-camp="ridge"] .kicker{color:var(--color-yellow-500)}
+
+/* campus tabs (design-system Tabs) */
+.tabs{display:flex;gap:4px;background:var(--surface-sunken);padding:6px;border-radius:var(--radius-pill);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs .sm{display:none}
+@media (max-width:520px){.tabs .lg{display:none}.tabs .sm{display:inline}.tabs button{padding:10px 10px}}
+.tabs button{flex:1 0 auto;border:0;cursor:pointer;padding:10px 18px;border-radius:var(--radius-pill);font-weight:800;font-size:15px;background:transparent;color:var(--text-muted);white-space:nowrap;transition:background .12s var(--ease-out),color .12s var(--ease-out)}
+.tabs button[aria-selected=true]{background:var(--surface-card);color:var(--text-primary);box-shadow:var(--shadow-sm)}
+.tabs button[aria-selected=true]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--camp-primary);margin-right:8px;vertical-align:1px}
+
+/* date controls */
+.datebar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px}
+.datebar h1{margin:0;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.95;font-size:clamp(26px,5.4vw,40px);flex:1 1 260px;min-width:0}
+.datebar h1 small{display:block;font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--text-muted);margin-bottom:6px}
+.ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ib{width:44px;height:44px;border-radius:50%;border:2px solid var(--border-default);background:var(--surface-card);cursor:pointer;display:grid;place-items:center;transition:transform .12s var(--ease-bounce)}
+.ib:hover{background:var(--surface-sunken)} .ib:active{transform:scale(.94)}
+.ib svg{width:20px;height:20px}
+.pill{border:0;border-radius:var(--radius-pill);padding:11px 20px;font-weight:700;cursor:pointer;background:var(--action-primary-bg);color:var(--action-primary-fg);transition:background .12s var(--ease-out),transform .12s var(--ease-bounce)}
+.pill:hover{background:var(--action-primary-bg-hover)} .pill:active{transform:scale(.97)}
+.pill.outline{background:transparent;color:var(--text-primary);border:2px solid var(--border-default);padding:9px 18px}
+.pill.outline:hover{background:var(--surface-sunken)}
+.datepick{position:relative;display:inline-flex}
+.datepick input{border:2px solid var(--border-default);border-radius:var(--radius-pill);padding:9px 14px;background:var(--surface-card);font-weight:600;min-height:44px}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{border:0;border-radius:var(--radius-md);background:var(--surface-card);box-shadow:var(--shadow-sm);padding:8px 2px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:0}
+.day b{font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted)}
+.day span{font-weight:900;font-size:22px;line-height:1.1}
+.day i{width:6px;height:6px;border-radius:50%;background:transparent;margin-top:3px}
+.day.has i{background:var(--camp-primary)}
+[data-camp="ridge"] .day.has i{background:var(--color-ink-900)}
+.day.today b{color:var(--text-primary)}
+.day[aria-pressed=true]{background:var(--color-ink-900);color:#fff;box-shadow:var(--shadow-md)}
+.day[aria-pressed=true] b{color:rgba(255,255,255,.75)}
+.day[aria-pressed=true].has i{background:var(--camp-primary)}
+
+/* allergen filter */
+.avoid{background:var(--surface-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.avoid p{margin:0;font-weight:700;font-size:15px}
+.avoid p span{display:block;font-weight:300;font-size:14px;color:var(--text-muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--border-default);background:var(--surface-card);border-radius:var(--radius-pill);padding:6px 14px;font-weight:700;font-size:15px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.chip[aria-pressed=true]{background:var(--color-coral-700);border-color:var(--color-coral-700);color:#fff}
+.chip svg{width:14px;height:14px}
+
+/* meals */
+.meals{display:flex;flex-direction:column;gap:16px}
+.meal{background:var(--surface-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);overflow:hidden}
+.mh{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 14px;padding:16px 20px 12px;border-bottom:4px solid transparent;border-image:var(--camp-gradient) 1}
+.mh h2{margin:0;font-weight:900;text-transform:uppercase;letter-spacing:-.02em;font-size:28px;line-height:1}
+.time{font-weight:800;font-size:16px;background:var(--color-ink-900);color:#fff;border-radius:var(--radius-pill);padding:6px 14px;display:inline-flex;align-items:center;gap:6px}
+.time svg{width:16px;height:16px}
+ul.items{list-style:none;margin:0;padding:4px 0}
+.it{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;padding:12px 20px;border-top:1px solid var(--border-subtle)}
+.it:first-child{border-top:0}
+.nm{font-weight:600;font-size:18px;min-width:0;flex:1 1 200px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.al{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-pill);padding:3px 11px;font-weight:700;font-size:13px;letter-spacing:.02em;border:2px solid var(--color-coral-700);color:var(--color-coral-800);background:#fff}
+.al svg{width:13px;height:13px}
+.diet{display:inline-flex;align-items:center;border-radius:var(--radius-pill);padding:3px 11px;font-weight:700;font-size:13px;background:var(--color-green-700);color:#fff}
+.ask{font-size:13px;font-weight:400;color:var(--text-muted)}
+.free{font-size:13px;font-weight:400;color:var(--text-muted)}
+.it.flag{background:#FCEDEA}
+.it.flag .nm{color:var(--color-coral-800)}
+.it.flag .al.hit{background:var(--color-coral-700);color:#fff}
+.gfh{margin:0;padding:10px 20px 4px;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-green-700);border-top:1px solid var(--border-subtle)}
+.empty{background:var(--surface-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);padding:28px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
+.empty b{font-weight:900;text-transform:uppercase;font-size:24px;letter-spacing:-.01em}
+.empty p{margin:0;color:var(--text-secondary)}
+.note{font-size:14px;color:var(--text-secondary);background:var(--surface-sunken);border-radius:var(--radius-md);padding:12px 16px;margin:0}
+.note b{font-weight:700}
+.upd{font-size:13px;color:var(--text-muted);text-align:center;margin:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:520px){.week{gap:4px}.day span{font-size:18px}.day b{font-size:10.5px}.mh,.it{padding-left:16px;padding-right:16px}.nm{flex-basis:100%}.tags{justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body data-camp="ridge">
+<div class="wrap">
+  <header class="frame"><div class="panel"><img id="logo" src="assets/logos/ridge-horizontal.png" alt="Crowders Ridge"><span class="kicker">What's on the menu!</span></div></header>
+
+  <nav class="tabs" role="tablist" aria-label="Choose your camp" id="camps">
+    <button role="tab" type="button" data-camp="ridge"><span class="lg">Crowders </span>Ridge</button>
+    <button role="tab" type="button" data-camp="springs"><span class="lg">Crowders </span>Springs</button>
+    <button role="tab" type="button" data-camp="south-mountain">South <span class="lg">Mountain</span><span class="sm">Mtn</span></button>
+  </nav>
+
+  <section class="datebar">
+    <h1 id="dayTitle"><small id="daySmall">Today</small><span id="dayBig">Loading…</span></h1>
+    <div class="ctl">
+      <button class="ib" type="button" id="prev" aria-label="Previous day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="ib" type="button" id="next" aria-label="Next day"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="pill outline" type="button" id="today">Today</button>
+      <label class="datepick"><span class="sr">Pick a date</span><input type="date" id="pick"></label>
+    </div>
+  </section>
+
+  <div class="week" id="week" role="group" aria-label="Days this week"></div>
+
+  <section class="avoid" aria-label="Allergen highlighter">
+    <p>Watching for an allergy?<span>Tap one to highlight every item that contains it.</span></p>
+    <div class="chips" id="avoid"></div>
+  </section>
+
+  <main class="meals" id="meals" aria-live="polite"></main>
+
+  <p class="note"><b>About allergens:</b> we label egg, dairy, gluten, sesame and soy. Kitchens also handle other foods, and recipes can change, so please talk with our kitchen staff about any allergy or dietary need before camp.</p>
+  <p class="upd" id="upd"></p>
+</div>
+
+<script>
+(function(){
+"use strict";
+const SOURCE='https://kitchen-prep.nate-5ff.workers.dev/public';
+const MEALS=['BREAKFAST','LUNCH','DINNER'];
+const DAYS=['MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY'];
+const DEF_TIME={BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
+const AL=['Egg','Dairy','Gluten','Sesame','Soy'];
+const CAMPS={ridge:{code:'RIDGE',name:'Crowders Ridge',logo:'assets/logos/ridge-horizontal.png'},
+  springs:{code:'SPRINGS',name:'Crowders Springs',logo:'assets/logos/springs-horizontal.png'},
+  'south-mountain':{code:'SM',name:'South Mountain Christian Camp',logo:'assets/logos/smcc-horizontal.png'}};
+const KEEP=new Set(['GF','BBQ','BLT','PB&J','PBJ','OJ','DF','V','VG','II','III','USA']);
+const WARN='<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 5.2c.7 0 1.2.6 1.2 1.2v4.8a1.2 1.2 0 1 1-2.4 0V8.4c0-.6.5-1.2 1.2-1.2Zm0 10.8a1.4 1.4 0 1 1 0-2.8 1.4 1.4 0 0 1 0 2.8Z"/></svg>';
+const CLOCK='<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+
+function pd(s){return new Date(s+'T12:00:00');}
+function iso(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');}
+function addDays(s,n){const x=pd(s); x.setDate(x.getDate()+n); return iso(x);}
+function todayISO(){return iso(new Date());}
+function mondayOf(s){const x=pd(s); x.setDate(x.getDate()-((x.getDay()+6)%7)); return iso(x);}
+function fmt12(t){ if(!t) return ''; const [h,m]=t.split(':').map(Number); if(isNaN(h)) return t; return ((h%12)||12)+':'+String(m).padStart(2,'0')+(h<12?' AM':' PM'); }
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function nice(name){
+  const s=String(name||'').replace(/^\([A-Z]+\)\s*/,'').trim();
+  return s.split(/(\s+|\/|-)/).map(w=>{ const u=w.toUpperCase(); if(KEEP.has(u)) return u; if(!/[A-Za-z]/.test(w)) return w; return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase(); }).join('');
+}
+
+let DATA=null, CAT=new Map();
+const OLD=/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY) (BREAKFAST|LUNCH|DINNER)$/;
+function normalize(d){
+  const st=d.state||{}; const wk=mondayOf(st.week||todayISO());
+  ['menus','serve','off','mt'].forEach(f=>{ const o=st[f]||{}, n={}; Object.keys(o).forEach(k=>{ const m=k.match(OLD); n[m?addDays(wk,DAYS.indexOf(m[1]))+' '+m[2]:k]=o[k]; }); st[f]=n; });
+  CAT=new Map((st.catalog||[]).map(it=>[it.id,it]));
+  return d;
+}
+function campsFor(k){const s=(DATA.state.serve||{})[k]||'BOTH'; return s==='BOTH'?['RIDGE','SPRINGS']:[s];}
+function mealsFor(ds,camp){
+  if(!DATA) return [];
+  const st=DATA.state, code=CAMPS[camp].code;
+  return MEALS.map(m=>{ const k=ds+' '+m, lines=(st.menus||{})[k]||[];
+    if(!lines.length||(st.off||{})[k]||!campsFor(k).includes(code)) return null;
+    const t=((st.mt||{})[k]||{})[code]; return {m, time:(t&&t.time)||DEF_TIME[m], lines}; }).filter(Boolean);
+}
+
+/* state: camp, date, avoid list; camp + date can come from the link */
+const q=new URLSearchParams(location.search);
+let camp=CAMPS[q.get('camp')]?q.get('camp'):null;
+try{ if(!camp){const c=localStorage.getItem('ccMenuCamp'); if(CAMPS[c]) camp=c;} }catch(e){}
+camp=camp||'ridge';
+let date=/^\d{4}-\d{2}-\d{2}$/.test(q.get('date')||'')?q.get('date'):todayISO();
+let avoid=[]; try{ avoid=JSON.parse(localStorage.getItem('ccMenuAvoid')||'[]').filter(a=>AL.includes(a)); }catch(e){}
+const embedded=window.parent!==window||q.get('embed')==='1';
+if(embedded) document.body.classList.add('embed');
+
+function setCamp(c){ camp=c; try{localStorage.setItem('ccMenuCamp',c);}catch(e){} render(); }
+function setDate(d){ date=d; render(); }
+
+function render(){
+  const C=CAMPS[camp];
+  document.body.dataset.camp=camp;
+  const logo=document.getElementById('logo'); logo.src=C.logo; logo.alt=C.name;
+  document.querySelectorAll('#camps [data-camp]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.camp===camp)));
+  const td=todayISO(), d=pd(date);
+  document.getElementById('daySmall').textContent=date===td?'Today':date===addDays(td,1)?'Tomorrow':date===addDays(td,-1)?'Yesterday':(d.getFullYear()!==new Date().getFullYear()?String(d.getFullYear()):(date<td?'Past menu':'Upcoming'));
+  document.getElementById('dayBig').textContent=d.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+  document.getElementById('pick').value=date;
+  // week strip
+  const wk=mondayOf(date);
+  document.getElementById('week').innerHTML=[0,1,2,3,4,5,6].map(i=>{const ds=addDays(wk,i), x=pd(ds), has=mealsFor(ds,camp).length>0;
+    return '<button type="button" class="day'+(has?' has':'')+(ds===td?' today':'')+'" data-d="'+ds+'" aria-pressed="'+(ds===date)+'" aria-label="'+esc(x.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}))+(has?'':', no menu posted')+'"><b>'+x.toLocaleDateString(undefined,{weekday:'short'})+'</b><span>'+x.getDate()+'</span><i></i></button>';}).join('');
+  document.querySelectorAll('#week [data-d]').forEach(b=>b.onclick=()=>setDate(b.dataset.d));
+  // allergen chips
+  document.getElementById('avoid').innerHTML=AL.map(a=>'<button type="button" class="chip" data-a="'+a+'" aria-pressed="'+avoid.includes(a)+'">'+(avoid.includes(a)?WARN:'')+a+'</button>').join('');
+  document.querySelectorAll('#avoid [data-a]').forEach(b=>b.onclick=()=>{const a=b.dataset.a; avoid=avoid.includes(a)?avoid.filter(x=>x!==a):avoid.concat(a); try{localStorage.setItem('ccMenuAvoid',JSON.stringify(avoid));}catch(e){} render();});
+  // meals
+  const el=document.getElementById('meals');
+  if(!DATA){ el.innerHTML='<div class="empty"><b>Loading the menu…</b></div>'; sendHeight(); return; }
+  const ms=mealsFor(date,camp);
+  if(!ms.length){
+    let nextDs=null; for(let i=1;i<=60;i++){const ds=addDays(date,i); if(mealsFor(ds,camp).length){nextDs=ds; break;}}
+    el.innerHTML='<div class="empty"><b>Menu coming soon!</b><p>Nothing is posted for '+esc(C.name)+' on this day yet. Check back closer to camp.</p>'
+      +(nextDs?'<button class="pill" type="button" id="jumpNext">See '+esc(pd(nextDs).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'}))+'</button>':'')+'</div>';
+    const j=document.getElementById('jumpNext'); if(j) j.onclick=()=>setDate(nextDs);
+  } else {
+    el.innerHTML=ms.map(x=>{
+      const row=l=>{ const it=l.ref!=null?CAT.get(l.ref):null; const name=nice(it?it.name:l.name);
+        if(!it) return '<li class="it"><span class="nm">'+esc(name)+'</span><span class="tags"><span class="ask">Ask staff about allergens</span></span></li>';
+        const has=AL.filter((a,i)=>it.al&&it.al[i]), hit=has.filter(a=>avoid.includes(a));
+        const tags=has.map(a=>'<span class="al'+(avoid.includes(a)?' hit':'')+'">'+WARN+'Contains '+a.toLowerCase()+'</span>').join('')
+          +(it.vegan?'<span class="diet">Vegan</span>':it.veg?'<span class="diet">Vegetarian</span>':'')
+          +(!has.length&&!it.vegan&&!it.veg?'<span class="free">No labeled allergens</span>':'');
+        return '<li class="it'+(hit.length?' flag':'')+'"><span class="nm">'+esc(name)+(hit.length?'<span class="sr"> (contains '+hit.join(', ').toLowerCase()+')</span>':'')+'</span><span class="tags">'+tags+'</span></li>'; };
+      const main=x.lines.filter(l=>!l.gf), gf=x.lines.filter(l=>l.gf);
+      return '<article class="meal"><div class="mh"><h2>'+x.m.charAt(0)+x.m.slice(1).toLowerCase()+'</h2><span class="time">'+CLOCK+esc(fmt12(x.time))+'</span></div>'
+        +'<ul class="items">'+main.map(row).join('')+'</ul>'
+        +(gf.length?'<p class="gfh">Gluten-free options</p><ul class="items">'+gf.map(row).join('')+'</ul>':'')+'</article>';
+    }).join('');
+  }
+  document.getElementById('upd').textContent=DATA.at?'Menu updated '+new Date(DATA.at).toLocaleDateString(undefined,{month:'short',day:'numeric'})+' at '+new Date(DATA.at).toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'}):'';
+  sendHeight();
+}
+
+document.querySelectorAll('#camps [data-camp]').forEach(b=>b.onclick=()=>setCamp(b.dataset.camp));
+document.getElementById('camps').addEventListener('keydown',e=>{ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return; const ks=Object.keys(CAMPS); const i=ks.indexOf(camp)+(e.key==='ArrowRight'?1:-1); const n=ks[(i+ks.length)%ks.length]; setCamp(n); document.querySelector('#camps [data-camp="'+n+'"]').focus(); });
+document.getElementById('prev').onclick=()=>setDate(addDays(date,-1));
+document.getElementById('next').onclick=()=>setDate(addDays(date,1));
+document.getElementById('today').onclick=()=>setDate(todayISO());
+document.getElementById('pick').onchange=e=>{ if(e.target.value) setDate(e.target.value); };
+
+/* when embedded in another site, tell the page how tall this is */
+let lastH=0;
+function sendHeight(){ if(!embedded) return; const h=Math.ceil(document.documentElement.scrollHeight); if(Math.abs(h-lastH)<2) return; lastH=h; try{ window.parent.postMessage({ccMenuHeight:h},'*'); }catch(e){} }
+if(embedded&&window.ResizeObserver) new ResizeObserver(sendHeight).observe(document.body);
+window.addEventListener('load',sendHeight);
+
+async function load(){
+  try{
+    const r=await fetch(SOURCE+'?t='+Math.floor(Date.now()/60000),{cache:'no-store'});
+    if(!r.ok) throw new Error(r.status);
+    const d=await r.json(); if(d&&d.state){ DATA=normalize(d); render(); return; }
+    throw new Error('empty');
+  }catch(e){
+    if(!DATA){ document.getElementById('meals').innerHTML='<div class="empty"><b>Menu unavailable</b><p>We couldn’t load the menu right now. Please try again in a minute.</p><button class="pill" type="button" id="retry">Try again</button></div>';
+      document.getElementById('retry').onclick=load; sendHeight(); }
+  }
+}
+render(); load();
+setInterval(()=>{ if(!document.hidden) load(); },120000);
+})();
+</script>
+</body>
+</html>

@@ -24,3 +24,9 @@ Add tokens after `#`, separated by dots:
 - `view` for the read-only kitchen view
 
 Example: `…/kitchen-prep/#today.sm.lunch.view`
+
+## Guest menu
+
+- `menu/index.html` – the public, guest-facing menu (Crowders Camps design system). It reads the live version through the relay's `/public` address, which leaves out kitchen notes and case counts and refreshes within about a minute of each Push live.
+- Link options: `?camp=ridge`, `?camp=springs` or `?camp=south-mountain`, and `?date=2026-11-14`.
+- Brand fonts and logos for the menu live in `menu/assets/`.

@@ -35,6 +35,27 @@ export default {
     });
 
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+
+    // Guest menu: a trimmed copy of the live version, readable from any site, cached for a minute.
+    if (request.method === 'GET' && new URL(request.url).pathname === '/public') {
+      const cache = caches.default;
+      const key = new Request(new URL('/public', request.url).toString());
+      let res = await cache.match(key);
+      if (!res) {
+        try {
+          const cur = await github(env).read(env.BRANCH);
+          res = new Response(JSON.stringify(cur ? publicMenu(cur.doc) : {}), {
+            headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60' }
+          });
+          await cache.put(key, res.clone());
+        } catch (e) {
+          return new Response(JSON.stringify({ error: 'upstream' }), { status: 502, headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' } });
+        }
+      }
+      res = new Response(res.body, res);
+      res.headers.set('Access-Control-Allow-Origin', '*');
+      return res;
+    }
     // Reading is open (the live version is public anyway); saving only from your site.
     if (!okOrigin && (origin || request.method !== 'GET')) return json({ error: 'origin_not_allowed' }, 403);
 
@@ -85,6 +106,25 @@ export default {
     }
   }
 };
+
+// Only what guests see: items, allergens, diet tags, meal times. No kitchen notes or case counts.
+function publicMenu(doc) {
+  const st = doc.state || {};
+  const used = new Set();
+  const menus = {};
+  Object.keys(st.menus || {}).forEach(k => {
+    const lines = (st.menus[k] || []).map(l => ({ ref: l.ref ?? null, name: l.name || '', gf: !!l.gf }));
+    if (lines.length) { menus[k] = lines; lines.forEach(l => { if (l.ref != null) used.add(l.ref); }); }
+  });
+  const catalog = (st.catalog || []).filter(it => used.has(it.id))
+    .map(it => ({ id: it.id, name: it.name, al: it.al || [], veg: !!it.veg, vegan: !!it.vegan }));
+  const mt = {};
+  Object.keys(st.mt || {}).forEach(k => {
+    const o = {}; Object.keys(st.mt[k] || {}).forEach(c => { if (st.mt[k][c] && st.mt[k][c].time) o[c] = { time: st.mt[k][c].time }; });
+    mt[k] = o;
+  });
+  return { v: doc.v, at: doc.at, state: { week: st.week, menus, serve: st.serve || {}, off: st.off || {}, mt, catalog } };
+}
 
 function rateOk(ip) {
   const now = Date.now();
