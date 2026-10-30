@@ -242,6 +242,24 @@ body.kv .syncact{display:none}
 .ck.ret span{min-width:0;padding:3px 7px;font-family:var(--f-body)}
 .ck.ret input:checked+span{background:var(--soft);color:var(--ink);border-color:var(--muted)}
 .idxtable tr.retired td input[type=text],.idxtable tr.retired td input[type=number]{color:var(--muted);text-decoration:line-through}
+.weeknav{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:10px}
+.wklabel{font-family:var(--f-display);font-size:20px;text-transform:uppercase;letter-spacing:.03em;min-width:0}
+.jump{display:flex;align-items:center;gap:6px;margin-left:auto}
+.jump input{width:auto}
+.tab.nomenu small{opacity:.6}
+.tab.today{border-color:var(--pine)}
+.tab.today[aria-selected=true]{border-color:var(--ink)}
+.copybtn{margin-left:auto}
+.copybtn+.switch{margin-left:0}
+.copyp{display:flex;flex-direction:column;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--mustard-soft)}
+.cph{font-size:14px}
+.cpf{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px}
+.cpf label{display:flex;flex-direction:column;gap:3px;min-width:0}
+.cpf label.chk{flex-direction:row;align-items:center}
+.cpf input[type=date],.cpf select{width:auto;background:var(--panel)}
+.cpfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.cpinfo{font-size:13px;color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 </style>
 
 <header class="top">
@@ -308,10 +326,6 @@ body.kv .syncact{display:none}
         <div class="tot sm"><b id="t_m">0</b><span>South Mtn</span></div>
       </div>
     </div>
-    <div class="grp">
-      <label class="lbl" for="week">Week starting (Monday)</label>
-      <input type="date" id="week">
-    </div>
     <div class="formula">
       <b>How prep is figured</b><br>
       Prep = <code>ROUNDUP(meal campers ÷ servings per case)</code><br>
@@ -321,6 +335,13 @@ body.kv .syncact{display:none}
   </aside>
 
   <main style="min-width:0">
+    <div class="weeknav">
+      <button class="btn small" type="button" id="wkPrev" aria-label="Previous week">‹ Prev week</button>
+      <b class="wklabel" id="wkLabel"></b>
+      <button class="btn small" type="button" id="wkNext" aria-label="Next week">Next week ›</button>
+      <button class="btn small quiet" type="button" id="wkToday">Today</button>
+      <label class="jump"><span class="lbl">Go to date</span><input type="date" id="jump"></label>
+    </div>
     <nav class="tabs" id="tabs" role="tablist"></nav>
     <div id="view"></div>
   </main>
@@ -340,35 +361,50 @@ const CAMP_NAME = {RIDGE:'Ridge',SPRINGS:'Springs',SM:'South Mountain'};
 const SERVE_OPTS = [['BOTH','Ridge + Springs'],['RIDGE','Ridge'],['SPRINGS','Springs'],['SM','South Mountain']];
 const DEF_TIME = {BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
 const KEY = 'prepBuilder.v2', SYNCKEY = 'prepBuilder.sync', PREFKEY = 'prepBuilder.prefs';
-const SHARED = ['counts','week','menus','loc','mealCount','serve','off','mt','catalog'];
+const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog'];
+const KEYED = ['menus','loc','mealCount','serve','off','mt'];
 /* Where the live version is kept. On the website: the GitHub save relay (worker/worker.js),
    whose address goes here. Inside a Claude artifact: that artifact's shared database. */
 const REMOTE_URL = 'https://kitchen-prep.nate-5ff.workers.dev';
 const PAGE_URL = '__PAGE_URL__';
 const DAY_TOK = ['mon','tue','wed','thu','fri','sat','sun'];
 
-function mondayOf(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);return x.toISOString().slice(0,10);}
-function blankMenus(){ const loc={}, menus={};
-  DAYS.forEach(d=>MEALS.forEach(m=>{const k=d+' '+m; loc[k]=RIDGE_MEALS.includes(k)?'RIDGE':'SPRINGS'; menus[k]=[];}));
-  return {loc,menus}; }
+function pd(s){return new Date(s+'T12:00:00');}
+function iso(x){return x.getFullYear()+'-'+String(x.getMonth()+1).padStart(2,'0')+'-'+String(x.getDate()).padStart(2,'0');}
+function addDays(s,n){const x=pd(s); x.setDate(x.getDate()+n); return iso(x);}
+function todayISO(){return iso(new Date());}
+function mondayOf(s){const x=typeof s==='string'?pd(s):new Date(s); x.setHours(12); x.setDate(x.getDate()-((x.getDay()+6)%7)); return iso(x);}
+function weekdayOf(s){return DAYS[(pd(s).getDay()+6)%7];}
+/* meals are stored by calendar date: "2026-11-14 LUNCH" */
+function dk(d){return addDays(S.week,DAYS.indexOf(d));}
+function K(d,m){return dk(d)+' '+m;}
+function fmtLong(s){return pd(s).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric',year:'numeric'});}
+/* older saves keyed meals by weekday ("MONDAY LUNCH") for one week; move them to real dates */
+const OLDKEY_RE=/^(MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY) (BREAKFAST|LUNCH|DINNER)$/;
+function toDated(st,week){ if(!st) return st; const wk=mondayOf(week||todayISO());
+  KEYED.forEach(f=>{ const o=st[f]; if(!o||typeof o!=='object') return; const n={};
+    Object.keys(o).forEach(key=>{ const mm=key.match(OLDKEY_RE); n[mm?addDays(wk,DAYS.indexOf(mm[1]))+' '+mm[2]:key]=o[key]; }); st[f]=n; });
+  return st; }
+
 /* Everything real (index, menus, headcounts) comes from the live version on GitHub.
    This blank starting point is only used until it loads. */
 function defaults(){
-  const {loc,menus}=blankMenus();
   return {counts:{rg:0,rs:0,sg:0,ss:0,mg:0,ms:0,gfr:0,gfs:0,gfm:0}, week:mondayOf(new Date()),
-    menus, loc, mealCount:{}, serve:{}, off:{}, mt:{}, catalog:[], tab:'MONDAY'};
+    menus:{}, loc:{}, mealCount:{}, serve:{}, off:{}, mt:{}, catalog:[], tab:'MONDAY'};
 }
 let S;
 try{
   const raw=localStorage.getItem(KEY);
-  S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults();
+  S=raw?Object.assign(defaults(),JSON.parse(raw)):defaults(); toDated(S,S.week);
 }catch(e){S=defaults();}
-function sharedOf(s){const o={}; SHARED.forEach(k=>o[k]=s[k]); return o;}
+function sharedOf(s){const o={}; SHARED.forEach(k=>o[k]=s[k]);
+  const mn={}; Object.keys(s.menus||{}).sort().forEach(k=>{ if(s.menus[k]&&s.menus[k].length) mn[k]=s.menus[k]; }); o.menus=mn; return o;}
 function sharedJSON(){return JSON.stringify(sharedOf(S));}
 const PRISTINE=JSON.stringify(sharedOf(defaults()));
 /* sync bookkeeping: which live version this browser's copy is based on */
 let SY={baseV:0, baseJSON:PRISTINE};
-try{const r=localStorage.getItem(SYNCKEY); if(r) SY=Object.assign(SY,JSON.parse(r));}catch(e){}
+try{const r=localStorage.getItem(SYNCKEY); if(r) SY=Object.assign(SY,JSON.parse(r));
+  const b=JSON.parse(SY.baseJSON); if(b&&b.menus&&Object.keys(b.menus).some(k=>OLDKEY_RE.test(k))) SY.baseJSON=JSON.stringify(sharedOf(Object.assign(defaults(),toDated(b,S.week))));}catch(e){}
 let PREF={campus:'all', meals:['breakfast','lunch','dinner'], view:false, auto:false, by:'', nameAsked:false};
 try{const r=localStorage.getItem(PREFKEY); if(r) PREF=Object.assign(PREF,JSON.parse(r));}catch(e){}
 function savePref(){try{localStorage.setItem(PREFKEY,JSON.stringify(PREF));}catch(e){}}
@@ -376,7 +412,7 @@ function isDirty(){return sharedJSON()!==SY.baseJSON;}
 let liveErr=false, autoTimer=null, STORE=null, LIVE=null, liveChecked=false, pushing=false, conflict=null;
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem(SYNCKEY,JSON.stringify(SY));}catch(e){}
-  renderSync();
+  renderSync(); if(typeof renderTabs==='function'&&document.getElementById('tabs').children.length) renderTabs();
   if(PREF.auto&&STORE&&STORE.canWrite&&isDirty()){ clearTimeout(autoTimer); autoTimer=setTimeout(()=>pushLive(false,true),2000); }
 }
 
@@ -390,6 +426,7 @@ function disp(name){return String(name||'').replace(/^\([A-Z]+\)\s*/,'').trim();
 function lineName(l){const it=item(l.ref); return disp(it?it.name:l.name);}
 function C(f){return +S.counts[f]||0;}
 function tot(){const r=C('rg')+C('rs'), s=C('sg')+C('ss'), m=C('mg')+C('ms'); return {r,s,m,rs:r+s};}
+function locOf(k){ if(S.loc[k]) return S.loc[k]; const [ds,m]=k.split(' '); return RIDGE_MEALS.includes(weekdayOf(ds)+' '+m)?'RIDGE':'SPRINGS'; }
 function serveOf(k){return S.serve[k]||'BOTH';}
 function campusesFor(k){const s=serveOf(k); return s==='BOTH'?['RIDGE','SPRINGS']:[s];}
 function hasSend(k){return serveOf(k)!=='SM';}
@@ -435,10 +472,15 @@ function dayDate(i){const d=new Date(S.week+'T12:00:00'); if(isNaN(d)) return ''
 
 /* ---------- sidebar ---------- */
 const CF=['rg','rs','gfr','sg','ss','gfs','mg','ms','gfm'];
-function fillPanel(){ CF.forEach(f=>{document.getElementById('c_'+f).value=S.counts[f]??0;}); document.getElementById('week').value=S.week; renderTotals(); }
+function fillPanel(){ CF.forEach(f=>{document.getElementById('c_'+f).value=S.counts[f]??0;}); renderTotals(); }
 function initPanel(){
   CF.forEach(f=>{const el=document.getElementById('c_'+f); el.addEventListener('input',()=>{S.counts[f]=el.value===''?0:Math.max(0,+el.value); save(); renderTotals(); if(S.tab!=='INDEX') renderView(); else refreshAtCol();});});
-  const w=document.getElementById('week'); w.addEventListener('change',()=>{S.week=w.value; save(); renderTabs(); renderView();});
+  const go=(dateStr)=>{ if(!dateStr) return; S.week=mondayOf(dateStr); S.tab=weekdayOf(dateStr); save(); renderTabs(); renderView(); setHash(); };
+  window.goToDate=go;
+  document.getElementById('wkPrev').onclick=()=>{S.week=addDays(S.week,-7); save(); renderTabs(); renderView(); setHash();};
+  document.getElementById('wkNext').onclick=()=>{S.week=addDays(S.week,7); save(); renderTabs(); renderView(); setHash();};
+  document.getElementById('wkToday').onclick=()=>go(todayISO());
+  document.getElementById('jump').onchange=e=>go(e.target.value);
   fillPanel();
 }
 function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s; t_rs.textContent=T.rs; t_m.textContent=T.m; renderKvSum();}
@@ -446,11 +488,14 @@ function renderTotals(){const T=tot(); t_r.textContent=T.r; t_s.textContent=T.s;
 /* ---------- tabs ---------- */
 function renderTabs(){
   const el=document.getElementById('tabs');
-  el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(d+' '+m)).length;
-    return '<button class="tab'+(on?'':' alloff')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+'</small></button>';}).join('')
+  const td=todayISO();
+  el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(K(d,m))).length, n=MEALS.reduce((a,m)=>a+((S.menus[K(d,m)]||[]).length),0), isToday=dk(d)===td;
+    return '<button class="tab'+(on?'':' alloff')+(n?'':' nomenu')+(isToday?' today':'')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+(n?'':' · empty')+'</small></button>';}).join('')
    +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>'+S.catalog.length+' items</small></button>';
   el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView(); setHash();});
   document.getElementById('pdfDay').disabled=S.tab==='INDEX';
+  document.getElementById('wkLabel').textContent='Week of '+pd(S.week).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+  document.getElementById('jump').value=S.tab==='INDEX'?S.week:dk(S.tab);
 }
 
 /* ---------- day view ---------- */
@@ -472,7 +517,7 @@ function rowHtml(line,k,i){
    +'<td><button class="x" type="button" data-del="'+i+'" aria-label="Remove '+esc(nm)+'">×</button></td></tr>';
 }
 function ticket(d,m){
-  const k=d+' '+m, lines=S.menus[k]||[], loc=S.loc[k], sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
+  const k=K(d,m), lines=S.menus[k]||[], loc=locOf(k), sv=serveOf(k), on=isOn(k), kid=k.replace(' ','_');
   const overridden=hasOverride(k), send=hasSend(k), cols=send?9:8;
   const toggle='<label class="switch" title="Include this meal"><input type="checkbox" data-on id="on_'+kid+'"'+(on?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">'+(on?'Serving':'Off')+'</span></label>';
   if(!on) return '<section class="ticket off" data-k="'+k+'"><div class="thead"><h3>'+m+'</h3><span class="meta">Not needed. Left off the prep sheet and PDF.</span>'+toggle+'</div></section>';
@@ -492,7 +537,8 @@ function ticket(d,m){
     +(gf.length?'<tr class="sub" data-k="'+k+'" data-gfhead><td colspan="'+cols+'">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(x=>rowHtml(x[0],k,x[1])).join(''):'')
     +'</tbody></table></div>';
   return '<section class="ticket'+(sv==='SM'?' smt':'')+'" data-k="'+k+'">'
-   +'<div class="thead"><h3>'+m+'</h3>'+kitchen+toggle+'</div>'
+   +'<div class="thead"><h3>'+m+'</h3>'+kitchen+'<button type="button" class="btn small copybtn" data-copy aria-expanded="'+(copyK===k)+'"'+(lines.length?'':' disabled title="Add items first"')+'>Copy to…</button>'+toggle+'</div>'
+   +(copyK===k?copyPanel(k):'')
    +'<div class="tbar"><span class="meta">Campus</span>'+seg
    +'<span class="meta"><label for="hc_'+kid+'">Campers</label><input type="number" min="0" id="hc_'+kid+'" data-hc value="'+mealHead(k)+'" class="'+(overridden?'is-ovr':'')+'">'
    +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small quiet" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+' total</span>')+'</span>'
@@ -503,12 +549,35 @@ function ticket(d,m){
    +'<button class="btn small" type="button" data-addbtn>Add item</button><button class="btn small quiet" type="button" data-addgf>Add to allergy prep</button></div>'
    +'</section>';
 }
+let copyK=null;
+function copyPanel(k){
+  const [ds,m]=k.split(' '), kid=k.replace(' ','_'), n=(S.menus[k]||[]).length;
+  return '<form class="copyp" data-copyform novalidate>'
+   +'<div class="cph"><b>Copy '+n+' item'+(n===1?'':'s')+'</b> from '+esc(fmtLong(ds))+' '+m.toLowerCase()+'</div>'
+   +'<div class="cpf"><label><span class="lbl">To date</span><input type="date" id="cpd_'+kid+'" required value="'+addDays(ds,7)+'"></label>'
+   +'<label><span class="lbl">Meal</span><select id="cpm_'+kid+'">'+MEALS.map(x=>'<option value="'+x+'"'+(x===m?' selected':'')+'>'+x.charAt(0)+x.slice(1).toLowerCase()+'</option>').join('')+'</select></label>'
+   +'<label><span class="lbl">If that meal already has items</span><select id="cpr_'+kid+'"><option value="add">Add these after them</option><option value="replace">Replace them</option></select></label>'
+   +'<label class="chk"><input type="checkbox" id="cps_'+kid+'" checked> Also copy campus, camper count, kitchen, times and notes</label></div>'
+   +'<div class="cpfoot"><button class="btn small primary" type="submit">Copy</button><button class="btn small quiet" type="button" data-copycancel>Cancel</button><span class="cpinfo" id="cpi_'+kid+'" role="status"></span></div></form>';
+}
+function copyMeal(k,ds,m,mode,settings){
+  const tk=ds+' '+m; if(tk===k) return {err:'That is the same meal. Pick another date or meal.'};
+  const clones=(S.menus[k]||[]).map(l=>JSON.parse(JSON.stringify(l)));
+  const had=(S.menus[tk]||[]).length;
+  S.menus[tk]=mode==='replace'?clones:(S.menus[tk]||[]).concat(clones);
+  if(settings){
+    ['serve','loc','mealCount'].forEach(f=>{ if(S[f][k]!==undefined&&S[f][k]!==null) S[f][tk]=S[f][k]; else delete S[f][tk]; });
+    if(S.mt[k]) S.mt[tk]=JSON.parse(JSON.stringify(S.mt[k])); else delete S.mt[tk];
+  }
+  delete S.off[tk];
+  return {tk,had,n:clones.length};
+}
 function refocus(sel){const n=document.querySelector(sel); if(n) n.focus();}
 const FC={ridge:'RIDGE',springs:'SPRINGS',sm:'SM'};
 function shown(k){const m=k.split(' ')[1].toLowerCase(); return PREF.meals.includes(m)&&(PREF.campus==='all'||campusesFor(k).includes(FC[PREF.campus]));}
 function filterNote(){const bits=[]; if(PREF.campus!=='all') bits.push(CAMP_NAME[FC[PREF.campus]]+' only'); if(PREF.meals.length<3) bits.push(PREF.meals.map(x=>x[0].toUpperCase()+x.slice(1)).join(' + ')); return bits.join(' · ');}
 function ticketRO(d,m){
-  const k=d+' '+m, lines=S.menus[k]||[], sv=serveOf(k), send=hasSend(k);
+  const k=K(d,m), lines=S.menus[k]||[], sv=serveOf(k), send=hasSend(k);
   if(!isOn(k)) return '<section class="ticket off ro"><div class="thead"><h3>'+m+'</h3><span class="meta">Not served</span></div></section>';
   const camps=campusesFor(k).filter(c=>PREF.campus==='all'||c===FC[PREF.campus]);
   const tl='<div class="mt">'+camps.map(c=>{const v=mtGet(k,c); return '<div class="mtrow ro"><span class="camptag '+c+'">'+CAMP_NAME[c]+'</span><b class="rotime">'+esc(fmt12(v.time)||'—')+'</b>'+(v.note?'<span class="ronote">'+esc(v.note)+'</span>':'')+'</div>';}).join('')+'</div>';
@@ -516,27 +585,42 @@ function ticketRO(d,m){
   const main=lines.filter(l=>!l.gf), gf=lines.filter(l=>l.gf), cols=send?8:7;
   const body=lines.length?'<div class="tscroll"><table class="rotable"><thead><tr><th></th><th>Item</th><th>Prep</th><th>Serving</th><th>Notes</th>'+(send?'<th>To Springs</th>':'')+'<th>Allergens</th><th>Diet</th></tr></thead><tbody>'
     +main.map(row).join('')+(gf.length?'<tr class="sub"><td colspan="'+cols+'">Allergy prep · '+mealGF(k)+' GF</td></tr>'+gf.map(row).join(''):'')+'</tbody></table></div>':'<div class="empty">No items.</div>';
-  return '<section class="ticket ro'+(sv==='SM'?' smt':'')+'"><div class="thead"><h3>'+m+'</h3><span class="meta"><b>'+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+'</b></span><span class="meta">'+mealHead(k)+' campers'+(hasOverride(k)?' (override)':'')+' · GF '+mealGF(k)+'</span><span class="meta">Kitchen: '+(sv==='SM'?'South Mountain':CAMP_NAME[S.loc[k]])+'</span></div>'+tl+body+'</section>';
+  return '<section class="ticket ro'+(sv==='SM'?' smt':'')+'"><div class="thead"><h3>'+m+'</h3><span class="meta"><b>'+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+'</b></span><span class="meta">'+mealHead(k)+' campers'+(hasOverride(k)?' (override)':'')+' · GF '+mealGF(k)+'</span><span class="meta">Kitchen: '+(sv==='SM'?'South Mountain':CAMP_NAME[locOf(k)])+'</span></div>'+tl+body+'</section>';
 }
 function renderDay(d){
-  const v=document.getElementById('view'); const ms=MEALS.filter(m=>shown(d+' '+m));
+  const v=document.getElementById('view'); const ms=MEALS.filter(m=>shown(K(d,m)));
   const fn=filterNote();
   v.innerHTML=(fn?'<div class="fnote">Filtered: '+esc(fn)+' · <button type="button" class="linkbtn" id="clearF">Show everything</button></div>':'')
     +'<div class="meals">'+(ms.length?ms.map(m=>PREF.view?ticketRO(d,m):ticket(d,m)).join(''):'<div class="ticket"><div class="empty">No meals on '+d.charAt(0)+d.slice(1).toLowerCase()+' match this filter.</div></div>')+'</div>';
   const cf=document.getElementById('clearF'); if(cf) cf.onclick=()=>{PREF.campus='all'; PREF.meals=['breakfast','lunch','dinner']; savePref(); applyPrefsUI(); renderView();};
   if(PREF.view) return;
   v.querySelectorAll('.ticket').forEach(t=>{
-    const k=t.dataset.k, lines=S.menus[k], m=k.split(' ')[1];
+    const k=t.dataset.k, m=k.split(' ')[1]; const lines=S.menus[k]||(S.menus[k]=[]);
     t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView(); refocus('#on_'+k.replace(' ','_')); };
     if(!isOn(k)) return;
+    const cb=t.querySelector('[data-copy]'); if(cb) cb.onclick=()=>{ copyK=copyK===k?null:k; renderView(); if(copyK) refocus('#cpd_'+k.replace(' ','_')); };
+    const cf=t.querySelector('[data-copyform]');
+    if(cf){ const kid=k.replace(' ','_');
+      cf.querySelector('[data-copycancel]').onclick=()=>{copyK=null; renderView();};
+      const info=()=>{ const ds=document.getElementById('cpd_'+kid).value, mm=document.getElementById('cpm_'+kid).value, el=document.getElementById('cpi_'+kid);
+        if(!ds){el.textContent=''; return;} const ex=(S.menus[ds+' '+mm]||[]).length; el.textContent=fmtLong(ds)+' '+mm.toLowerCase()+(ex?' already has '+ex+' item'+(ex===1?'':'s')+'.':' is empty.'); };
+      cf.addEventListener('change',info); info();
+      cf.onsubmit=e=>{ e.preventDefault();
+        const ds=document.getElementById('cpd_'+kid).value, mm=document.getElementById('cpm_'+kid).value;
+        if(!ds||isNaN(pd(ds))){ document.getElementById('cpi_'+kid).textContent='Pick a date to copy to.'; return; }
+        const r=copyMeal(k,ds,mm,document.getElementById('cpr_'+kid).value,document.getElementById('cps_'+kid).checked);
+        if(r.err){ document.getElementById('cpi_'+kid).textContent=r.err; return; }
+        copyK=null; save(); renderTabs(); renderView();
+        statusGo('Copied '+r.n+' item'+(r.n===1?'':'s')+' to '+fmtLong(ds)+' '+mm.toLowerCase()+(r.had?' (it already had '+r.had+')':'')+'.', ds);
+      }; }
     t.querySelectorAll('[data-serve]').forEach(b=>b.onclick=()=>{ if(b.dataset.serve==='BOTH') delete S.serve[k]; else S.serve[k]=b.dataset.serve; save(); renderView();
       refocus('.ticket[data-k="'+k+'"] [data-serve="'+b.dataset.serve+'"]'); });
-    const lc=t.querySelector('[data-loc]'); if(lc) lc.onclick=()=>{S.loc[k]=S.loc[k]==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
+    const lc=t.querySelector('[data-loc]'); if(lc) lc.onclick=()=>{S.loc[k]=locOf(k)==='RIDGE'?'SPRINGS':'RIDGE'; save(); renderView();};
     const hc=t.querySelector('[data-hc]'); hc.onchange=()=>{const v=hc.value; S.mealCount[k]=(v===''||+v===baseHead(k))?null:Math.max(0,+v); save(); renderView();};
     const hr=t.querySelector('[data-hcreset]'); if(hr) hr.onclick=()=>{S.mealCount[k]=null; save(); renderView();};
     t.querySelectorAll('[data-mt]').forEach(el=>el.onchange=()=>{mtSet(k,el.dataset.mt,el.dataset.f,el.dataset.f==='note'?el.value:el.value); save();});
     t.querySelectorAll('[data-alltime]').forEach(b=>b.onclick=()=>{const c=b.dataset.alltime, tm=mtGet(k,c).time;
-      DAYS.forEach(dd=>mtSet(dd+' '+m,c,'time',tm)); save(); status(CAMP_NAME[c]+' '+m.toLowerCase()+' set to '+fmt12(tm)+' every day.');});
+      DAYS.forEach(dd=>mtSet(K(dd,m),c,'time',tm)); save(); status(CAMP_NAME[c]+' '+m.toLowerCase()+' set to '+fmt12(tm)+' every day this week.');});
     t.querySelectorAll('[data-ov]').forEach(el=>el.onchange=()=>{lines[+el.dataset.ov].ov=el.value.trim().toUpperCase(); save(); renderView();});
     t.querySelectorAll('[data-note]').forEach(el=>el.onchange=()=>{lines[+el.dataset.note].note=el.value; save();});
     t.querySelectorAll('[data-del]').forEach(el=>el.onclick=()=>{lines.splice(+el.dataset.del,1); save(); renderView();});
@@ -592,7 +676,7 @@ function finish(){ if(!drag) return; cancelAnimationFrame(drag.raf); drag.ghost.
 function cancelDrag(){ finish(); drag=null; }
 function endDrag(){
   const d=drag; finish(); drag=null; if(!d||!d.target) return;
-  const src=S.menus[d.k], tg=d.target, dst=S.menus[tg.k];
+  const src=S.menus[d.k], tg=d.target, dst=S.menus[tg.k]||(S.menus[tg.k]=[]);
   if(tg.i===d.i&&tg.k===d.k) return;
   const [line]=src.splice(d.i,1); line.gf=tg.gf;
   let pos;
@@ -699,6 +783,7 @@ function status(msg,err,fix){const s=document.getElementById('status'); s.textCo
     btn.onclick=async()=>{try{const p=await window.claude.use('permissions'); if(!p) throw 0; await p.manage(); status('If you switched downloads on, press Export again.');}
       catch(e){status('Open the page menu at the top of this artifact, choose Permissions, and allow file downloads. Then press Export again.',true);}};
     s.appendChild(btn);}}
+function statusGo(msg,ds){ status(msg); const s=document.getElementById('status'); const b=document.createElement('button'); b.type='button'; b.className='linkbtn'; b.style.marginLeft='8px'; b.textContent='Go to '+pd(ds).toLocaleDateString(undefined,{month:'short',day:'numeric'}); b.onclick=()=>window.goToDate(ds); s.appendChild(b); }
 async function downloadsBlocked(){
   let st='unavailable'; try{const p=window.claude&&await window.claude.use('permissions'); if(p) st=await p.state('downloads');}catch(e){}
   if(st==='denied') status('File downloads are turned off for this page in your browser.',true,true);
@@ -711,15 +796,15 @@ function drawDay(doc,d,first){
   doc.text(d+'  '+dayDate(i),W-40,44,{align:'right'});
   doc.setFont('helvetica','normal'); doc.setFontSize(9.5);
   let summary='RIDGE '+T.r+' (GF '+C('gfr')+')    SPRINGS '+T.s+' (GF '+C('gfs')+')    RIDGE + SPRINGS '+T.rs;
-  if(T.m||MEALS.some(m=>serveOf(d+' '+m)==='SM')) summary+='    SOUTH MOUNTAIN '+T.m+' (GF '+C('gfm')+')';
+  if(T.m||MEALS.some(m=>serveOf(K(d,m))==='SM')) summary+='    SOUTH MOUNTAIN '+T.m+' (GF '+C('gfm')+')';
   const fn=filterNote(); if(fn) summary+='    ·  '+fn.toUpperCase();
   doc.text(summary,40,60);
   doc.setDrawColor(30); doc.setLineWidth(1); doc.line(40,66,W-40,66);
   let y=78;
-  const offM=MEALS.filter(m=>!isOn(d+' '+m));
+  const offM=MEALS.filter(m=>!isOn(K(d,m)));
   if(offM.length){doc.setFontSize(9); doc.setFont('helvetica','italic'); doc.text('Not served today: '+offM.join(', '),40,y+4); doc.setFont('helvetica','normal'); y+=16;}
   MEALS.forEach(m=>{
-    const k=d+' '+m, lines=S.menus[k]||[];
+    const k=K(d,m), lines=S.menus[k]||[];
     if(!isOn(k)||!shown(k)) return;
     const send=hasSend(k), sv=serveOf(k);
     const cols=[['',{cellWidth:16}],['ITEM',{cellWidth:send?118:132,fontStyle:'bold'}],['PREP',{cellWidth:62,fontStyle:'bold'}],['SERVING',{cellWidth:58}],['NOTES',{cellWidth:'auto'}]];
@@ -737,7 +822,7 @@ function drawDay(doc,d,first){
     doc.setFillColor(28,36,32); doc.rect(40,y,W-80,22,'F'); doc.setTextColor(255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
     doc.text(m,48,y+15); doc.setFontSize(9.5); doc.setFont('helvetica','normal');
     const campLabel=sv==='BOTH'?'RIDGE + SPRINGS':CAMP_NAME[sv].toUpperCase()+' ONLY';
-    doc.text(campLabel+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+(sv==='SM'?'SOUTH MOUNTAIN':S.loc[k]),W-48,y+15,{align:'right'}); doc.setTextColor(0);
+    doc.text(campLabel+'    '+mealHead(k)+' CAMPERS'+(hasOverride(k)?' (OVERRIDE)':'')+'    KITCHEN: '+(sv==='SM'?'SOUTH MOUNTAIN':locOf(k)),W-48,y+15,{align:'right'}); doc.setTextColor(0);
     y+=22;
     doc.setFontSize(9);
     noteLines.forEach(o=>{ doc.setFont('helvetica','bold'); const lab=CAMP_NAME[o.c].toUpperCase()+'  '+(o.t||'—'); doc.text(lab,48,y+12);
@@ -764,7 +849,7 @@ async function exportPdf(days){
   try{await dl.save({filename:name,data:doc.output('blob')}); status('Saved '+name+'. Open it and print.');}
   catch(e){ if(e&&e.code==='declined') status('Export cancelled.'); else if(e&&e.code==='rate_limited') status('A save prompt is already open. Finish that one first.',true); else if(e&&['not_granted','unavailable','capability_disabled','capability_removed'].includes(e.code)) downloadsBlocked(); else status('Could not save the PDF ('+(e&&e.code||'error')+').',true);}
 }
-const dayHas=d=>MEALS.some(m=>isOn(d+' '+m)&&shown(d+' '+m));
+const dayHas=d=>MEALS.some(m=>isOn(K(d,m))&&shown(K(d,m)));
 document.getElementById('pdfDay').onclick=()=>{ if(S.tab==='INDEX') return; if(!dayHas(S.tab)){status('No meals on this day are turned on and match the filter.',true); return;} exportPdf([S.tab]); };
 document.getElementById('pdfWeek').onclick=()=>{const ds=DAYS.filter(dayHas); if(!ds.length){status('No meals this week are turned on and match the filter.',true); return;} exportPdf(ds);};
 
@@ -782,7 +867,7 @@ function renderKvSum(){
     +'<span>GF: Ridge '+C('gfr')+' · Springs '+C('gfs')+(T.m?' · S. Mtn '+C('gfm'):'')+'</span><span class="wk">Week of '+esc(dayDate(0))+'</span>';
 }
 function hashTokens(){
-  const t=[S.tab==='INDEX'?'index':DAY_TOK[DAYS.indexOf(S.tab)]];
+  const t=[S.tab==='INDEX'?'index':dk(S.tab).replace(/-/g,'')];
   if(PREF.campus!=='all') t.push(PREF.campus);
   if(PREF.meals.length<3) t.push(...PREF.meals);
   if(PREF.view) t.push('view');
@@ -800,7 +885,8 @@ function readHash(){
   const meals=[]; let campus='all', view=false, tab=null;
   toks.forEach(x=>{
     const di=DAY_TOK.indexOf(x.slice(0,3));
-    if(x==='today'){tab=DAYS[(new Date().getDay()+6)%7];}
+    if(x==='today'){tab=weekdayOf(todayISO()); S.week=mondayOf(todayISO());}
+    else if(/^\d{8}$/.test(x)){const ds=x.slice(0,4)+'-'+x.slice(4,6)+'-'+x.slice(6); if(!isNaN(pd(ds))){S.week=mondayOf(ds); tab=weekdayOf(ds);}}
     else if(x==='index'){tab='INDEX';}
     else if(di>=0&&DAYS[di].toLowerCase().startsWith(x)){tab=DAYS[di];}
     else if(x==='ridge'||x==='springs'||x==='sm'){campus=x;}
@@ -835,7 +921,7 @@ let byNames={};
 async function nameOf(by){ if(!by) return ''; if(!STORE||!STORE.user) return by; if(byNames[by]!==undefined) return byNames[by];
   try{const ps=await STORE.user.profiles([by]); byNames[by]=(ps[by]&&ps[by].name)||'';}catch(e){byNames[by]='';} return byNames[by]; }
 function applyLive(doc,msg){
-  const st=JSON.parse(JSON.stringify(doc.state||{}));
+  const st=toDated(JSON.parse(JSON.stringify(doc.state||{})),(doc.state&&doc.state.week)||S.week);
   SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; });
   S.counts=Object.assign(defaults().counts,S.counts);
   SY.baseV=doc.v; SY.baseJSON=sharedJSON(); conflict=null; LIVE=doc;
@@ -994,7 +1080,7 @@ async function connect(){
   renderSync();
 }
 
-if(readHash()) savePref();
+if(readHash()) savePref(); else { S.week=mondayOf(todayISO()); if(S.tab!=='INDEX') S.tab=weekdayOf(todayISO()); }
 initPanel(); buildCatalog(); applyPrefsUI(); renderTabs(); renderView(); setHash(); renderSync();
 connect();
 
