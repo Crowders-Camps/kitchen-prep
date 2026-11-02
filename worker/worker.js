@@ -8,10 +8,10 @@
  *
  * Settings (Cloudflare dashboard → your worker → Settings → Variables):
  *   GITHUB_TOKEN   (Secret)  fine-grained token: this repo only, Contents read & write
- *   REPO           natecrowders/kitchen-prep
+ *   REPO           Crowders-Camps/kitchen-prep
  *   BRANCH         live-data          (kept separate so saves don't rebuild the website)
  *   DATA_PATH      data/live.json
- *   ALLOWED_ORIGIN https://natecrowders.github.io   (comma-separate several; add your own domain later)
+ *   ALLOWED_ORIGIN https://crowders-camps.github.io   (comma-separate several; add your own domain later)
  */
 
 const MAX_BODY = 900 * 1024;          // GitHub's contents API tops out near 1 MB

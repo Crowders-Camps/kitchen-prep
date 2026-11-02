@@ -6,9 +6,9 @@
   "compatibility_date": "2026-09-01",
   "workers_dev": true,
   "vars": {
-    "REPO": "natecrowders/kitchen-prep",
+    "REPO": "Crowders-Camps/kitchen-prep",
     "BRANCH": "live-data",
     "DATA_PATH": "data/live.json",
-    "ALLOWED_ORIGIN": "https://natecrowders.github.io"
+    "ALLOWED_ORIGIN": "https://crowders-camps.github.io"
   }
 }
