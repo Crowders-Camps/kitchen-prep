@@ -155,6 +155,40 @@ label.chk{flex-direction:row!important;align-items:center;gap:6px;font-size:13px
 .nfoot{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
 .nmsg{font-size:13px;color:var(--pine)} .nmsg.err{color:var(--flag)}
 .tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--pine-soft);color:var(--pine);border-radius:3px;padding:1px 5px;margin-left:4px}
+.tplbar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px 14px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--pine-soft)}
+.tplpick{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tplpick select{width:auto;min-width:220px;max-width:100%;background:var(--panel);font-weight:600}
+.tplbar .hint{flex:1 1 220px;align-self:center}
+.idxseg{margin-left:4px}
+.idxseg button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+.tplhost{padding:14px 16px 18px;display:flex;flex-direction:column;gap:12px}
+.tplhead{display:flex;flex-direction:column;gap:10px}
+.tplhead .hint{margin:0}
+.tplnew{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px}
+.tplfrom{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.tplfrom input,.tplfrom select{width:auto}
+.tgh{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.04em;font-size:16px;margin:6px 0 0;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
+.tcard{border:1px solid var(--line);border-radius:8px;background:var(--panel);display:flex;flex-direction:column;min-width:0}
+.tch{display:flex;gap:6px;padding:10px;border-bottom:1px solid var(--line);background:var(--soft);border-radius:8px 8px 0 0}
+.tch .tname{flex:1 1 auto;min-width:0;font-family:var(--f-display);font-size:18px;font-weight:700;text-transform:uppercase;background:var(--panel)}
+.tch select{width:auto;min-width:118px;background:var(--panel)}
+.tlist{list-style:none;margin:0;padding:4px 0}
+.tl{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 10px;border-top:1px solid var(--soft)}
+.tl:first-child{border-top:0}
+.tl.empty{color:var(--muted);font-style:italic;font-size:13px}
+.tln{display:flex;flex-direction:column;min-width:0}
+.tln b{font-weight:600;font-size:13.5px}
+.tln small{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.tl.miss b{color:var(--flag)}
+.tla{display:flex;flex:none}
+.tla .x{font-size:14px;padding:2px 5px}
+.tla .x:disabled{opacity:.3;cursor:default}
+.tgf{margin:4px 10px 0;font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em;font-size:13px;color:var(--flag)}
+.tadd{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;border-top:1px solid var(--line);margin-top:auto}
+.tadd input{flex:1 1 160px;min-width:0}
+.tfoot{display:flex;justify-content:flex-end;gap:6px;padding:0 10px 10px}
+.btn.danger{color:var(--flag)}
 @media (prefers-reduced-motion:no-preference){.btn,.tab{transition:border-color .15s,background .15s}}
 .camp{display:flex;flex-direction:column;gap:6px;padding-top:8px;border-top:1px solid var(--soft)}
 .camp:first-of-type{border-top:none;padding-top:0}
@@ -361,7 +395,7 @@ const CAMP_NAME = {RIDGE:'Ridge',SPRINGS:'Springs',SM:'South Mountain'};
 const SERVE_OPTS = [['BOTH','Ridge + Springs'],['RIDGE','Ridge'],['SPRINGS','Springs'],['SM','South Mountain']];
 const DEF_TIME = {BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
 const KEY = 'prepBuilder.v2', SYNCKEY = 'prepBuilder.sync', PREFKEY = 'prepBuilder.prefs';
-const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog'];
+const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog','templates'];
 const KEYED = ['menus','loc','mealCount','serve','off','mt'];
 /* Where the live version is kept. On the website: the GitHub save relay (worker/worker.js),
    whose address goes here. Inside a Claude artifact: that artifact's shared database. */
@@ -491,7 +525,7 @@ function renderTabs(){
   const td=todayISO();
   el.innerHTML=DAYS.map((d,i)=>{const on=MEALS.filter(m=>isOn(K(d,m))).length, n=MEALS.reduce((a,m)=>a+((S.menus[K(d,m)]||[]).length),0), isToday=dk(d)===td;
     return '<button class="tab'+(on?'':' alloff')+(n?'':' nomenu')+(isToday?' today':'')+'" role="tab" type="button" data-tab="'+d+'" aria-selected="'+(S.tab===d)+'"><b>'+d.slice(0,3)+(on<3?' <i class="moff">'+on+'/3</i>':'')+'</b><small>'+dayDate(i)+(n?'':' · empty')+'</small></button>';}).join('')
-   +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>'+S.catalog.length+' items</small></button>';
+   +'<button class="tab idx" role="tab" type="button" data-tab="INDEX" aria-selected="'+(S.tab==='INDEX')+'"><b>Index</b><small>'+S.catalog.length+' items · '+tpls().length+' templates</small></button>';
   el.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab; save(); renderTabs(); renderView(); setHash();});
   document.getElementById('pdfDay').disabled=S.tab==='INDEX';
   document.getElementById('wkLabel').textContent='Week of '+pd(S.week).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
@@ -543,6 +577,9 @@ function ticket(d,m){
    +'<span class="meta"><label for="hc_'+kid+'">Campers</label><input type="number" min="0" id="hc_'+kid+'" data-hc value="'+mealHead(k)+'" class="'+(overridden?'is-ovr':'')+'">'
    +(overridden?'<span class="ovr">override (calc '+baseHead(k)+')</span><button class="btn small quiet" type="button" data-hcreset>Reset</button>':'<span class="hint">from '+(sv==='BOTH'?'Ridge + Springs':CAMP_NAME[sv])+' total</span>')+'</span>'
    +'<span class="meta">GF '+mealGF(k)+'</span></div>'
+   +'<div class="tplbar"><label class="tplpick"><span class="lbl">Menu template</span><select data-tpl id="tpl_'+kid+'">'+tplOptions(m)+'</select></label>'
+   +'<span class="hint">Swaps in the template’s items. Campus, campers and times stay as they are.</span>'
+   +'<button class="btn small quiet" type="button" data-savetpl'+(lines.length?'':' disabled')+'>Save as template</button></div>'
    +times
    +body
    +'<div class="addrow"><input type="text" list="catalog" data-add placeholder="Add item from index…" aria-label="Add item to '+k+'">'
@@ -598,6 +635,8 @@ function renderDay(d){
     const k=t.dataset.k, m=k.split(' ')[1]; const lines=S.menus[k]||(S.menus[k]=[]);
     t.querySelector('[data-on]').onchange=(e)=>{ if(e.target.checked) delete S.off[k]; else S.off[k]=true; save(); renderTabs(); renderView(); refocus('#on_'+k.replace(' ','_')); };
     if(!isOn(k)) return;
+    const tp=t.querySelector('[data-tpl]'); if(tp) tp.onchange=()=>{ if(tp.value) applyTemplate(k,tp.value); };
+    const st2=t.querySelector('[data-savetpl]'); if(st2) st2.onclick=()=>saveMealAsTemplate(k);
     const cb=t.querySelector('[data-copy]'); if(cb) cb.onclick=()=>{ copyK=copyK===k?null:k; renderView(); if(copyK) refocus('#cpd_'+k.replace(' ','_')); };
     const cf=t.querySelector('[data-copyform]');
     if(cf){ const kid=k.replace(' ','_');
@@ -686,6 +725,116 @@ function endDrag(){
   status(d.k===tg.k?'':'Moved '+lineName(line)+' to '+tg.k.toLowerCase()+'.');
 }
 
+/* ---------- meal templates ---------- */
+/* Starter set, built from the week of Oct 26, 2026 prep sheet. Shown until someone edits a template;
+   after that the templates are saved with the live version like everything else. */
+const STARTER_TEMPLATES = [{"id":"s1","name":"Monday Breakfast","meal":"BREAKFAST","lines":[{"ref":9,"name":"BACON","note":"","gf":false,"ov":""},{"ref":80,"name":"SCRAMBLED EGG","note":"","gf":false,"ov":""},{"ref":12,"name":"FRENCH TOAST STICKS","note":"","gf":false,"ov":""},{"ref":258,"name":"SYRUP","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":"AS NEEDED"},{"ref":15,"name":"ORANGE SLICES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}]},{"id":"s2","name":"Monday Lunch","meal":"LUNCH","lines":[{"ref":48,"name":"CHICKEN TENDERS","note":"","gf":false,"ov":""},{"ref":134,"name":"CRINKLE FRIES","note":"","gf":false,"ov":""},{"ref":52,"name":"FRUIT SALAD","note":"","gf":false,"ov":""},{"ref":233,"name":"RANCH CUPS","note":"","gf":false,"ov":""},{"ref":53,"name":"GF CHICKEN TENDERS","note":"","gf":true,"ov":""}]},{"id":"s3","name":"Monday Dinner","meal":"DINNER","lines":[{"ref":259,"name":"TACO BEEF","note":"","gf":false,"ov":""},{"ref":100,"name":"BLACK BEANS","note":"","gf":false,"ov":""},{"ref":248,"name":"SOUR CREAM CUPS","note":"","gf":false,"ov":""},{"ref":240,"name":"SALSA CUP","note":"","gf":false,"ov":""},{"ref":260,"name":"TACO SHELLS","note":"","gf":false,"ov":""},{"ref":245,"name":"SHREDDED LETTUCE","note":"","gf":false,"ov":""},{"ref":174,"name":"GUACAMOLE","note":"","gf":false,"ov":""},{"ref":null,"name":"CHIPS TORTILLA YELLOW","note":"","gf":false,"ov":""},{"ref":14,"name":"GF WRAP","note":"","gf":true,"ov":""}]},{"id":"s4","name":"Tuesday Breakfast","meal":"BREAKFAST","lines":[{"ref":6,"name":"SAUSAGE","note":"","gf":false,"ov":""},{"ref":65,"name":"CHEESE OMELET","note":"","gf":false,"ov":""},{"ref":99,"name":"BISCUIT","note":"","gf":false,"ov":""},{"ref":169,"name":"GRAVY","note":"","gf":false,"ov":""},{"ref":null,"name":"CEREAL","note":"","gf":false,"ov":"AS NEEDED"},{"ref":15,"name":"ORANGE SLICES","note":"","gf":false,"ov":""},{"ref":163,"name":"GF MUFFIN","note":"","gf":true,"ov":""}]},{"id":"s5","name":"Tuesday Lunch","meal":"LUNCH","lines":[{"ref":null,"name":"SLOPPY JOE SAUCE","note":"2oz scoop = 2 buns","gf":false,"ov":""},{"ref":null,"name":"DICED ONION","note":"","gf":false,"ov":"AS NEEDED"},{"ref":null,"name":"BEEF 80/20","note":"","gf":false,"ov":""},{"ref":null,"name":"SLIDER BUNS","note":"","gf":false,"ov":""},{"ref":130,"name":"COLE SLAW","note":"","gf":false,"ov":""},{"ref":66,"name":"CHIPS","note":"","gf":false,"ov":""},{"ref":156,"name":"FRUIT CUP","note":"","gf":false,"ov":""},{"ref":161,"name":"GF BUN","note":"","gf":true,"ov":"AS NEEDED"}]},{"id":"s6","name":"Tuesday Dinner","meal":"DINNER","lines":[{"ref":213,"name":"ORANGE SAUCE","note":"","gf":false,"ov":""},{"ref":2,"name":"BONELESS WING CHICKEN","note":"","gf":false,"ov":""},{"ref":155,"name":"FRIED RICE","note":"","gf":false,"ov":""},{"ref":255,"name":"SWEET CARROTS","note":"","gf":false,"ov":""},{"ref":181,"name":"HONEY","note":"","gf":false,"ov":"AS NEEDED"},{"ref":null,"name":"BROWN SUGAR","note":"","gf":false,"ov":"AS NEEDED"},{"ref":null,"name":"CHOCOLATE CHIP COOKIES DAVIDS GF","note":"","gf":false,"ov":""},{"ref":13,"name":"GF BONELESS WING CHICKEN","note":"","gf":true,"ov":""}]},{"id":"s7","name":"Wednesday Lunch","meal":"LUNCH","lines":[{"ref":226,"name":"PITA CHICKEN","note":"","gf":false,"ov":""},{"ref":222,"name":"PEPPERS + ONIONS","note":"","gf":false,"ov":""},{"ref":183,"name":"HOT DOG ROLL TOP SLICE","note":"","gf":false,"ov":""},{"ref":232,"name":"QUESO","note":"","gf":false,"ov":""},{"ref":134,"name":"CRINKLE FRIES","note":"","gf":false,"ov":""},{"ref":199,"name":"MANGO CHUNKS","note":"","gf":false,"ov":""},{"ref":14,"name":"GF WRAP","note":"","gf":true,"ov":""}]},{"id":"s8","name":"Wednesday Dinner","meal":"DINNER","lines":[{"ref":null,"name":"MEATLOAF","note":"","gf":false,"ov":""},{"ref":201,"name":"MASHED POTATOES","note":"","gf":false,"ov":""},{"ref":70,"name":"GREEN BEANS","note":"","gf":false,"ov":""},{"ref":78,"name":"ROLL","note":"","gf":false,"ov":""},{"ref":88,"name":"APPLE COBBLER","note":"","gf":false,"ov":""},{"ref":null,"name":"GF ROLL","note":"","gf":true,"ov":""},{"ref":69,"name":"GF CHICKEN TENDERS","note":"","gf":true,"ov":""}]}];
+function tpls(){ return Array.isArray(S.templates)?S.templates:STARTER_TEMPLATES; }
+function ensureTpls(){ if(!Array.isArray(S.templates)) S.templates=JSON.parse(JSON.stringify(STARTER_TEMPLATES)); return S.templates; }
+function tplById(id){ return tpls().find(t=>t.id===id)||null; }
+function newTplId(){ return 't'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function mealWord(m){ return m?m.charAt(0)+m.slice(1).toLowerCase():'Any meal'; }
+/* A template line points at an index item. If that item is gone (or was never in this index),
+   look it up by name, so items added to the index later link up on their own. */
+function findByName(name){
+  const n=disp(name).toUpperCase(); if(!n) return null;
+  const hits=S.catalog.filter(it=>disp(it.name).toUpperCase()===n);
+  return hits.find(it=>!isRetired(it))||hits[0]||null;
+}
+function resolveLine(l){
+  let ref=l.ref!=null&&CAT.has(l.ref)?l.ref:null;
+  if(ref==null){ const it=findByName(l.name); if(it) ref=it.id; }
+  return {ref, name:ref!=null?item(ref).name:l.name, note:l.note||'', gf:!!l.gf, ov:l.ov||''};
+}
+function tplOptions(m){
+  const list=tpls(), same=list.filter(t=>t.meal===m), other=list.filter(t=>t.meal!==m);
+  const opt=t=>'<option value="'+esc(t.id)+'">'+esc(t.name)+' ('+t.lines.length+')</option>';
+  return '<option value="">Load a template…</option>'
+    +(same.length?'<optgroup label="'+mealWord(m)+' templates">'+same.map(opt).join('')+'</optgroup>':'')
+    +(other.length?'<optgroup label="Other templates">'+other.map(opt).join('')+'</optgroup>':'');
+}
+let tplUndo=null;
+function applyTemplate(k,id){
+  const t=tplById(id); if(!t) return;
+  const prev=JSON.parse(JSON.stringify(S.menus[k]||[]));
+  S.menus[k]=t.lines.map(resolveLine);
+  delete S.off[k];
+  tplUndo={k,prev};
+  save(); renderTabs(); renderView();
+  const missing=S.menus[k].filter(l=>l.ref==null).length;
+  status('Loaded “'+t.name+'”: '+S.menus[k].length+' items'+(prev.length?' replaced '+prev.length:'')+'. Prep amounts use this meal’s camper count.'
+    +(missing?' '+missing+' item'+(missing===1?' isn’t':'s aren’t')+' in the index yet.':''));
+  const s=document.getElementById('status'), b=document.createElement('button');
+  b.type='button'; b.className='linkbtn'; b.style.marginLeft='8px'; b.textContent='Undo';
+  b.onclick=()=>{ if(!tplUndo) return; S.menus[tplUndo.k]=tplUndo.prev; tplUndo=null; save(); renderTabs(); renderView(); status('Put the previous items back.'); };
+  s.appendChild(b);
+}
+function saveMealAsTemplate(k){
+  const [ds,m]=k.split(' '), lines=(S.menus[k]||[]);
+  if(!lines.length){ status('This meal has no items to save.',true); return; }
+  const list=ensureTpls();
+  const name=weekdayOf(ds).charAt(0)+weekdayOf(ds).slice(1).toLowerCase()+' '+mealWord(m)+' ('+pd(ds).toLocaleDateString(undefined,{month:'short',day:'numeric'})+')';
+  const t={id:newTplId(), name, meal:m, lines:lines.map(l=>({ref:l.ref??null,name:l.ref!=null&&item(l.ref)?item(l.ref).name:l.name,note:l.note||'',gf:!!l.gf,ov:l.ov||''}))};
+  list.push(t); save(); renderView();
+  status('Saved as template “'+name+'”. Rename it or change its items under Index → Meal templates.');
+}
+
+/* Index → Meal templates */
+let tplDelArm=null;
+function tplLineHtml(t,l,i){
+  const r=resolveLine(l), it=item(r.ref), sub=it?(it.spc?it.spc+' per '+it.unit.toLowerCase():'no servings in index'):'not in index';
+  return '<li class="tl'+(it?'':' miss')+'"><span class="tln"><b>'+esc(disp(r.name))+'</b><small>'+esc(sub)+(r.ov?' · '+esc(r.ov):'')+(r.note?' · '+esc(r.note):'')+'</small></span>'
+    +'<span class="tla"><button class="x" type="button" data-tu="'+i+'" aria-label="Move '+esc(disp(r.name))+' up"'+(i?'':' disabled')+'>↑</button>'
+    +'<button class="x" type="button" data-td="'+i+'" aria-label="Move '+esc(disp(r.name))+' down">↓</button>'
+    +'<button class="x" type="button" data-tx="'+i+'" aria-label="Remove '+esc(disp(r.name))+'">×</button></span></li>';
+}
+function tplCard(t){
+  const main=t.lines.map((l,i)=>[l,i]).filter(x=>!x[0].gf), gf=t.lines.map((l,i)=>[l,i]).filter(x=>x[0].gf);
+  return '<article class="tcard" data-tid="'+esc(t.id)+'">'
+   +'<div class="tch"><input type="text" class="tname" data-tf="name" value="'+esc(t.name)+'" aria-label="Template name">'
+   +'<select data-tf="meal" aria-label="Meal for '+esc(t.name)+'">'+['','BREAKFAST','LUNCH','DINNER'].map(m=>'<option value="'+m+'"'+(m===(t.meal||'')?' selected':'')+'>'+mealWord(m)+'</option>').join('')+'</select></div>'
+   +'<ul class="tlist">'+(main.length?main.map(x=>tplLineHtml(t,x[0],x[1])).join(''):'<li class="tl empty">No items yet.</li>')+'</ul>'
+   +(gf.length?'<p class="tgf">Allergy prep</p><ul class="tlist">'+gf.map(x=>tplLineHtml(t,x[0],x[1])).join('')+'</ul>':'')
+   +'<div class="tadd"><input type="text" list="catalog" data-tadd placeholder="Add item from index…" aria-label="Add item to '+esc(t.name)+'">'
+   +'<button class="btn small" type="button" data-taddb>Add</button><button class="btn small quiet" type="button" data-taddg>Add to allergy prep</button></div>'
+   +'<div class="tfoot"><button class="btn small quiet" type="button" data-tdup>Duplicate</button>'
+   +'<button class="btn small quiet danger" type="button" data-tdel>'+(tplDelArm===t.id?'Click again to delete':'Delete')+'</button></div></article>';
+}
+function renderTemplates(host){
+  const list=tpls(), groups=['BREAKFAST','LUNCH','DINNER',''].map(m=>[m,list.filter(t=>(t.meal||'')===m)]).filter(g=>g[1].length);
+  host.innerHTML='<div class="tplhead"><p class="hint">Pick a template from the menu at the top of any meal to swap in its items. Prep amounts always come from that day’s camper count.</p>'
+   +'<div class="tplnew"><button class="btn small primary" type="button" id="tplBlank">New blank template</button>'
+   +'<span class="tplfrom"><span class="lbl">Or copy a meal</span><input type="date" id="tplFromD" value="'+(S.tab!=='INDEX'?dk(S.tab):dk('MONDAY'))+'" aria-label="Date of the meal to copy">'
+   +'<select id="tplFromM" aria-label="Meal to copy">'+MEALS.map(m=>'<option value="'+m+'">'+mealWord(m)+'</option>').join('')+'</select>'
+   +'<button class="btn small" type="button" id="tplFrom">Make template</button></span></div></div>'
+   +(groups.length?groups.map(([m,ts])=>'<h4 class="tgh">'+mealWord(m)+'</h4><div class="tgrid">'+ts.map(tplCard).join('')+'</div>').join(''):'<div class="empty">No templates yet.</div>');
+
+  document.getElementById('tplBlank').onclick=()=>{ const l=ensureTpls(); const t={id:newTplId(),name:'New template',meal:'',lines:[]}; l.push(t); save(); renderView();
+    const n=document.querySelector('.tcard[data-tid="'+t.id+'"] .tname'); if(n){n.focus(); n.select();} };
+  document.getElementById('tplFrom').onclick=()=>{ const ds=document.getElementById('tplFromD').value, m=document.getElementById('tplFromM').value;
+    if(!ds){status('Pick the date of the meal to copy.',true); return;} saveMealAsTemplate(ds+' '+m); };
+  host.querySelectorAll('.tcard').forEach(card=>{
+    const id=card.dataset.tid;
+    const edit=fn=>{ ensureTpls(); const t=tplById(id); if(!t) return; fn(t); save(); };
+    card.querySelectorAll('[data-tf]').forEach(el=>el.onchange=()=>edit(t=>{ if(el.dataset.tf==='name'){ const v=el.value.trim(); t.name=v||t.name; el.value=t.name; } else { t.meal=el.value; renderView(); } }));
+    card.addEventListener('click',e=>{
+      const b=e.target.closest('button'); if(!b||!card.contains(b)) return;
+      if(b.dataset.tu!=null||b.dataset.td!=null){ const i=+(b.dataset.tu??b.dataset.td), dir=b.dataset.tu!=null?-1:1;
+        edit(t=>{ const gfv=t.lines[i].gf; let j=i+dir; while(j>=0&&j<t.lines.length&&t.lines[j].gf!==gfv) j+=dir; if(j<0||j>=t.lines.length) return; [t.lines[i],t.lines[j]]=[t.lines[j],t.lines[i]]; }); renderView(); }
+      else if(b.dataset.tx!=null){ edit(t=>t.lines.splice(+b.dataset.tx,1)); renderView(); }
+      else if(b.hasAttribute('data-tdup')){ const l=ensureTpls(), t=tplById(id); const c=JSON.parse(JSON.stringify(t)); c.id=newTplId(); c.name=t.name+' (copy)'; l.splice(l.indexOf(t)+1,0,c); save(); renderView(); }
+      else if(b.hasAttribute('data-tdel')){ if(tplDelArm!==id){ tplDelArm=id; renderView(); setTimeout(()=>{ if(tplDelArm===id){tplDelArm=null; if(S.tab==='INDEX') renderView();} },4000); return; }
+        tplDelArm=null; const l=ensureTpls(), t=tplById(id); S.templates=l.filter(x=>x.id!==id); save(); renderView(); status('Deleted template “'+t.name+'”.'); }
+      else if(b.hasAttribute('data-taddb')||b.hasAttribute('data-taddg')){ addTo(b.hasAttribute('data-taddg')); }
+    });
+    const inp=card.querySelector('[data-tadd]');
+    const addTo=gf=>{ const v=inp.value.trim(); if(!v) return; const ref=labelToRef[v.toUpperCase()]??labelToRef[v];
+      edit(t=>t.lines.push({ref:ref??null,name:ref!=null?item(ref).name:v.toUpperCase(),note:'',gf:!!gf,ov:''})); renderView();
+      const n=document.querySelector('.tcard[data-tid="'+id+'"] [data-tadd]'); if(n) n.focus(); };
+    inp.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); addTo(false); } };
+  });
+}
+
 /* ---------- index (fully editable catalog) ---------- */
 let idxQ='', idxDelArm=null;
 function atText(it){return it.spc?cases(tot().rs,it.spc)+' '+it.unit:'—';}
@@ -710,9 +859,18 @@ function idxRowsHtml(){
   const list=S.catalog.filter(it=>!q||(it.name+' '+it.cbi).toUpperCase().includes(q)).slice().sort((a,b)=>disp(a.name).localeCompare(disp(b.name))||a.name.localeCompare(b.name));
   return list.length?list.map(idxRow).join(''):'<tr><td colspan="11" class="empty">No items match “'+esc(q)+'”.</td></tr>';
 }
+function idxTabsHtml(){ const cur=PREF.idxTab==='templates'?'templates':'items';
+  return '<div class="seg idxseg" role="tablist" aria-label="Index sections">'
+    +'<button type="button" role="tab" data-it="items" aria-selected="'+(cur==='items')+'">Items ('+S.catalog.length+')</button>'
+    +'<button type="button" role="tab" data-it="templates" aria-selected="'+(cur==='templates')+'">Meal templates ('+tpls().length+')</button></div>'; }
+function bindIdxTabs(){ document.querySelectorAll('[data-it]').forEach(b=>b.onclick=()=>{ PREF.idxTab=b.dataset.it; savePref(); renderView(); setHash(); }); }
 function renderIndex(){
   const v=document.getElementById('view');
-  v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3><span class="meta">Every field is editable. Changes save as you go and apply to every meal.</span>'
+  if(PREF.idxTab==='templates'){
+    v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3>'+idxTabsHtml()+'</div><div class="tplhost" id="tplHost"></div></div>';
+    bindIdxTabs(); renderTemplates(document.getElementById('tplHost')); return;
+  }
+  v.innerHTML='<div class="ticket"><div class="thead"><h3>Index</h3>'+idxTabsHtml()+'<span class="meta">Every field is editable. Changes save as you go and apply to every meal.</span>'
    +'</div>'
    +'<form class="newitem" id="newitem" novalidate><div class="nh"><h3>Add an item</h3><span class="meta">New items show up in every meal&#39;s item search.</span></div>'
    +'<div class="nf">'
@@ -729,6 +887,7 @@ function renderIndex(){
    +'<div class="addrow idxbar"><input type="text" id="idxq" placeholder="Search name or CBI #" value="'+esc(idxQ)+'" aria-label="Search index"><span class="hint">Allergens: E egg · D dairy · G gluten · SE sesame · SO soy</span></div>'
    +'<div class="tscroll"><table class="idxtable"><thead><tr><th>Item</th><th>CBI #</th><th>Servings / case</th><th>Unit</th><th id="atHead">At '+tot().rs+'</th><th>Serving size</th><th>Usual meal</th><th>Allergens</th><th>Diet</th><th>Status</th><th></th></tr></thead><tbody id="idxBody">'+idxRowsHtml()+'</tbody></table></div></div>';
 
+  bindIdxTabs();
   document.getElementById('idxq').oninput=(e)=>{idxQ=e.target.value.trim().toUpperCase(); document.getElementById('idxBody').innerHTML=idxRowsHtml();};
   const tb=document.getElementById('idxBody');
   tb.addEventListener('change',e=>{
@@ -867,7 +1026,7 @@ function renderKvSum(){
     +'<span>GF: Ridge '+C('gfr')+' · Springs '+C('gfs')+(T.m?' · S. Mtn '+C('gfm'):'')+'</span><span class="wk">Week of '+esc(dayDate(0))+'</span>';
 }
 function hashTokens(){
-  const t=[S.tab==='INDEX'?'index':dk(S.tab).replace(/-/g,'')];
+  const t=[S.tab==='INDEX'?(PREF.idxTab==='templates'?'templates':'index'):dk(S.tab).replace(/-/g,'')];
   if(PREF.campus!=='all') t.push(PREF.campus);
   if(PREF.meals.length<3) t.push(...PREF.meals);
   if(PREF.view) t.push('view');
@@ -887,7 +1046,8 @@ function readHash(){
     const di=DAY_TOK.indexOf(x.slice(0,3));
     if(x==='today'){tab=weekdayOf(todayISO()); S.week=mondayOf(todayISO());}
     else if(/^\d{8}$/.test(x)){const ds=x.slice(0,4)+'-'+x.slice(4,6)+'-'+x.slice(6); if(!isNaN(pd(ds))){S.week=mondayOf(ds); tab=weekdayOf(ds);}}
-    else if(x==='index'){tab='INDEX';}
+    else if(x==='index'){tab='INDEX'; PREF.idxTab='items';}
+    else if(x==='templates'){tab='INDEX'; PREF.idxTab='templates';}
     else if(di>=0&&DAYS[di].toLowerCase().startsWith(x)){tab=DAYS[di];}
     else if(x==='ridge'||x==='springs'||x==='sm'){campus=x;}
     else if(x==='southmountain'||x==='mountain'){campus='sm';}
@@ -922,7 +1082,7 @@ async function nameOf(by){ if(!by) return ''; if(!STORE||!STORE.user) return by;
   try{const ps=await STORE.user.profiles([by]); byNames[by]=(ps[by]&&ps[by].name)||'';}catch(e){byNames[by]='';} return byNames[by]; }
 function applyLive(doc,msg){
   const st=toDated(JSON.parse(JSON.stringify(doc.state||{})),(doc.state&&doc.state.week)||S.week);
-  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; });
+  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; else if(k==='templates') delete S.templates; });
   S.counts=Object.assign(defaults().counts,S.counts);
   SY.baseV=doc.v; SY.baseJSON=sharedJSON(); conflict=null; LIVE=doc;
   reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); renderKvSum(); save();
@@ -957,7 +1117,7 @@ async function pushLive(force,fromAuto){
 }
 function discard(){ if(LIVE&&LIVE.state) applyLive(LIVE,'Discarded your changes. Showing the live version.'); else if(STORE) STORE.fetchNow().then(d=>{ if(d&&d.v) applyLive(d,'Discarded your changes. Showing the live version.'); }); }
 function loadDraft(p,label){
-  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); });
+  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); else if(k==='templates') delete S.templates; });
   S.counts=Object.assign(defaults().counts,S.counts);
   reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); save();
   status('Loaded '+label+' as your draft. Push live to make it the live version again.');
