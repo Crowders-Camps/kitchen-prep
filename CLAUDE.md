@@ -15,6 +15,8 @@ Crowders Camps' kitchen prep sheet tool and guest-facing menu. Static pages on G
 - `serve`, `loc`, `mealCount`, `off`, `mt` — per-meal campus, kitchen, camper override, off switch, per-campus `{time, note}`.
 - `counts` — rg/rs (Ridge campers/staff), sg/ss (Springs), mg/ms (South Mountain), gfr/gfs/gfm.
 - `templates` — meal templates `{id, name, meal, lines}`; absent until first edited (page falls back to `STARTER_TEMPLATES`).
+- `inv` — Inventory mode; absent until first edited. `c.RIDGE|SPRINGS|SM = {locs:[{id,name,items:[key]}], stock:{key:number}}`, one independent set per campus. `log:[{at, by, c, n (items counted), of (items listed), ch (counts changed)}]`, capped at 400. An item `key` is the index name without its day prefix, uppercased (`(FRIDAY) BACON` → `BACON`), so duplicate index rows count as one product. Every Push live from inventory mode adds a log entry for the campus shown. Never sent to the guest `/public` feed.
+- Pushing: when a newer live version arrives, the page merges it with unpublished changes if they touch different parts (each top-level field, each campus's inventory; logs are combined). Only overlapping edits show the conflict choice.
 
 ## Rules that must not change
 - Prep = ROUNDUP(meal campers ÷ servings per case); To Springs = ROUNDUP(Springs total ÷ servings per case). No servings = AS NEEDED.
