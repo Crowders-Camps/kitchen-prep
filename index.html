@@ -294,14 +294,72 @@ body.kv .syncact{display:none}
 .cpfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
 .cpinfo{font-size:13px;color:var(--muted)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
+/* ---------- inventory mode ---------- */
+.modeseg button{padding:8px 16px;font-size:14px}
+.modeseg button[aria-checked=true]{background:var(--pine);color:var(--pine-ink)}
+#invPanel,#invMain{display:none}
+body.invmode #invPanel{display:flex}
+body.invmode #invMain{display:block}
+@media (max-width:900px){body.invmode #invPanel{order:2}}
+body.invmode #panel,body.invmode #prepMain,body.invmode .viewbar,body.invmode .kvsum,body.invmode #pdfDay,body.invmode #pdfWeek{display:none}
+.invbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:10px}
+.invbar input[type=search]{border:1px solid var(--line);background:var(--panel);border-radius:5px;padding:6px 8px;max-width:260px;flex:1 1 180px}
+.locbar{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+.lochead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.lochead .btn{margin-left:auto}
+.lchips{display:flex;flex-wrap:wrap;gap:6px}
+.lchip{border:1px solid var(--line);background:var(--panel);border-radius:6px;padding:5px 10px;cursor:pointer;font-weight:600;font-size:13px;display:inline-flex;align-items:baseline;gap:6px}
+.lchip small{font-family:var(--f-mono);font-size:11px;color:var(--muted);font-weight:500}
+.lchip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lchip[aria-pressed=true] small{color:inherit;opacity:.75}
+.lchip.un{border-style:dashed}
+.locedit{border-top:1px solid var(--soft);padding-top:8px;display:flex;flex-direction:column;gap:6px}
+.lerow{display:flex;align-items:center;gap:6px}
+.lerow input[type=text]{max-width:300px;font-weight:600}
+.lerow .n{font-size:12px;color:var(--muted);min-width:64px}
+.leadd{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-top:4px}
+.leadd input{max-width:300px}
+.invsecs{display:flex;flex-direction:column;gap:14px}
+.invloc .thead h3{font-size:22px}
+.invloc .thead .btn{margin-left:auto}
+.invloc.un{border-style:dashed}
+.invloc.un .thead{background:transparent}
+.invtable{min-width:0}
+.invtable td.item{font-size:14.5px}
+.invtable th.oh,.invtable td.oh{width:132px}
+.invtable td.oh input{width:110px;font-size:15px;padding:6px 8px;background:var(--panel)}
+.invtable td.oh.chg input{background:var(--mustard-soft);border-color:var(--mustard)}
+.invtable th.mv,.invtable td.mv{width:190px}
+.invtable td.mv select{font-size:12.5px;padding:4px 6px;background:transparent;border-color:transparent;color:var(--muted)}
+.invtable td.mv select:hover,.invtable td.mv select:focus{border-color:var(--line);background:var(--bg);color:var(--ink)}
+@media (max-width:560px){.invtable th.mv,.invtable td.mv{width:120px}.invtable th.oh,.invtable td.oh{width:96px}.invtable td.oh input{width:84px}}
+.invpanel h2{font-size:18px}
+.invcamp{font-family:var(--f-display);font-size:26px;text-transform:uppercase;letter-spacing:.03em;line-height:1}
+.invcamp.RIDGE{color:var(--pine)} .invcamp.SM{color:var(--sm)}
+.lastinv{background:var(--pine);color:var(--pine-ink);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.lastinv .lbl{color:inherit;opacity:.8}
+.lastinv b{font-family:var(--f-mono);font-size:17px;font-variant-numeric:tabular-nums}
+.lastinv span{font-size:13px}
+.lastinv.none{background:var(--soft);color:var(--muted)}
+.othercamps{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.othercamps b{color:var(--ink);font-weight:600}
+.invlog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;max-height:340px;overflow:auto}
+.invlog li{display:flex;flex-direction:column;padding:6px 0;border-top:1px solid var(--soft);font-size:13px}
+.invlog li:first-child{border-top:none}
+.invlog .t{font-family:var(--f-mono);font-size:12px;font-variant-numeric:tabular-nums}
+.invlog .w{font-weight:600}
+.invlog .d{color:var(--muted);font-size:12px}
 </style>
 
 <header class="top">
   <div>
     <h1>Kitchen Prep Builder</h1>
-    <p>Set headcounts, build each meal, export a printable prep sheet. Case counts come from the index.</p>
+    <p id="topText">Set headcounts, build each meal, export a printable prep sheet. Case counts come from the index.</p>
   </div>
   <div class="actions">
+    <div class="seg modeseg" role="radiogroup" aria-label="Mode" id="modeSeg">
+      <button type="button" role="radio" data-mode="prep">Prep sheets</button><button type="button" role="radio" data-mode="inv">Inventory</button>
+    </div>
     <button class="btn primary" id="pdfDay" type="button">Export day PDF</button>
     <button class="btn" id="pdfWeek" type="button">Export week PDF</button>
   </div>
@@ -367,8 +425,9 @@ body.kv .syncact{display:none}
       South Mountain meals have no Send to Springs column. Allergy prep = that meal's GF count. Items with no servings print as AS NEEDED.
     </div>
   </aside>
+  <aside class="panel invpanel" id="invPanel" aria-label="Inventory summary"></aside>
 
-  <main style="min-width:0">
+  <main style="min-width:0" id="prepMain">
     <div class="weeknav">
       <button class="btn small" type="button" id="wkPrev" aria-label="Previous week">‹ Prev week</button>
       <b class="wklabel" id="wkLabel"></b>
@@ -379,9 +438,11 @@ body.kv .syncact{display:none}
     <nav class="tabs" id="tabs" role="tablist"></nav>
     <div id="view"></div>
   </main>
+  <main style="min-width:0" id="invMain"><div id="invView"></div></main>
 </div>
 
 <datalist id="catalog"></datalist>
+<datalist id="invList"></datalist>
 
 <script>
 (function(){
@@ -395,7 +456,14 @@ const CAMP_NAME = {RIDGE:'Ridge',SPRINGS:'Springs',SM:'South Mountain'};
 const SERVE_OPTS = [['BOTH','Ridge + Springs'],['RIDGE','Ridge'],['SPRINGS','Springs'],['SM','South Mountain']];
 const DEF_TIME = {BREAKFAST:'09:00',LUNCH:'13:00',DINNER:'17:30'};
 const KEY = 'prepBuilder.v2', SYNCKEY = 'prepBuilder.sync', PREFKEY = 'prepBuilder.prefs';
-const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog','templates'];
+const SHARED = ['counts','menus','loc','mealCount','serve','off','mt','catalog','templates','inv'];
+/* shared fields that stay absent until someone first edits them */
+const OPTIONAL = ['templates','inv'];
+/* inventory: one independent set of storage locations and on-hand counts per campus */
+const INV_CAMPS = ['RIDGE','SPRINGS','SM'];
+const INV_TOK = {RIDGE:'ridge',SPRINGS:'springs',SM:'sm'};
+const STARTER_LOCS = [['l_cool','Walk-in cooler'],['l_frz','Walk-in freezer'],['l_dry','Dry storage']];
+const LOG_MAX = 400;
 const KEYED = ['menus','loc','mealCount','serve','off','mt'];
 /* Where the live version is kept. On the website: the GitHub save relay (worker/worker.js),
    whose address goes here. Inside a Claude artifact: that artifact's shared database. */
@@ -439,7 +507,7 @@ const PRISTINE=JSON.stringify(sharedOf(defaults()));
 let SY={baseV:0, baseJSON:PRISTINE};
 try{const r=localStorage.getItem(SYNCKEY); if(r) SY=Object.assign(SY,JSON.parse(r));
   const b=JSON.parse(SY.baseJSON); if(b&&b.menus&&Object.keys(b.menus).some(k=>OLDKEY_RE.test(k))) SY.baseJSON=JSON.stringify(sharedOf(Object.assign(defaults(),toDated(b,S.week))));}catch(e){}
-let PREF={campus:'all', meals:['breakfast','lunch','dinner'], view:false, auto:false, by:'', nameAsked:false};
+let PREF={campus:'all', meals:['breakfast','lunch','dinner'], view:false, auto:false, by:'', nameAsked:false, inv:false, invC:'RIDGE', invLoc:'all'};
 try{const r=localStorage.getItem(PREFKEY); if(r) PREF=Object.assign(PREF,JSON.parse(r));}catch(e){}
 function savePref(){try{localStorage.setItem(PREFKEY,JSON.stringify(PREF));}catch(e){}}
 function isDirty(){return sharedJSON()!==SY.baseJSON;}
@@ -447,7 +515,7 @@ let liveErr=false, autoTimer=null, STORE=null, LIVE=null, liveChecked=false, pus
 function save(){
   try{localStorage.setItem(KEY,JSON.stringify(S)); localStorage.setItem(SYNCKEY,JSON.stringify(SY));}catch(e){}
   renderSync(); if(typeof renderTabs==='function'&&document.getElementById('tabs').children.length) renderTabs();
-  if(PREF.auto&&STORE&&STORE.canWrite&&isDirty()){ clearTimeout(autoTimer); autoTimer=setTimeout(()=>pushLive(false,true),2000); }
+  if(PREF.auto&&!PREF.inv&&STORE&&STORE.canWrite&&isDirty()){ clearTimeout(autoTimer); autoTimer=setTimeout(()=>pushLive(false,true),2000); }
 }
 
 /* ---------- catalog + math ---------- */
@@ -932,9 +1000,209 @@ function renderIndex(){
   };
 }
 function renderView(){
+  if(PREF.inv){ renderInv(); return; }
   if(!S.catalog.length&&!LIVE&&!liveChecked){ document.getElementById('view').innerHTML='<div class="ticket"><div class="empty">Loading the live menus and index…</div></div>'; return; }
   if(!S.catalog.length&&!LIVE&&(liveErr||!STORE)&&liveChecked&&S.tab!=='INDEX'&&!Object.values(S.menus).some(l=>l.length)){ document.getElementById('view').innerHTML='<div class="ticket"><div class="empty">Couldn’t load the live version, and this device has no saved copy yet. Check the connection and reload the page.</div></div>'; return; }
   if(S.tab==='INDEX') renderIndex(); else renderDay(S.tab); }
+
+/* ---------- inventory ----------
+   S.inv = { c: { RIDGE|SPRINGS|SM: { locs:[{id,name,items:[key]}], stock:{key:number} } },
+             log: [{at, by, c, n (items with a count), of (items listed), ch (counts changed)}] }
+   An inventory item is a product name from the index. Index rows that differ only by a
+   day prefix ("(FRIDAY) BACON", "(MONDAY) BACON") are the same stock, so they count once. */
+function invKey(name){ return disp(name).toUpperCase().replace(/\s+/g,' ').trim(); }
+function invItems(){ const seen=new Set(), out=[];
+  S.catalog.forEach(it=>{ if(isRetired(it)) return; const k=invKey(it.name); if(!k||seen.has(k)) return; seen.add(k); out.push(k); });
+  return out.sort((a,b)=>a.localeCompare(b)); }
+function starterCamp(){ return {locs:STARTER_LOCS.map(([id,name])=>({id,name,items:[]})), stock:{}}; }
+function invRead(c){ return (S.inv&&S.inv.c&&S.inv.c[c])||starterCamp(); }
+function invW(c){ if(!S.inv||typeof S.inv!=='object') S.inv={c:{},log:[]}; S.inv.c=S.inv.c||{}; S.inv.log=S.inv.log||[];
+  if(!S.inv.c[c]) S.inv.c[c]=starterCamp(); const r=S.inv.c[c]; r.locs=r.locs||[]; r.stock=r.stock||{}; return r; }
+function invBase(){ try{ const b=JSON.parse(SY.baseJSON); return (b&&b.inv)||{}; }catch(e){ return {}; } }
+function baseStock(base,c){ return (base.c&&base.c[c]&&base.c[c].stock)||{}; }
+function hasNum(v){ return v!==undefined&&v!==null&&v!==''&&isFinite(v); }
+function invLog(){ return (S.inv&&Array.isArray(S.inv.log))?S.inv.log:[]; }
+function lastInv(c){ const l=invLog().filter(e=>e.c===c); return l.length?l[l.length-1]:null; }
+function newLocId(){ return 'l'+Date.now().toString(36)+Math.random().toString(36).slice(2,5); }
+/* which location each item sits in (first one wins), plus the items with no location */
+function invLayout(c){
+  const R=invRead(c), all=invItems(), have=new Set(all), placed=new Map();
+  const secs=R.locs.map(l=>{ const keys=(l.items||[]).filter(k=>have.has(k)&&!placed.has(k)); keys.forEach(k=>placed.set(k,l.id)); return {id:l.id,name:l.name,keys}; });
+  secs.push({id:'',name:'Not assigned to a location',keys:all.filter(k=>!placed.has(k)),un:true});
+  return {R,all,secs,placed};
+}
+function invCounts(c){ const R=invRead(c), all=invItems(), bs=baseStock(invBase(),c);
+  let n=0, ch=0; all.forEach(k=>{ if(hasNum(R.stock[k])) n++; });
+  const keys=new Set(Object.keys(R.stock).concat(Object.keys(bs)));
+  keys.forEach(k=>{ if(String(R.stock[k]??'')!==String(bs[k]??'')) ch++; });
+  return {n,of:all.length,ch}; }
+/* the log entries a push should add: every campus whose counts changed, and on a push
+   made from inventory mode, the campus being counted even if nothing changed */
+function invLogEntries(out,invPush,who){
+  const base=(()=>{try{return JSON.parse(SY.baseJSON).inv||{};}catch(e){return {};}})(), at=new Date().toISOString(), list=invItems(), res=[];
+  INV_CAMPS.forEach(c=>{
+    const cur=(out.inv&&out.inv.c&&out.inv.c[c]&&out.inv.c[c].stock)||{}, bs=baseStock(base,c);
+    let ch=0; new Set(Object.keys(cur).concat(Object.keys(bs))).forEach(k=>{ if(String(cur[k]??'')!==String(bs[k]??'')) ch++; });
+    if(ch||(invPush&&c===PREF.invC)) res.push({at,by:who||'',c,n:list.filter(k=>hasNum(cur[k])).length,of:list.length,ch});
+  });
+  return res;
+}
+function invOpt(R,sel){ return R.locs.map(l=>'<option value="'+esc(l.id)+'"'+(l.id===sel?' selected':'')+'>'+esc(l.name)+'</option>').join('')+'<option value=""'+(sel?'':' selected')+'>Not assigned</option>'; }
+function invRow(k,R,locId,bs){ const v=R.stock[k], chg=String(v??'')!==String(bs[k]??'');
+  return '<tr data-key="'+esc(k)+'"><td class="item">'+esc(k)+'</td>'
+    +'<td class="oh'+(chg?' chg':'')+'"><input type="number" inputmode="decimal" min="0" step="any" data-oh value="'+(hasNum(v)?esc(v):'')+'" aria-label="On hand: '+esc(k)+'"></td>'
+    +'<td class="mv"><select data-mv aria-label="Storage location for '+esc(k)+'">'+invOpt(R,locId)+'</select></td></tr>'; }
+let invEdit=false, invQ='', locDelArm=null;
+function renderInv(){
+  renderInvPanel();
+  const v=document.getElementById('invView');
+  if(!S.catalog.length&&!LIVE&&!liveChecked){ v.innerHTML='<div class="ticket"><div class="empty">Loading the live index…</div></div>'; return; }
+  if(!S.catalog.length){ v.innerHTML='<div class="ticket"><div class="empty">'+(liveErr||!STORE?'Couldn’t load the live version, and this device has no saved copy yet. Check the connection and reload the page.':'The index is empty. Add items on the Index tab in Prep sheets and they appear here.')+'</div></div>'; return; }
+  const c=PREF.invC, L=invLayout(c), R=L.R, bs=baseStock(invBase(),c);
+  if(PREF.invLoc!=='all'&&PREF.invLoc!=='_un'&&!R.locs.some(l=>l.id===PREF.invLoc)) PREF.invLoc='all';
+  const cnt=keys=>keys.filter(k=>hasNum(R.stock[k])).length;
+  const chip=(id,label,keys,cls)=>'<button type="button" class="lchip'+(cls?' '+cls:'')+'" data-lf="'+esc(id)+'" aria-pressed="'+(PREF.invLoc===id)+'">'+esc(label)+'<small>'+cnt(keys)+'/'+keys.length+'</small></button>';
+  const un=L.secs[L.secs.length-1];
+  let h='<div class="invbar"><div class="vgrp"><span class="lbl">Campus</span><div class="seg" role="radiogroup" aria-label="Campus">'
+    +INV_CAMPS.map(x=>'<button type="button" role="radio" data-ic="'+x+'" aria-checked="'+(x===c)+'"'+(x==='SM'?' class="smopt"':'')+'>'+(x==='SM'?'South Mtn':CAMP_NAME[x])+'</button>').join('')+'</div></div>'
+    +'<input type="search" id="invq" placeholder="Find an item" value="'+esc(invQ)+'" aria-label="Find an item"></div>';
+  h+='<div class="locbar"><div class="lochead"><span class="lbl">Storage locations · '+esc(CAMP_NAME[c])+'</span><button type="button" class="btn small" id="locEdit" aria-expanded="'+invEdit+'">'+(invEdit?'Done editing':'Edit locations')+'</button></div>'
+    +'<div class="lchips">'+chip('all','All',L.all)+L.secs.filter(s=>!s.un).map(s=>chip(s.id,s.name,s.keys)).join('')+(un.keys.length?chip('_un','Not assigned',un.keys,'un'):'')+'</div>';
+  if(invEdit){
+    h+='<div class="locedit">'+(R.locs.length?R.locs.map((l,i)=>{ const s=L.secs[i];
+        return '<div class="lerow" data-lid="'+esc(l.id)+'"><input type="text" data-lname value="'+esc(l.name)+'" aria-label="Location name" maxlength="40">'
+          +'<span class="n">'+s.keys.length+' item'+(s.keys.length===1?'':'s')+'</span>'
+          +'<button class="x" type="button" data-lup'+(i===0?' disabled':'')+' aria-label="Move '+esc(l.name)+' up">↑</button>'
+          +'<button class="x" type="button" data-ldown'+(i===R.locs.length-1?' disabled':'')+' aria-label="Move '+esc(l.name)+' down">↓</button>'
+          +'<button class="x'+(locDelArm===l.id?' armed':'')+'" type="button" data-ldel aria-label="Remove '+esc(l.name)+'">'+(locDelArm===l.id?'Remove?':'×')+'</button></div>'; }).join(''):'<span class="hint">No storage locations yet.</span>')
+      +'<form class="leadd" id="locAdd"><input type="text" id="locName" placeholder="New location, e.g. Reach-in fridge" maxlength="40" aria-label="New location name"><button class="btn small primary" type="submit">Add location</button>'
+      +'<span class="hint">Removing a location keeps its items and counts; they move to Not assigned.</span></form></div>';
+  }
+  h+='</div><div class="invsecs">';
+  L.secs.forEach(s=>{
+    if(PREF.invLoc!=='all'&&!(PREF.invLoc==='_un'?s.un:PREF.invLoc===s.id)) return;
+    if(s.un&&!s.keys.length) return;
+    h+='<section class="ticket invloc'+(s.un?' un':'')+'" data-sec="'+esc(s.id)+'"><div class="thead"><h3>'+esc(s.name)+'</h3><span class="meta" data-prog>'+(s.keys.length?cnt(s.keys)+' of '+s.keys.length+' counted':'Empty')+'</span>'
+      +(!s.un&&s.keys.length>1?'<button class="btn small quiet" type="button" data-sort>Sort A–Z</button>':'')+'</div>';
+    h+=s.keys.length?'<div class="tscroll"><table class="invtable"><thead><tr><th>Item</th><th class="oh">On hand</th><th class="mv">Location</th></tr></thead><tbody>'+s.keys.map(k=>invRow(k,R,s.id,bs)).join('')+'</tbody></table></div>'
+      :'<div class="empty">No items here yet. Add them below, or move them from another location.</div>';
+    if(!s.un) h+='<form class="addrow" data-add><input type="text" list="invList" placeholder="Add an item to '+esc(s.name)+'" aria-label="Add an item to '+esc(s.name)+'"><button class="btn small" type="submit">Add</button></form>';
+    h+='</section>';
+  });
+  h+='</div>';
+  v.innerHTML=h;
+  document.getElementById('invList').innerHTML=L.all.map(k=>'<option value="'+esc(k)+'"></option>').join('');
+  applyInvQuery();
+}
+function applyInvQuery(){
+  const q=invQ.toUpperCase();
+  document.querySelectorAll('#invView .invloc').forEach(sec=>{ let vis=0;
+    sec.querySelectorAll('tr[data-key]').forEach(tr=>{ const on=!q||tr.dataset.key.includes(q); tr.hidden=!on; if(on) vis++; });
+    sec.hidden=!!q&&!vis; });
+}
+function refreshInvBits(){
+  const c=PREF.invC, L=invLayout(c), R=L.R, cnt=keys=>keys.filter(k=>hasNum(R.stock[k])).length;
+  document.querySelectorAll('#invView .invloc').forEach(sec=>{ const s=L.secs.find(x=>x.id===sec.dataset.sec); const p=sec.querySelector('[data-prog]'); if(s&&p) p.textContent=s.keys.length?cnt(s.keys)+' of '+s.keys.length+' counted':'Empty'; });
+  document.querySelectorAll('#invView [data-lf]').forEach(b=>{ const id=b.dataset.lf, keys=id==='all'?L.all:id==='_un'?L.secs[L.secs.length-1].keys:(L.secs.find(s=>s.id===id)||{keys:[]}).keys; const sm=b.querySelector('small'); if(sm) sm.textContent=cnt(keys)+'/'+keys.length; });
+  renderInvPanel();
+}
+function moveInvItem(c,k,to){ const R=invW(c); R.locs.forEach(l=>{ l.items=(l.items||[]).filter(x=>x!==k); }); const l=R.locs.find(x=>x.id===to); if(l) l.items.push(k); }
+function bindInv(){
+  const v=document.getElementById('invView');
+  v.addEventListener('input',e=>{
+    const el=e.target;
+    if(el.id==='invq'){ invQ=el.value.trim(); applyInvQuery(); return; }
+    if(el.hasAttribute('data-oh')){ const k=el.closest('tr').dataset.key, R=invW(PREF.invC);
+      if(el.value===''||!isFinite(+el.value)) delete R.stock[k]; else R.stock[k]=Math.max(0,+el.value);
+      const bs=baseStock(invBase(),PREF.invC); el.parentNode.classList.toggle('chg',String(R.stock[k]??'')!==String(bs[k]??''));
+      save(); refreshInvBits(); }
+  });
+  v.addEventListener('keydown',e=>{ if(e.key!=='Enter'||!e.target.hasAttribute('data-oh')) return; e.preventDefault();
+    const all=[...v.querySelectorAll('[data-oh]')].filter(x=>!x.closest('tr').hidden), i=all.indexOf(e.target); if(all[i+1]){ all[i+1].focus(); all[i+1].select(); } });
+  v.addEventListener('change',e=>{
+    const el=e.target;
+    if(el.hasAttribute('data-mv')){ const k=el.closest('tr').dataset.key, R=invW(PREF.invC); moveInvItem(PREF.invC,k,el.value);
+      const l=R.locs.find(x=>x.id===el.value); save(); renderInv(); status('Moved '+k+' to '+(l?l.name:'Not assigned')+'.'); return; }
+    if(el.hasAttribute('data-lname')){ const id=el.closest('[data-lid]').dataset.lid, l=invW(PREF.invC).locs.find(x=>x.id===id), nv=el.value.trim();
+      if(!l) return; if(!nv){ el.value=l.name; status('A location needs a name. Use × to remove it.',true); return; }
+      l.name=nv; save(); renderInv(); }
+  });
+  v.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.ic){ PREF.invC=b.dataset.ic; PREF.invLoc='all'; invEdit=false; locDelArm=null; savePref(); setHash(); renderInv(); renderSync(); return; }
+    if(b.dataset.lf){ PREF.invLoc=b.dataset.lf; savePref(); renderInv(); return; }
+    if(b.id==='locEdit'){ invEdit=!invEdit; locDelArm=null; renderInv(); if(invEdit){ const n=document.getElementById('locName'); if(n) n.focus(); } return; }
+    const lrow=b.closest('[data-lid]');
+    if(lrow){ const R=invW(PREF.invC), i=R.locs.findIndex(x=>x.id===lrow.dataset.lid); if(i<0) return;
+      if(b.hasAttribute('data-lup')&&i>0){ [R.locs[i-1],R.locs[i]]=[R.locs[i],R.locs[i-1]]; save(); renderInv(); }
+      else if(b.hasAttribute('data-ldown')&&i<R.locs.length-1){ [R.locs[i+1],R.locs[i]]=[R.locs[i],R.locs[i+1]]; save(); renderInv(); }
+      else if(b.hasAttribute('data-ldel')){ const l=R.locs[i];
+        if(locDelArm!==l.id){ locDelArm=l.id; renderInv(); setTimeout(()=>{ if(locDelArm===l.id){ locDelArm=null; if(PREF.inv) renderInv(); } },4000); return; }
+        locDelArm=null; R.locs.splice(i,1); if(PREF.invLoc===l.id) PREF.invLoc='all'; save(); renderInv(); status('Removed '+l.name+'. Its items are now under Not assigned, with their counts kept.'); }
+      return; }
+    if(b.hasAttribute('data-sort')){ const id=b.closest('[data-sec]').dataset.sec, l=invW(PREF.invC).locs.find(x=>x.id===id); if(l){ l.items.sort((a,c2)=>a.localeCompare(c2)); save(); renderInv(); } }
+  });
+  v.addEventListener('submit',e=>{
+    e.preventDefault(); const f=e.target;
+    if(f.id==='locAdd'){ const inp=document.getElementById('locName'), nv=inp.value.trim(); if(!nv){ inp.focus(); return; }
+      const R=invW(PREF.invC); if(R.locs.some(l=>l.name.toLowerCase()===nv.toLowerCase())){ status(nv+' is already a location.',true); return; }
+      R.locs.push({id:newLocId(),name:nv,items:[]}); save(); renderInv(); status('Added '+nv+'. Add items to it below.'); const n=document.getElementById('locName'); if(n) n.focus(); return; }
+    if(f.hasAttribute('data-add')){ const inp=f.querySelector('input'), k=invKey(inp.value), id=f.closest('[data-sec]').dataset.sec, c=PREF.invC;
+      if(!k) return; if(!invItems().includes(k)){ status(k+' isn’t in the index. Add it on the Index tab in Prep sheets first.',true); return; }
+      const L=invLayout(c), from=L.placed.get(k), R=invW(c), to=R.locs.find(l=>l.id===id), was=from&&R.locs.find(l=>l.id===from);
+      if(from===id){ status(k+' is already in '+to.name+'.'); inp.value=''; return; }
+      moveInvItem(c,k,id); save(); renderInv(); status((was?'Moved '+k+' from '+was.name+' to ':'Added '+k+' to ')+to.name+'.');
+      const again=document.querySelector('#invView [data-sec="'+(window.CSS&&CSS.escape?CSS.escape(id):id)+'"] form[data-add] input'); if(again) again.focus(); }
+  });
+}
+function renderInvPanel(){
+  const el=document.getElementById('invPanel'); if(!PREF.inv){ el.innerHTML=''; return; }
+  const c=PREF.invC, last=lastInv(c), k=invCounts(c);
+  const who=e=>'<span data-by="'+esc(e.by||'')+'">'+esc(STORE&&STORE.kind==='claude'?'':(e.by||'Someone'))+'</span>';
+  let h='<div class="grp"><h2>Inventory</h2><div class="invcamp '+c+'">'+esc(CAMP_NAME[c])+'</div></div>';
+  h+=last?'<div class="lastinv"><span class="lbl">Last completed inventory</span><b>'+esc(fmtWhen(last.at))+'</b><span>by '+who(last)+' · '+last.n+' of '+last.of+' items counted</span></div>'
+    :'<div class="lastinv none"><span class="lbl">Last completed inventory</span><span>None logged yet for '+esc(CAMP_NAME[c])+'.</span></div>';
+  h+='<div class="othercamps">'+INV_CAMPS.filter(x=>x!==c).map(x=>{ const l=lastInv(x); return '<span>'+esc(CAMP_NAME[x])+': <b>'+(l?esc(fmtWhen(l.at)):'none yet')+'</b></span>'; }).join('')+'</div>';
+  h+='<div class="totals"><div class="tot"><b>'+k.n+'</b><span>of '+k.of+' counted</span></div><div class="tot'+(k.ch?' main':'')+'"><b>'+k.ch+'</b><span>Not pushed yet</span></div></div>';
+  h+='<div class="formula"><b>How it works</b><br>Type what’s on hand for each item (Enter jumps to the next one). Counts stay on this device until you press <b>Push live</b>, which saves them for everyone and adds this count to the log with your name. Counts carry over until someone changes them.</div>';
+  const log=invLog().filter(e=>e.c===c).slice(-15).reverse();
+  h+='<div class="grp"><span class="lbl">Inventory log · '+esc(CAMP_NAME[c])+'</span>'+(log.length?'<ol class="invlog">'+log.map(e=>'<li><span class="t">'+esc(fmtWhen(e.at))+'</span><span class="w">'+who(e)+'</span><span class="d">'+e.n+' of '+e.of+' counted · '+e.ch+' changed</span></li>').join('')+'</ol>':'<span class="hint">Nothing logged yet.</span>')+'</div>';
+  el.innerHTML=h;
+  if(STORE&&STORE.kind==='claude') el.querySelectorAll('[data-by]').forEach(async s=>{ s.textContent=(await nameOf(s.dataset.by))||'Someone'; });
+}
+
+/* ---------- merging a newer live version with your unpublished changes ----------
+   Kitchen staff push menus while someone else is counting inventory. When the two sets of
+   changes don't touch the same part (menus, index, each campus's inventory...), combine them
+   instead of asking anyone to choose. The inventory log keeps every entry from both sides. */
+function stable(v){ return JSON.stringify(v===undefined?null:v,(k,val)=>val&&typeof val==='object'&&!Array.isArray(val)?Object.keys(val).sort().reduce((a,x)=>(a[x]=val[x],a),{}):val); }
+function normShared(st){ const o=Object.assign(defaults(),toDated(JSON.parse(JSON.stringify(st||{})),(st&&st.week)||S.week)); o.counts=Object.assign(defaults().counts,o.counts); return sharedOf(o); }
+function pick3(b,m,l){ const sb=stable(b), sm=stable(m), sl=stable(l); if(sm===sb||sm===sl) return {v:l,from:'live'}; if(sl===sb) return {v:m,from:'mine'}; return null; }
+function mergeLogs(a,b){ const seen=new Set(), out=[]; (a||[]).concat(b||[]).forEach(e=>{ const id=e.at+'|'+e.by+'|'+e.c; if(!seen.has(id)){ seen.add(id); out.push(e); } });
+  return out.sort((x,y)=>String(x.at).localeCompare(String(y.at))).slice(-LOG_MAX); }
+function mergeShared(base,mine,live){
+  const out={}, fromLive=[];
+  for(const k of SHARED){ if(k==='inv') continue; const p=pick3(base[k],mine[k],live[k]); if(!p) return null; out[k]=p.v; if(p.from==='live'&&stable(p.v)!==stable(mine[k])) fromLive.push(k); }
+  const bi=base.inv||{}, mi=mine.inv||{}, li=live.inv||{};
+  if(mine.inv!==undefined||live.inv!==undefined){ const c={};
+    for(const cc of INV_CAMPS){ const b=(bi.c||{})[cc], m=(mi.c||{})[cc], l=(li.c||{})[cc], p=pick3(b,m,l); if(!p) return null; if(p.v!=null) c[cc]=p.v; if(p.from==='live'&&stable(p.v)!==stable(m)) fromLive.push('inv.'+cc); }
+    out.inv={c, log:mergeLogs(li.log,mi.log)};
+    if(stable(out.inv.log)!==stable(mi.log||[])) fromLive.push('inv.log'); }
+  return {state:out, fromLive};
+}
+function rebaseOnto(doc){
+  if(!doc||!doc.state) return false;
+  let base; try{ base=JSON.parse(SY.baseJSON); }catch(e){ return false; }
+  const live=normShared(doc.state), m=mergeShared(base,sharedOf(S),live); if(!m) return false;
+  SHARED.forEach(k=>{ if(m.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(m.state[k])); else if(OPTIONAL.includes(k)) delete S[k]; });
+  SY.baseV=doc.v; SY.baseJSON=JSON.stringify(live); LIVE=doc; conflict=null;
+  reindex(); buildCatalog(); fillPanel(); renderTabs();
+  /* redraw only if something on screen came from the other person, so nobody loses their place while typing */
+  const vis=PREF.inv?m.fromLive.some(k=>k==='catalog'||k==='inv.'+PREF.invC):m.fromLive.length>0;
+  if(vis) renderView(); else if(PREF.inv) renderInvPanel();
+  save();
+  return true;
+}
 
 /* ---------- PDF ---------- */
 function status(msg,err,fix){const s=document.getElementById('status'); s.textContent=msg; s.className='status'+(err?' err':'');
@@ -1017,15 +1285,21 @@ function applyPrefsUI(){
   document.querySelectorAll('[data-fc]').forEach(b=>b.setAttribute('aria-checked',String(b.dataset.fc===PREF.campus)));
   document.querySelectorAll('[data-fm]').forEach(b=>b.setAttribute('aria-pressed',String(PREF.meals.includes(b.dataset.fm))));
   document.getElementById('fView').checked=!!PREF.view;
-  document.body.classList.toggle('kv',!!PREF.view);
+  document.body.classList.toggle('kv',!!PREF.view&&!PREF.inv);
+  document.body.classList.toggle('invmode',!!PREF.inv);
+  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-checked',String((b.dataset.mode==='inv')===!!PREF.inv)));
+  document.getElementById('topText').textContent=PREF.inv?'Count what’s on hand at each campus, sorted by storage location. Items come from the index.':'Set headcounts, build each meal, export a printable prep sheet. Case counts come from the index.';
   renderKvSum(); renderLinkOut();
 }
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{ const on=b.dataset.mode==='inv'; if(on===!!PREF.inv) return;
+  PREF.inv=on; invEdit=false; locDelArm=null; prefChanged(); renderSync(); if(!on) renderInvPanel(); window.scrollTo(0,0); });
 function renderKvSum(){
   const el=document.getElementById('kvsum'); if(!PREF.view){el.innerHTML=''; return;}
   const T=tot(); el.innerHTML='<span><b>'+T.r+'</b> Ridge</span><span><b>'+T.s+'</b> Springs</span><span><b>'+T.rs+'</b> Ridge + Springs</span>'+(T.m?'<span class="smv"><b>'+T.m+'</b> South Mountain</span>':'')
     +'<span>GF: Ridge '+C('gfr')+' · Springs '+C('gfs')+(T.m?' · S. Mtn '+C('gfm'):'')+'</span><span class="wk">Week of '+esc(dayDate(0))+'</span>';
 }
 function hashTokens(){
+  if(PREF.inv) return 'inventory.'+INV_TOK[PREF.invC];
   const t=[S.tab==='INDEX'?(PREF.idxTab==='templates'?'templates':'index'):dk(S.tab).replace(/-/g,'')];
   if(PREF.campus!=='all') t.push(PREF.campus);
   if(PREF.meals.length<3) t.push(...PREF.meals);
@@ -1041,6 +1315,10 @@ function renderLinkOut(){ document.getElementById('linkOut').textContent=shareUR
 function readHash(){
   const raw=(location.hash||'').replace(/^#/,'').toLowerCase(); if(!raw) return false;
   const toks=raw.split(/[.,_~-]+/).filter(Boolean); if(!toks.length) return false;
+  if(toks.includes('inventory')||toks.includes('inv')){ PREF.inv=true;
+    toks.forEach(x=>{ if(x==='ridge') PREF.invC='RIDGE'; else if(x==='springs') PREF.invC='SPRINGS'; else if(x==='sm'||x==='southmountain'||x==='mountain') PREF.invC='SM'; });
+    return true; }
+  PREF.inv=false;
   const meals=[]; let campus='all', view=false, tab=null;
   toks.forEach(x=>{
     const di=DAY_TOK.indexOf(x.slice(0,3));
@@ -1062,6 +1340,7 @@ function readHash(){
 }
 function setHash(){ const h='#'+hashTokens(); try{ if(location.hash!==h) history.replaceState(null,'',h); }catch(e){} renderLinkOut(); }
 function prefChanged(){ savePref(); applyPrefsUI(); setHash(); renderView(); }
+bindInv();
 document.querySelectorAll('[data-fc]').forEach(b=>b.onclick=()=>{PREF.campus=b.dataset.fc; prefChanged();});
 document.querySelectorAll('[data-fm]').forEach(b=>b.onclick=()=>{const m=b.dataset.fm; const on=PREF.meals.includes(m);
   if(on&&PREF.meals.length===1){status('Keep at least one meal showing.',true); return;}
@@ -1082,7 +1361,7 @@ async function nameOf(by){ if(!by) return ''; if(!STORE||!STORE.user) return by;
   try{const ps=await STORE.user.profiles([by]); byNames[by]=(ps[by]&&ps[by].name)||'';}catch(e){byNames[by]='';} return byNames[by]; }
 function applyLive(doc,msg){
   const st=toDated(JSON.parse(JSON.stringify(doc.state||{})),(doc.state&&doc.state.week)||S.week);
-  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; else if(k==='templates') delete S.templates; });
+  SHARED.forEach(k=>{ if(st[k]!==undefined) S[k]=st[k]; else if(OPTIONAL.includes(k)) delete S[k]; });
   S.counts=Object.assign(defaults().counts,S.counts);
   SY.baseV=doc.v; SY.baseJSON=sharedJSON(); conflict=null; LIVE=doc;
   reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); renderKvSum(); save();
@@ -1093,20 +1372,34 @@ function onLive(doc){
   if(LIVE){
     if(LIVE.v===SY.baseV){ if(!isDirty()) conflict=null; }
     else if(!isDirty()) applyLive(LIVE, SY.baseV?'Updated to the newest live version.':'');
-    else conflict=LIVE;
+    else if(!rebaseOnto(LIVE)) conflict=LIVE;
   }
   renderSync();
 }
-async function pushLive(force,fromAuto){
+/* named: the name form was just confirmed. retried: this is the second try after merging in a newer version. */
+async function pushLive(force,fromAuto,named,retried){
   if(!STORE||!STORE.canWrite||pushing) return;
-  if(!isDirty()&&!force&&LIVE){status('Nothing new to push. This is already the live version.'); return;}
-  if(STORE.kind==='remote'&&!PREF.by&&!PREF.nameAsked&&!fromAuto){ renderSync('name'); return; }
+  const invPush=!!PREF.inv&&!fromAuto;
+  if(!isDirty()&&!force&&LIVE&&!invPush){status('Nothing new to push. This is already the live version.'); return;}
+  if(STORE.kind==='remote'&&!fromAuto&&!named){
+    /* inventory is logged under a name, and a kitchen tablet is shared, so confirm who is counting every time */
+    if(invPush||(!PREF.by&&!PREF.nameAsked)){ renderSync('name'); const n=document.getElementById('byIn'); if(n) n.focus(); return; } }
+  if(invPush&&STORE.kind==='remote'&&!PREF.by){ renderSync('name'); status('Add your name so the inventory log shows who did this count.',true); return; }
   pushing=true; renderSync();
   try{
-    const res=await STORE.push(sharedOf(S), SY.baseV, !!force);
-    if(res.conflict){ conflict=res.live||LIVE; if(res.live&&res.live.v) LIVE=res.live; if(fromAuto){PREF.auto=false; savePref();} status(fromAuto?'Automatic publishing paused: someone else published a newer version.':'Someone published a newer version while you were editing.',true); }
+    const out=sharedOf(JSON.parse(JSON.stringify(S)));
+    const entries=invLogEntries(out,invPush,STORE.kind==='claude'?STORE.uid:PREF.by);
+    if(entries.length){ out.inv=out.inv||{c:{},log:[]}; out.inv.c=out.inv.c||{}; out.inv.log=(out.inv.log||[]).concat(entries).slice(-LOG_MAX); }
+    const res=await STORE.push(out, SY.baseV, !!force);
+    if(res.conflict&&!retried&&!force&&res.live&&rebaseOnto(res.live)){ pushing=false; return pushLive(force,fromAuto,true,true); }
+    if(res.conflict){ conflict=res.live||LIVE; if(res.live&&res.live.v) LIVE=res.live; if(fromAuto){PREF.auto=false; savePref();} status(fromAuto?'Automatic publishing paused: someone else published a newer version.':'Someone published a newer version while you were editing, and you both changed the same thing.',true); }
     else if(res.busy){ status('Someone else is publishing right now. Try again in a few seconds.',true); }
-    else { SY.baseV=res.v; SY.baseJSON=sharedJSON(); LIVE={v:res.v,at:res.at,by:res.by,state:sharedOf(JSON.parse(JSON.stringify(S)))}; conflict=null; save(); if(histOpen) loadHistory(); if(!fromAuto) status('Pushed live. Everyone now sees version '+res.v+'.'); }
+    else {
+      if(entries.length){ if(!S.inv) S.inv={c:{},log:[]}; S.inv.log=out.inv.log; }
+      SY.baseV=res.v; SY.baseJSON=sharedJSON(); LIVE={v:res.v,at:res.at,by:res.by,state:sharedOf(JSON.parse(JSON.stringify(S)))}; conflict=null; save(); if(histOpen) loadHistory();
+      if(PREF.inv) renderInv();
+      const logged=entries.map(e=>CAMP_NAME[e.c]);
+      if(!fromAuto) status((logged.length?'Inventory logged for '+logged.join(', ')+'. ':'')+'Pushed live. Everyone now sees version '+res.v+'.'+(retried?' A newer version from someone else was merged in first; nothing of theirs was lost.':'')); }
   }catch(e){
     const code=e&&e.code;
     if(code==='invalid_argument'&&STORE.kind==='claude'){ STORE.canWrite=false; status('You can view the live version but not publish to it. Ask the page owner for Contributor access.',true); }
@@ -1117,7 +1410,10 @@ async function pushLive(force,fromAuto){
 }
 function discard(){ if(LIVE&&LIVE.state) applyLive(LIVE,'Discarded your changes. Showing the live version.'); else if(STORE) STORE.fetchNow().then(d=>{ if(d&&d.v) applyLive(d,'Discarded your changes. Showing the live version.'); }); }
 function loadDraft(p,label){
-  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); else if(k==='templates') delete S.templates; });
+  const keepLog=invLog();
+  SHARED.forEach(k=>{ if(p.state[k]!==undefined) S[k]=JSON.parse(JSON.stringify(p.state[k])); else if(OPTIONAL.includes(k)) delete S[k]; });
+  /* rolling back menus or counts never erases the record of who did inventory */
+  if(keepLog.length){ if(!S.inv) S.inv={c:{},log:[]}; S.inv.log=mergeLogs(S.inv.log,keepLog); }
   S.counts=Object.assign(defaults().counts,S.counts);
   reindex(); fillPanel(); buildCatalog(); renderTabs(); renderView(); save();
   status('Loaded '+label+' as your draft. Push live to make it the live version again.');
@@ -1135,20 +1431,24 @@ async function renderSync(mode){
     text='A newer live version (v'+conflict.v+(who?' by '+esc(who):'')+(conflict.at?', '+fmtWhen(conflict.at):'')+') was published while you had unpublished changes.';
     btns='<button class="btn small" type="button" data-sa="load">Load the live version</button>'+(STORE.canWrite?'<button class="btn small primary" type="button" data-sa="force">'+(armForce?'Click again to replace it':'Push mine anyway')+'</button>':''); }
   else if(dirty){ state='dirty';
-    text=STORE.canWrite?'You have unpublished changes. Only you see them until you push live.':'You have changes on this device. You can’t publish to the live version.';
+    text=STORE.canWrite?(PREF.inv?'You have counts or changes that aren’t saved yet. Push live to save them and log this inventory for '+esc(CAMP_NAME[PREF.invC])+'.':'You have unpublished changes. Only you see them until you push live.'):'You have changes on this device. You can’t publish to the live version.';
     btns=(STORE.canWrite?'<button class="btn small primary" type="button" data-sa="push">Push live</button>':'')+(LIVE?'<button class="btn small quiet" type="button" data-sa="discard">'+(armDiscard?'Click again to discard':'Discard changes')+'</button>':''); }
   else if(LIVE){ state='live'; const who=await nameOf(LIVE.by);
-    text='Live version '+LIVE.v+(who?' · published by '+esc(who):'')+(LIVE.at?' · '+fmtWhen(LIVE.at):'')+'. Everyone sees this.'; }
+    text='Live version '+LIVE.v+(who?' · published by '+esc(who):'')+(LIVE.at?' · '+fmtWhen(LIVE.at):'')+'. Everyone sees this.'
+      +(PREF.inv&&STORE.canWrite?' Nothing changed? Push live anyway to log a completed inventory for '+esc(CAMP_NAME[PREF.invC])+'.':'');
+    if(PREF.inv&&STORE.canWrite) btns='<button class="btn small primary" type="button" data-sa="push">Push live</button>'; }
   else { state='empty'; text=STORE.canWrite?'Nothing has been pushed live yet. Push live to share this version with everyone.':'Nothing has been published yet.';
     if(STORE.canWrite) btns='<button class="btn small primary" type="button" data-sa="push">Push live</button>'; }
-  if(STORE&&STORE.canWrite&&!pushing&&!conflict){
+  if(STORE&&STORE.canWrite&&!pushing&&!conflict&&!PREF.inv){
     btns+='<label class="switch autosw" title="Publish each change a couple of seconds after you make it"><input type="checkbox" data-sa="auto"'+(PREF.auto?' checked':'')+'><span class="track" aria-hidden="true"></span><span class="swl">Publish as I edit</span></label>';
   }
   if(STORE&&STORE.history&&LIVE) btns+='<button class="btn small quiet" type="button" data-sa="hist" aria-expanded="'+histOpen+'">Version history</button>';
   else if(STORE&&STORE.previous&&LIVE&&STORE.canWrite) btns+='<button class="btn small quiet" type="button" data-sa="prev">Undo last push</button>';
   if(STORE&&STORE.kind==='remote'&&(PREF.by||PREF.nameAsked)&&!pushing) btns+='<button class="linkbtn" type="button" data-sa="who">'+(PREF.by?'Editing as '+esc(PREF.by):'Add your name')+'</button>';
   if(syncMode==='name'){
-    btns='<form class="pinf" id="namef"><label for="byIn">Your name, shown in version history</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="name" maxlength="60"><button class="btn small primary" type="submit">Push live</button><button class="btn small quiet" type="button" id="nameSkip">Push without a name</button></form>';
+    btns=PREF.inv
+      ?'<form class="pinf" id="namef"><label for="byIn">Who did this inventory?</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="name" maxlength="60" required placeholder="Name or initials"><button class="btn small primary" type="submit">Push live &amp; log</button><button class="btn small quiet" type="button" id="nameCancel">Cancel</button></form>'
+      :'<form class="pinf" id="namef"><label for="byIn">Your name, shown in version history</label><input type="text" id="byIn" value="'+esc(PREF.by)+'" autocomplete="name" maxlength="60"><button class="btn small primary" type="submit">Push live</button><button class="btn small quiet" type="button" id="nameSkip">Push without a name</button></form>';
   }
   bar.dataset.state=state; tx.innerHTML=text; act.innerHTML=btns;
   const bi=document.getElementById('byIn'); if(bi&&typedVal!==null){ bi.value=typedVal; if(typedFocus) bi.focus(); }
@@ -1165,8 +1465,11 @@ async function renderSync(mode){
     };
   });
   const nf=document.getElementById('namef');
-  if(nf){ nf.onsubmit=e=>{e.preventDefault(); syncMode=null; PREF.by=document.getElementById('byIn').value.trim(); PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();};
-    document.getElementById('nameSkip').onclick=()=>{syncMode=null; PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false); else renderSync();}; }
+  if(nf){ nf.onsubmit=e=>{e.preventDefault(); const nv=document.getElementById('byIn').value.trim();
+      if(PREF.inv&&!nv){ status('Add your name or initials so the inventory log shows who did this count.',true); document.getElementById('byIn').focus(); return; }
+      syncMode=null; PREF.by=nv; PREF.nameAsked=true; savePref(); if(PREF.inv||isDirty()||!LIVE) pushLive(false,false,true); else renderSync();};
+    const sk=document.getElementById('nameSkip'); if(sk) sk.onclick=()=>{syncMode=null; PREF.nameAsked=true; savePref(); if(isDirty()||!LIVE) pushLive(false,false,true); else renderSync();};
+    const cn=document.getElementById('nameCancel'); if(cn) cn.onclick=()=>{syncMode=null; renderSync();}; }
 }
 
 /* ---------- version history ---------- */
@@ -1198,7 +1501,7 @@ async function claudeStore(){
   let uid=null; try{uid=user?await user.id():null;}catch(e){}
   let canW=null; try{canW=user&&user.can?await user.can('data.write'):null;}catch(e){}
   const ref=db.doc('live/state'), prevRef=db.doc('live/previous'), tabId=Math.random().toString(36).slice(2);
-  const st={kind:'claude', user, canWrite:canW!==false,
+  const st={kind:'claude', user, uid, canWrite:canW!==false,
     fetchNow:async()=>{const s=await ref.get(); return s.exists?s.data():null;},
     previous:async()=>{const s=await prevRef.get(); return s.exists?s.data():null;},
     push:async(state,baseV,force)=>{
