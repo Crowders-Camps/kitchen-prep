@@ -12,6 +12,8 @@
  *   BRANCH         live-data          (kept separate so saves don't rebuild the website)
  *   DATA_PATH      data/live.json
  *   ALLOWED_ORIGIN https://crowders-camps.github.io   (comma-separate several; add your own domain later)
+ *   SAVE_KEY       (Secret)  the save key staff type once per device. When set, reading and saving the
+ *                  live version need it (security audit Nov 11, item 1). Not set = open, as before.
  */
 
 const MAX_BODY = 900 * 1024;          // GitHub's contents API tops out near 1 MB
@@ -26,7 +28,7 @@ export default {
     const cors = {
       'Access-Control-Allow-Origin': okOrigin && origin ? origin : (allowed[0] || '*'),
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-Save-Key',
       'Access-Control-Max-Age': '86400',
       'Vary': 'Origin'
     };
@@ -59,6 +61,15 @@ export default {
     // Reading is open (the live version is public anyway); saving only from your site.
     if (!okOrigin && (origin || request.method !== 'GET')) return json({ error: 'origin_not_allowed' }, 403);
 
+    // Save key: anything past this point (read, history, save) needs it once SAVE_KEY is set.
+    if (env.SAVE_KEY) {
+      const ip = request.headers.get('CF-Connecting-IP') || 'anon';
+      if (!keyTriesOk(ip)) return json({ error: 'busy' }, 429);
+      const given = request.headers.get('X-Save-Key') || '';
+      if (!given) return json({ error: 'key_needed' }, 401);
+      if (!(await sameKey(given, env.SAVE_KEY))) { keyMiss(ip); return json({ error: 'key_wrong' }, 401); }
+    }
+
     const gh = github(env);
     const url = new URL(request.url);
     try {
@@ -90,7 +101,7 @@ export default {
         if (curV !== Number(body.base || 0) && !body.force) {
           return json({ error: 'conflict', live: cur ? cur.doc : null });
         }
-        const by = String(body.by || '').replace(/[\r\n]+/g, ' ').trim().slice(0, 60);
+        const by = shortName(body.by);
         const doc = { v: curV + 1, at: new Date().toISOString(), by, state: body.state };
         const message = 'v' + doc.v + ': ' + (by || 'Someone') + ' pushed live';
         const res = await gh.write(doc, cur ? cur.sha : null, message);
@@ -124,6 +135,40 @@ function publicMenu(doc) {
     mt[k] = o;
   });
   return { v: doc.v, at: doc.at, state: { week: st.week, menus, serve: st.serve || {}, off: st.off || {}, mt, catalog } };
+}
+
+// Names on public-ish screens: first name + last initial ("Pat Smith" -> "Pat S."). Old saves are shortened too.
+function shortName(raw) {
+  const words = String(raw || '').replace(/[\r\n]+/g, ' ').trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return '';
+  const first = words[0].slice(0, 30);
+  if (words.length === 1) return first;
+  const last = words[words.length - 1].replace(/[^\p{L}]/gu, '');
+  return last ? first + ' ' + last[0].toUpperCase() + '.' : first;
+}
+
+// Compare keys without leaking how much matched (hash both, then compare every byte).
+async function sameKey(a, b) {
+  const enc = new TextEncoder();
+  const [x, y] = await Promise.all([crypto.subtle.digest('SHA-256', enc.encode(a)), crypto.subtle.digest('SHA-256', enc.encode(b))]);
+  const u = new Uint8Array(x), v = new Uint8Array(y);
+  let diff = 0;
+  for (let i = 0; i < u.length; i++) diff |= u[i] ^ v[i];
+  return diff === 0;
+}
+
+// Wrong keys: 10 per 10 minutes per visitor, best effort (memory resets when the worker restarts).
+const KEY_MISSES = 10;
+const misses = new Map();
+function keyTriesOk(ip) {
+  const now = Date.now();
+  const list = (misses.get(ip) || []).filter(t => now - t < 600000);
+  misses.set(ip, list);
+  return list.length < KEY_MISSES;
+}
+function keyMiss(ip) {
+  (misses.get(ip) || misses.set(ip, []).get(ip)).push(Date.now());
+  if (misses.size > 5000) misses.clear();
 }
 
 function rateOk(ip) {
@@ -196,7 +241,7 @@ function github(env) {
       return list.map(c => {
         const msg = (c.commit && c.commit.message) || '';
         const m = msg.match(/^v(\d+):\s*(.*?)\s+pushed live/);
-        return { sha: c.sha, v: m ? Number(m[1]) : null, by: m ? (m[2] === 'Someone' ? '' : m[2]) : '', at: c.commit && c.commit.committer && c.commit.committer.date, message: msg };
+        return { sha: c.sha, v: m ? Number(m[1]) : null, by: m ? (m[2] === 'Someone' ? '' : shortName(m[2])) : '', at: c.commit && c.commit.committer && c.commit.committer.date, message: msg };
       });
     }
   };

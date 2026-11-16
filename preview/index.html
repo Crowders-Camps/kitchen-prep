@@ -1403,6 +1403,7 @@ async function pushLive(force,fromAuto,named,retried){
   }catch(e){
     const code=e&&e.code;
     if(code==='invalid_argument'&&STORE.kind==='claude'){ STORE.canWrite=false; status('You can view the live version but not publish to it. Ask the page owner for Contributor access.',true); }
+    else if(code==='key_needed'||code==='key_wrong') status('The save key is missing or wrong. Press Push live again and enter the kitchen save key (ask Nate).',true);
     else if(code==='busy') status('Too many pushes in a row. Wait a minute and push again.',true);
     else status('Could not push live ('+(code||'network error')+'). Your changes are still saved on this device.',true);
   }
@@ -1516,16 +1517,35 @@ async function claudeStore(){
     e=>{ STORE=null; liveChecked=true; renderSync(); });
   return st;
 }
+/* Save key (security audit Nov 11, item 1). The relay asks for it once the owner turns it on.
+   Typed once per device and kept on this device only; never in this file. */
+const SAVE_KEY_STORE='kp-save-key';
+let keyAskedOnLoad=false;
+function saveKey(){ try{ return localStorage.getItem(SAVE_KEY_STORE)||''; }catch(e){ return ''; } }
+function askSaveKey(wrong,fromUser){
+  if(!fromUser){ if(keyAskedOnLoad) return false; keyAskedOnLoad=true; }
+  const k=window.prompt((wrong?'That save key did not work. ':'')+'Enter the kitchen save key (ask Nate). You only need to do this once on this device.');
+  if(!k||!k.trim()) return false;
+  try{ localStorage.setItem(SAVE_KEY_STORE,k.trim()); }catch(e){}
+  return true;
+}
+/* fetch with the save key; if the relay says it is missing or wrong, ask once and try again */
+async function keyedFetch(url,opts,fromUser){
+  const go=()=>{ const k=saveKey(); const h=Object.assign({},(opts&&opts.headers)||{}); if(k) h['X-Save-Key']=k; return fetch(url,Object.assign({},opts||{},{headers:h})); };
+  let r=await go();
+  if(r.status===401){ const d=await r.clone().json().catch(()=>({})); if(askSaveKey(d.error==='key_wrong',fromUser)) r=await go(); }
+  return r;
+}
 /* Store: the GitHub save relay (worker/worker.js in the repo) */
 function remoteStore(){
   const base=REMOTE_URL.replace(/\/+$/,'');
-  const get=async(p)=>{const r=await fetch(base+p+(p.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'}); const d=await r.json().catch(()=>({})); if(!r.ok) throw {code:d.error||'http_'+r.status}; return d;};
+  const get=async(p,fromUser)=>{const r=await keyedFetch(base+p+(p.includes('?')?'&':'?')+'t='+Date.now(),{cache:'no-store'},fromUser); const d=await r.json().catch(()=>({})); if(!r.ok) throw {code:d.error||'http_'+r.status}; return d;};
   const st={kind:'remote', canWrite:true,
     fetchNow:async()=>{const d=await get('/live'); return d&&d.v?d:null;},
-    history:async()=>{const d=await get('/history'); return d.versions||[];},
-    version:async(sha)=>get('/version?sha='+encodeURIComponent(sha)),
+    history:async()=>{const d=await get('/history',true); return d.versions||[];},
+    version:async(sha)=>get('/version?sha='+encodeURIComponent(sha),true),
     push:async(state,baseV,force)=>{
-      const r=await fetch(base+'/live',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({by:PREF.by,base:baseV,force,state})});
+      const r=await keyedFetch(base+'/live',{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({by:PREF.by,base:baseV,force,state})},true);
       const d=await r.json().catch(()=>({}));
       if(d.error==='conflict') return {conflict:true, live:d.live};
       if(!r.ok||d.error) throw {code:d.error||'http_'+r.status};
