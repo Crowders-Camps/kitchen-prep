@@ -500,6 +500,44 @@ body.invmode #panel,body.invmode #prepMain,body.invmode .viewbar,body.invmode .k
   .switch .track{transition:background .15s} .switch .track::after{transition:transform .15s}
   .btn:active,.tab:active,.seg button:active,.lchip:active,button.chip:active,.x:active{transform:scale(.97)}
 }
+/* ---------- voice count (prototype, only drawn when the voice flag is on) ---------- */
+.vbtn{min-height:44px;padding-inline:16px;border-color:var(--ink)}
+.vbtn svg{flex:none}
+.vbtn[aria-pressed=true]{background:var(--flag-fill);border-color:var(--flag-fill);color:var(--flag-fill-fg)}
+.invloc .thead .vbtn+.btn{margin-left:0}
+.invloc.vlive{box-shadow:var(--shadow-md),0 0 0 3px var(--teal)}
+body.vopen{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 300px)}
+.vstrip{position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom,0px));width:min(720px,calc(100% - 24px));max-height:min(60vh,420px);overflow-y:auto;
+  background:var(--panel);color:var(--ink);border-radius:var(--r-lg);box-shadow:var(--shadow-md),0 0 0 2px var(--ink);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.vstrip p{margin:0}
+.vhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.vstate{display:inline-flex;align-items:center;gap:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:13px;color:var(--muted);min-width:0}
+.vstate.on{color:var(--ink)}
+.vdot{width:14px;height:14px;border-radius:50%;background:var(--line3);flex:none}
+.vstate.on .vdot{background:var(--coral);box-shadow:0 0 0 4px rgba(232,93,66,.3)}
+.vact{display:flex;gap:8px;margin-left:auto}
+.vact .btn{min-height:44px}
+.vstop{background:var(--flag-fill);border-color:var(--flag-fill);color:var(--flag-fill-fg)}
+.vstop:hover{background:var(--flag-fill);filter:brightness(.92)}
+.vheard{font-size:17px;font-weight:600;line-height:1.3;min-height:1.3em;overflow-wrap:anywhere}
+.vheard .lbl{margin-right:4px}
+.vint{color:var(--muted)}
+.vnote{font-size:14px;color:var(--ink2)}
+.verr{font-weight:700;color:var(--flag-fill-fg);background:var(--flag-fill);border-radius:var(--r-sm);padding:8px 12px}
+.vpend{display:flex;flex-direction:column;gap:6px;background:var(--soft);border-radius:var(--r-md);padding:10px 12px}
+.vq{font-weight:700}
+.vcands{display:flex;flex-wrap:wrap;gap:6px}
+.vcands .btn{min-height:44px}
+.vlog{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.vlog li{display:flex;align-items:baseline;gap:10px;padding:6px 2px;border-top:1px solid var(--line)}
+.vlog li:first-child{border-top:0;font-size:17px}
+.vk{font-weight:700;min-width:0;flex:1 1 auto}
+.vk small{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:6px}
+.varr{color:var(--muted)}
+.vlog b{font-weight:900;font-variant-numeric:tabular-nums;background:var(--yellow-300);color:var(--ink-900);border-radius:999px;padding:2px 12px}
+@media (max-width:640px){.vstrip{max-height:46vh;padding:12px 14px;gap:6px}.vlog li:nth-child(n+3){display:none}.vheard{font-size:16px}}
+@media (prefers-reduced-motion:no-preference){.vstate.on .vdot{animation:vpulse 1.4s ease-in-out infinite}}
+@keyframes vpulse{0%,100%{box-shadow:0 0 0 3px rgba(232,93,66,.35)}50%{box-shadow:0 0 0 8px rgba(232,93,66,.08)}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -1238,6 +1276,7 @@ function renderInv(){
     if(PREF.invLoc!=='all'&&!(PREF.invLoc==='_un'?s.un:PREF.invLoc===s.id)) return;
     if(s.un&&!s.keys.length) return;
     h+='<section class="ticket invloc'+(s.un?' un':'')+'" data-sec="'+esc(s.id)+'"><div class="thead"><h3>'+esc(s.name)+'</h3><span class="meta" data-prog>'+(s.keys.length?cnt(s.keys)+' of '+s.keys.length+' counted':'Empty')+'</span>'
+      +(voiceOn()&&s.keys.length?'<button class="btn small vbtn" type="button" data-voice aria-pressed="false">'+MIC+'<span>Voice count</span></button>':'')
       +(!s.un&&s.keys.length>1?'<button class="btn small quiet" type="button" data-sort>Sort A–Z</button>':'')+'</div>';
     h+=s.keys.length?'<div class="tscroll"><table class="invtable"><thead><tr><th>Item</th><th class="oh">On hand</th><th class="mv">Location</th></tr></thead><tbody>'+s.keys.map(k=>invRow(k,R,s.id,bs)).join('')+'</tbody></table></div>'
       :'<div class="empty">No items here yet. Add them below, or move them from another location.</div>';
@@ -1247,7 +1286,7 @@ function renderInv(){
   h+='</div>';
   v.innerHTML=h;
   document.getElementById('invList').innerHTML=L.all.map(k=>'<option value="'+esc(k)+'"></option>').join('');
-  applyInvQuery();
+  applyInvQuery(); voiceSync();
 }
 function applyInvQuery(){
   const q=invQ.toUpperCase();
@@ -1267,9 +1306,8 @@ function bindInv(){
   v.addEventListener('input',e=>{
     const el=e.target;
     if(el.id==='invq'){ invQ=el.value.trim(); applyInvQuery(); return; }
-    if(el.hasAttribute('data-oh')){ const k=el.closest('tr').dataset.key, R=invW(PREF.invC);
-      if(el.value===''||!isFinite(+el.value)) delete R.stock[k]; else R.stock[k]=Math.max(0,+el.value);
-      const bs=baseStock(invBase(),PREF.invC); el.parentNode.classList.toggle('chg',String(R.stock[k]??'')!==String(bs[k]??''));
+    if(el.hasAttribute('data-oh')){ const k=el.closest('tr').dataset.key;
+      el.parentNode.classList.toggle('chg',setOnHand(k,el.value));
       save(); refreshInvBits(); }
   });
   v.addEventListener('keydown',e=>{ if(e.key!=='Enter'||!e.target.hasAttribute('data-oh')) return; e.preventDefault();
@@ -1284,6 +1322,7 @@ function bindInv(){
   });
   v.addEventListener('click',e=>{
     const b=e.target.closest('button'); if(!b) return;
+    if(b.hasAttribute('data-voice')){ voiceToggle(b.closest('[data-sec]').dataset.sec); return; }
     if(b.dataset.ic){ PREF.invC=b.dataset.ic; PREF.invLoc='all'; invEdit=false; locDelArm=null; savePref(); setHash(); renderInv(); renderSync(); return; }
     if(b.dataset.lf){ PREF.invLoc=b.dataset.lf; savePref(); renderInv(); return; }
     if(b.id==='locEdit'){ invEdit=!invEdit; locDelArm=null; renderInv(); if(invEdit){ const n=document.getElementById('locName'); if(n) n.focus(); } return; }
@@ -1325,6 +1364,237 @@ function renderInvPanel(){
   el.innerHTML=h;
   if(STORE&&STORE.kind==='claude') el.querySelectorAll('[data-by]').forEach(async s=>{ s.textContent=(await nameOf(s.dataset.by))||'Someone'; });
 }
+
+/* ---------- voice count (prototype, behind a flag) ----------
+   Off unless the link has "voice" in its hash (#inventory.ridge.voice) or localStorage.kpVoice is "1",
+   and the browser has speech recognition. Speech is turned into text by the browser's own speech
+   service; this page sends no audio or transcript anywhere. Counts go through the same path as typing
+   in the On hand box, and nothing is pushed live by voice. */
+const VOICE={SR:window.SpeechRecognition||window.webkitSpeechRecognition||null, hash:false};
+function voiceOn(){ if(!VOICE.SR) return false; if(VOICE.hash) return true; try{ return localStorage.getItem('kpVoice')==='1'; }catch(e){ return false; } }
+const MIC='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8.5 21h7"/></svg>';
+
+/* --- pure helpers: numbers --- */
+const V_UNITS={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+const V_TENS={twenty:20,thirty:30,forty:40,fourty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+const V_ZERO=new Set(['zero','none','nothing','nil']);
+const V_FRAC={'1/2':.5,'1/4':.25,'3/4':.75,'½':.5,'¼':.25,'¾':.75};
+const V_FRAC_WHOLE=[['a half',.5],['half',.5],['one half',.5],['a quarter',.25],['quarter',.25],['one quarter',.25],['three quarters',.75]];
+const V_FRAC_TAIL=[['and a half',.5],['and one half',.5],['and half',.5],['and a quarter',.25],['and one quarter',.25],['and three quarters',.75]];
+const V_HOMO={to:'two',too:'two',for:'four',ate:'eight'};
+function vTokens(text){ return String(text||'').toLowerCase().replace(/[’']/g,'').match(/\d+\/\d+|\d+(?:\.\d+)?|[a-z]+|[½¼¾]/g)||[]; }
+function vInt(t){
+  if(!t.length) return null;
+  if(t.length===1&&/^\d+$/.test(t[0])) return +t[0];
+  if(t.length===1&&V_ZERO.has(t[0])) return 0;
+  let i=0, total=0, got=false;
+  if(t[0]==='a'&&t[1]==='hundred'){ total=100; i=2; got=true; }
+  else if(V_UNITS[t[0]]<=9&&t[1]==='hundred'){ total=V_UNITS[t[0]]*100; i=2; got=true; }
+  else if(/^[1-9]$/.test(t[0])&&t[1]==='hundred'){ total=+t[0]*100; i=2; got=true; }
+  if(got&&t[i]==='and'){ if(i+1>=t.length) return null; i++; }
+  if(i<t.length){
+    if(V_TENS[t[i]]){ let v=V_TENS[t[i]]; i++; if(i<t.length&&V_UNITS[t[i]]<=9){ v+=V_UNITS[t[i]]; i++; } total+=v; }
+    else if(V_UNITS[t[i]]){ total+=V_UNITS[t[i]]; i++; }
+    else return null;
+  }
+  return i===t.length?total:null;
+}
+/* a whole number phrase ("twenty one", "2 1/2", "three point five", "a half") -> number, or null */
+function parseNumberWords(input){
+  const t=Array.isArray(input)?input.slice():vTokens(input); if(!t.length) return null;
+  const s=t.join(' ');
+  if(t.length===1&&V_FRAC[t[0]]!=null) return V_FRAC[t[0]];
+  for(const [p,v] of V_FRAC_WHOLE) if(s===p) return v;
+  if(t.length===1&&/^\d+\.\d+$/.test(t[0])) return +t[0];
+  for(const [p,v] of V_FRAC_TAIL){ if(s.length>p.length&&s.endsWith(' '+p)){ const n=vInt(t.slice(0,t.length-p.split(' ').length)); return n==null?null:n+v; } }
+  if(t.length>1&&V_FRAC[t[t.length-1]]!=null){ let head=t.slice(0,-1); if(head.length>1&&head[head.length-1]==='and') head=head.slice(0,-1); const n=vInt(head); return n==null?null:n+V_FRAC[t[t.length-1]]; }
+  const pi=t.indexOf('point');
+  if(pi>=0){ const left=t.slice(0,pi), right=t.slice(pi+1); if(!right.length) return null;
+    const whole=left.length?vInt(left):0; if(whole==null) return null;
+    let d=''; for(const x of right){ if(/^\d+$/.test(x)) d+=x; else if(x==='zero'||x==='oh') d+='0'; else if(V_UNITS[x]<=9) d+=V_UNITS[x]; else return null; }
+    return whole+parseFloat('0.'+d); }
+  return vInt(t);
+}
+
+/* --- pure helpers: item names --- */
+const V_SYN={ounce:'oz',ounces:'oz',large:'lg',medium:'med',regular:'reg',barbecue:'bbq',barbeque:'bbq'};
+const V_STOP=new Set(['and','the','of','a','an']);
+const V_FILL=new Set(['um','uh','okay','ok','next','then','is','are','equals','have','has','we','there','i','got','theres']);
+function vSing(w){ if(w.length<4||/ss$/.test(w)) return w; if(/ies$/.test(w)) return w.slice(0,-3)+'y'; if(/oes$/.test(w)) return w.slice(0,-2); if(/s$/.test(w)) return w.slice(0,-1); return w; }
+/* tokens used to compare a spoken phrase with an index name: lower case, no punctuation, singular, number words as digits */
+function normTokens(text){
+  const raw=String(text||'').toLowerCase().replace(/[’']/g,'').replace(/[&+]/g,' and ').replace(/gluten[\s-]+free/g,'gf').replace(/bar\s*b\s*q(ue)?/g,'bbq').match(/\d+|[a-z]+/g)||[];
+  const out=[];
+  raw.forEach(w=>{ if(V_STOP.has(w)) return; if(V_SYN[w]) w=V_SYN[w];
+    if(V_UNITS[w]) w=String(V_UNITS[w]); else if(V_TENS[w]) w=String(V_TENS[w]); else if(w==='zero') w='0'; else if(!/^\d+$/.test(w)) w=vSing(w);
+    out.push(w); });
+  return out;
+}
+function vLev(a,b){ if(a===b) return 0; const m=a.length,n=b.length; if(!m) return n; if(!n) return m; let prev=[]; for(let j=0;j<=n;j++) prev[j]=j;
+  for(let i=1;i<=m;i++){ const cur=[i]; for(let j=1;j<=n;j++) cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1)); prev=cur; } return prev[n]; }
+function vTokSim(a,b){ if(a===b) return 1; if(/^\d+$/.test(a)||/^\d+$/.test(b)) return 0; const L=Math.max(a.length,b.length); if(L<5) return 0; const s=1-vLev(a,b)/L; return s>=.8?s:0; }
+/* how well a spoken phrase fits one item: p = share of spoken words found, r = share of the item's words covered */
+function vScore(h,it){
+  if(!h.length||!it.length) return {score:0,p:0,r:0};
+  const used=new Array(it.length).fill(false); let m=0;
+  h.forEach(w=>{ let bi=-1,bs=0; it.forEach((x,i)=>{ if(used[i]) return; const s=vTokSim(w,x); if(s>bs){bs=s;bi=i;} }); if(bi>=0){ used[bi]=true; m+=bs; } });
+  const p=m/h.length, r=m/it.length; return {score:p+r?2*p*r/(p+r):0,p,r};
+}
+const vNormCache=new Map();
+function vNorm(key){ let v=vNormCache.get(key); if(!v){ v=normTokens(key); vNormCache.set(key,v); } return v; }
+function vRank(h,keys){ return keys.map(k=>Object.assign({key:k},vScore(h,vNorm(k)))).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.key.length-b.key.length); }
+function vSure(list){
+  if(!list.length) return false; const a=list[0], b=list[1];
+  if(a.score>=.99) return !b||b.score<.99;
+  if(a.score>=.8&&(!b||a.score-b.score>=.15)) return true;
+  return a.p>=.999&&a.r>=.5&&list.filter(x=>x.p>=.999).length===1;
+}
+/* match a spoken item phrase: this location first, then the rest of the campus.
+   -> {key, score, confident, scope:'loc'|'campus'|null, candidates:[{key,score,inLoc}]} */
+function matchItem(phrase,locKeys,allKeys){
+  const h=Array.isArray(phrase)?phrase:normTokens(phrase), inLoc=new Set(locKeys||[]);
+  const loc=vRank(h,locKeys||[]), all=vRank(h,allKeys||[]);
+  const cand=[]; const add=x=>{ if(x&&x.score>=.34&&!cand.some(c=>c.key===x.key)) cand.push({key:x.key,score:+x.score.toFixed(3),inLoc:inLoc.has(x.key)}); };
+  const res=(x,confident,scope)=>({key:x?x.key:null,score:x?+x.score.toFixed(3):0,confident,scope,candidates:cand.slice(0,4)});
+  const outsideExact=all.find(x=>x.score>=.99&&!inLoc.has(x.key));
+  if(loc.length&&vSure(loc)&&!(loc[0].score<.99&&outsideExact)){ add(loc[0]); loc.slice(1,3).forEach(add); return res(loc[0],true,'loc'); }
+  if(outsideExact&&loc.length&&loc[0].score>=.5){ add(outsideExact); loc.slice(0,3).forEach(add); return res(outsideExact,false,null); }
+  if((!loc.length||loc[0].score<.5)&&vSure(all)){ add(all[0]); all.slice(1,3).forEach(add); return res(all[0],true,inLoc.has(all[0].key)?'loc':'campus'); }
+  loc.slice(0,3).forEach(add); all.slice(0,4).forEach(add);
+  const best=loc.length&&(!all.length||loc[0].score>=all[0].score-.02)?loc[0]:all[0];
+  return res(best||null,false,null);
+}
+/* split what was heard into item + count pairs.
+   -> {pairs:[{phrase,count,match}], rest:'words still waiting for a count', hold:bool, orphan:bool} */
+function parseUtterance(text,locKeys,allKeys,opts){
+  opts=opts||{}; allKeys=allKeys||locKeys||[];
+  const vocab=new Set(); allKeys.forEach(k=>vNorm(k).forEach(w=>vocab.add(w)));
+  let toks=vTokens(text).filter(w=>!(V_FILL.has(w)&&!vocab.has(w)));
+  const run=toks=>{
+    const n=toks.length, numAt={};
+    for(let b=1;b<n;b++) for(let c=b+1;c<=Math.min(n,b+7);c++){ const v=parseNumberWords(toks.slice(b,c)); if(v!=null) numAt[b+','+c]=v; }
+    const mcache={}; const m=(a,b)=>{ const id=a+','+b; if(!(id in mcache)){ const h=normTokens(toks.slice(a,b).join(' ')); mcache[id]=h.length?matchItem(h,locKeys,allKeys):null; } return mcache[id]; };
+    /* f[i]: best value of whole pairs covering toks[0..i) */
+    const f=new Array(n+1).fill(-Infinity), back=new Array(n+1).fill(null); f[0]=0;
+    for(let c=2;c<=n;c++) for(let b=1;b<c;b++){ const v=numAt[b+','+c]; if(v==null) continue;
+      for(let a=0;a<b;a++){ if(f[a]===-Infinity) continue; const mm=m(a,b); if(!mm) continue;
+        const val=f[a]+(mm.score-.3)+(mm.confident?.05:0)+.01*(c-b); if(val>f[c]){ f[c]=val; back[c]=[a,b,v]; } } }
+    let end=0, bestV=-Infinity;
+    for(let i=0;i<=n;i++){ if(f[i]===-Infinity) continue; const v=f[i]-.2*toks.slice(i).filter(w=>!V_STOP.has(w)).length; if(v>bestV){ bestV=v; end=i; } }
+    const pairs=[]; for(let i=end;i>0;){ const [a,b,v]=back[i]; pairs.unshift({phrase:toks.slice(a,b).join(' '),count:v,match:m(a,b),span:[a,i]}); i=a; }
+    return {pairs,restToks:toks.slice(end),toks};
+  };
+  let out=run(toks);
+  /* "chicken tenders for" at the very end: the speech engine wrote a number as a small word */
+  if(opts.final!==false&&out.restToks.length>=2&&V_HOMO[out.restToks[out.restToks.length-1]]){
+    const t2=toks.slice(0,-1).concat(V_HOMO[toks[toks.length-1]]), alt=run(t2), last=alt.pairs[alt.pairs.length-1];
+    if(!alt.restToks.length&&last&&last.match.score>=.6) out=alt; }
+  let hold=false;
+  /* "coke zero": the count word is really part of an item's name, so wait for the count */
+  const lp=out.pairs[out.pairs.length-1];
+  if(lp){ const tail=out.toks.slice(lp.span[0]), whole=normTokens(tail.join(' ')).join(' ');
+    if(allKeys.some(k=>vNorm(k).join(' ')===whole)){ out.pairs.pop(); out.restToks=tail; hold=true; } }
+  const orphan=out.restToks.length>0&&parseNumberWords(out.restToks)!=null&&!hold;
+  return {pairs:out.pairs.map(p=>({phrase:p.phrase,count:p.count,match:p.match})), rest:orphan?'':out.restToks.join(' '), hold, orphan};
+}
+
+/* --- listening + the "heard" strip --- */
+const VC={listening:false, sec:null, rec:null, interim:'', last:'', carry:'', carryAt:0, log:[], pend:[], hist:[], err:'', note:'', restarts:[], open:false, seq:0};
+function vLocKeys(){ const L=invLayout(PREF.invC), s=L.secs.find(x=>x.id===VC.sec); return {loc:s?s.keys:[], all:L.all, name:s?s.name:''}; }
+function vLocOf(k){ const L=invLayout(PREF.invC), s=L.secs.find(x=>x.keys.includes(k)); return s?s.name:''; }
+function vFmt(n){ return String(+(+n).toFixed(2)); }
+function setOnHand(k,val){ const R=invW(PREF.invC);
+  if(val===''||!isFinite(+val)) delete R.stock[k]; else R.stock[k]=Math.max(0,+val);
+  const bs=baseStock(invBase(),PREF.invC); return String(R.stock[k]??'')!==String(bs[k]??''); }
+/* a spoken count lands in the On hand box and fires the same input event as typing */
+function voiceFill(k,val){
+  const el=[...document.querySelectorAll('#invView tr[data-key] [data-oh]')].find(x=>x.closest('tr').dataset.key===k);
+  if(el){ el.value=val; el.dispatchEvent(new Event('input',{bubbles:true})); }
+  else { setOnHand(k,val); save(); refreshInvBits(); }
+}
+function voiceApply(k,count,phrase){
+  const R=invRead(PREF.invC), prev=hasNum(R.stock[k])?String(R.stock[k]):'', val=vFmt(Math.max(0,count)), id=++VC.seq;
+  voiceFill(k,val); VC.hist.push({id,k,prev,c:PREF.invC});
+  const where=vLocOf(k); VC.log.unshift({id,k,val,where:where&&where!==vLocKeys().name?where:''}); VC.log=VC.log.slice(0,6);
+}
+function voiceUndo(){ const h=VC.hist.pop(); if(!h) return; if(h.c===PREF.invC) voiceFill(h.k,h.prev); VC.log=VC.log.filter(x=>x.id!==h.id); VC.note='Undid '+h.k+'.'; renderVoice(); }
+function voiceHeard(text){
+  text=String(text||'').trim(); if(!text) return;
+  const S2=vLocKeys(); if(VC.carry&&Date.now()-VC.carryAt>9000) VC.carry='';
+  const full=(VC.carry?VC.carry+' ':'')+text; VC.last=full; VC.interim=''; VC.note='';
+  const res=parseUtterance(full,S2.loc,S2.all,{final:true});
+  res.pairs.forEach(p=>{ if(p.match&&p.match.confident) voiceApply(p.match.key,p.count,p.phrase);
+    else { VC.pend.unshift({id:++VC.seq,phrase:p.phrase,count:p.count,cands:(p.match&&p.match.candidates||[]).slice(0,3)}); VC.pend=VC.pend.slice(0,4); } });
+  VC.carry=res.rest; VC.carryAt=Date.now();
+  if(res.orphan) VC.note='Heard a count with no item. Say the item first, then the count.';
+  renderVoice();
+}
+const V_ERR={'not-allowed':'The microphone is blocked. Allow the mic for this site in your browser settings, then tap Voice count again.',
+  'service-not-allowed':'Speech recognition isn’t allowed in this browser. Try opening the tool in Safari or Chrome.',
+  'audio-capture':'No microphone was found on this device.',
+  'language-not-supported':'This browser’s speech service doesn’t support English (US).'};
+function voiceStart(sec){
+  VC.sec=sec; VC.err=''; VC.note=''; VC.open=true;
+  if(VC.listening){ voiceSync(); return; }
+  if(navigator.onLine===false){ VC.err='You’re offline. Voice count needs a connection for the speech service.'; voiceSync(); return; }
+  let rec; try{ rec=new VOICE.SR(); }catch(e){ VC.err='Speech recognition isn’t available in this browser.'; voiceSync(); return; }
+  rec.lang='en-US'; rec.continuous=true; rec.interimResults=true; rec.maxAlternatives=1;
+  rec.onresult=e=>{ if(VC.rec!==rec) return; let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){ const r=e.results[i]; if(r.isFinal) voiceHeard(r[0].transcript); else interim+=r[0].transcript; }
+    VC.interim=interim.trim(); VC.restarts=[]; renderVoice(); };
+  rec.onerror=e=>{ if(VC.rec!==rec) return; const code=e&&e.error;
+    if(code==='no-speech'||code==='aborted') return;
+    VC.err=V_ERR[code]||(code==='network'?(navigator.onLine===false?'You’re offline. Voice count needs a connection for the speech service.':'The speech service can’t be reached right now. Check the connection and try again.'):'Voice count stopped ('+(code||'error')+').');
+    VC.listening=false; voiceSync(); };
+  rec.onend=()=>{ if(VC.rec!==rec) return;
+    if(!VC.listening){ VC.rec=null; return; }
+    /* the engine stops by itself after a pause; keep going while we are still in listening mode */
+    const now=Date.now(); VC.restarts=VC.restarts.filter(t=>now-t<10000); VC.restarts.push(now);
+    if(VC.restarts.length>6){ VC.listening=false; VC.rec=null; VC.err='Voice count keeps stopping. Tap Voice count to try again.'; voiceSync(); return; }
+    setTimeout(()=>{ if(VC.rec!==rec||!VC.listening) return; try{ rec.start(); }catch(err){ VC.listening=false; VC.rec=null; VC.err='Voice count stopped. Tap Voice count to start again.'; voiceSync(); } },250); };
+  VC.rec=rec; VC.listening=true; VC.restarts=[];
+  try{ rec.start(); }catch(e){ VC.listening=false; VC.rec=null; VC.err='Voice count couldn’t start. Tap Voice count to try again.'; }
+  voiceSync();
+}
+function voiceStop(){ const rec=VC.rec; VC.listening=false; VC.interim=''; VC.carry=''; if(rec){ try{ rec.stop(); }catch(e){} } voiceSync(); }
+function voiceToggle(sec){ if(VC.listening&&VC.sec===sec) voiceStop(); else voiceStart(sec); }
+/* keep the buttons, the section highlight and the strip in step with the listening state */
+function voiceSync(){
+  if(!voiceOn()&&!VC.open) return;
+  if(voiceOn()&&!window.KPVoice) window.KPVoice={parseNumberWords,normTokens,matchItem,parseUtterance}; /* for tests */
+  if(VC.listening&&(!PREF.inv||![...document.querySelectorAll('#invView [data-sec]')].some(s=>s.dataset.sec===VC.sec))){ VC.listening=false; VC.interim=''; VC.carry=''; if(VC.rec){ try{ VC.rec.stop(); }catch(e){} } }
+  if(!PREF.inv){ VC.open=false; VC.pend=[]; }
+  document.querySelectorAll('#invView [data-voice]').forEach(b=>{ const on=VC.listening&&b.closest('[data-sec]').dataset.sec===VC.sec;
+    b.setAttribute('aria-pressed',String(on)); b.querySelector('span').textContent=on?'Stop':'Voice count'; b.closest('.invloc').classList.toggle('vlive',on); });
+  renderVoice();
+}
+function renderVoice(){
+  let el=document.getElementById('vstrip');
+  if(!VC.open){ if(el) el.hidden=true; document.body.classList.remove('vopen'); return; }
+  if(!el){ el=document.createElement('section'); el.id='vstrip'; el.className='vstrip'; el.setAttribute('aria-label','Voice count'); document.body.appendChild(el);
+    el.addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return;
+      if(b.dataset.va==='stop') voiceStop();
+      else if(b.dataset.va==='undo') voiceUndo();
+      else if(b.dataset.va==='close'){ VC.open=false; VC.pend=[]; VC.log=[]; VC.err=''; VC.note=''; VC.last=''; renderVoice(); }
+      else if(b.dataset.va==='pick'){ const p=VC.pend.find(x=>x.id===+b.dataset.pid); if(p){ VC.pend=VC.pend.filter(x=>x!==p); voiceApply(b.dataset.key,p.count,p.phrase); renderVoice(); } }
+      else if(b.dataset.va==='skip'){ VC.pend=VC.pend.filter(x=>x.id!==+b.dataset.pid); renderVoice(); } }); }
+  el.hidden=false; document.body.classList.add('vopen');
+  const name=vLocKeys().name;
+  let h='<div class="vhead"><span class="vstate'+(VC.listening?' on':'')+'"><span class="vdot" aria-hidden="true"></span>'+(VC.listening?'Listening · '+esc(name):'Not listening')+'</span>'
+    +'<span class="vact"><button type="button" class="btn small" data-va="undo"'+(VC.hist.length?'':' disabled')+'>Undo last</button>'
+    +(VC.listening?'<button type="button" class="btn small vstop" data-va="stop">Stop</button>':'<button type="button" class="btn small quiet" data-va="close">Close</button>')+'</span></div>';
+  if(VC.err) h+='<p class="verr" role="alert">'+esc(VC.err)+'</p>';
+  const heard=VC.interim||VC.last;
+  h+='<p class="vheard" id="vHeard">'+(heard?'<span class="lbl">Heard</span> <span'+(VC.interim?' class="vint"':'')+'>'+esc(heard)+'</span>':(VC.listening?'<span class="hint">Say an item, then its count. Like “chicken tenders four”.</span>':''))+'</p>';
+  if(VC.carry&&VC.listening) h+='<p class="vnote">Waiting for a count for “'+esc(VC.carry)+'”.</p>';
+  if(VC.note) h+='<p class="vnote">'+esc(VC.note)+'</p>';
+  VC.pend.forEach(p=>{ h+='<div class="vpend"><span class="vq">'+(p.cands.length?'Which item is “'+esc(p.phrase)+'”? Count '+esc(vFmt(p.count)):'No match for “'+esc(p.phrase)+'”')+'</span><span class="vcands">'
+    +p.cands.map(c=>'<button type="button" class="btn small" data-va="pick" data-pid="'+p.id+'" data-key="'+esc(c.key)+'">'+esc(c.key)+'</button>').join('')
+    +'<button type="button" class="btn small quiet" data-va="skip" data-pid="'+p.id+'">Skip</button></span></div>'; });
+  h+='<ul class="vlog" aria-live="polite">'+VC.log.map(x=>'<li><span class="vk">'+esc(x.k)+(x.where?' <small>'+esc(x.where)+'</small>':'')+'</span><span class="varr" aria-hidden="true">→</span><b>'+esc(x.val)+'</b></li>').join('')+'</ul>';
+  el.innerHTML=h;
+}
+document.addEventListener('visibilitychange',()=>{ if(document.hidden&&VC.listening) voiceStop(); });
 
 /* ---------- merging a newer live version with your unpublished changes ----------
    Kitchen staff push menus while someone else is counting inventory. When the two sets of
@@ -1444,7 +1714,7 @@ function applyPrefsUI(){
   document.body.classList.toggle('invmode',!!PREF.inv);
   document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-checked',String((b.dataset.mode==='inv')===!!PREF.inv)));
   document.getElementById('topText').textContent=PREF.inv?'Count what’s on hand at each campus, sorted by storage location. Items come from the index.':'Set headcounts, build each meal, export a printable prep sheet. Case counts come from the index.';
-  renderKvSum(); renderLinkOut();
+  renderKvSum(); renderLinkOut(); voiceSync();
 }
 document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{ const on=b.dataset.mode==='inv'; if(on===!!PREF.inv) return;
   PREF.inv=on; invEdit=false; locDelArm=null; prefChanged(); renderSync(); if(!on) renderInvPanel(); window.scrollTo(0,0); });
@@ -1454,7 +1724,7 @@ function renderKvSum(){
     +'<span>GF: Ridge '+C('gfr')+' · Springs '+C('gfs')+(T.m?' · S. Mtn '+C('gfm'):'')+'</span><span class="wk">Week of '+esc(dayDate(0))+'</span>';
 }
 function hashTokens(){
-  if(PREF.inv) return 'inventory.'+INV_TOK[PREF.invC];
+  if(PREF.inv) return 'inventory.'+INV_TOK[PREF.invC]+(VOICE.hash&&voiceOn()?'.voice':'');
   const t=[S.tab==='INDEX'?(PREF.idxTab==='templates'?'templates':'index'):dk(S.tab).replace(/-/g,'')];
   if(PREF.campus!=='all') t.push(PREF.campus);
   if(PREF.meals.length<3) t.push(...PREF.meals);
@@ -1470,6 +1740,7 @@ function renderLinkOut(){ document.getElementById('linkOut').textContent=shareUR
 function readHash(){
   const raw=(location.hash||'').replace(/^#/,'').toLowerCase(); if(!raw) return false;
   const toks=raw.split(/[.,_~-]+/).filter(Boolean); if(!toks.length) return false;
+  VOICE.hash=toks.includes('voice');
   if(toks.includes('inventory')||toks.includes('inv')){ PREF.inv=true;
     toks.forEach(x=>{ if(x==='ridge') PREF.invC='RIDGE'; else if(x==='springs') PREF.invC='SPRINGS'; else if(x==='sm'||x==='southmountain'||x==='mountain') PREF.invC='SM'; });
     return true; }
