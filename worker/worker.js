@@ -150,19 +150,26 @@ function github(env) {
     return r;
   };
   const encPath = path.split('/').map(encodeURIComponent).join('/');
+  // Say why GitHub refused (its message and rate-limit numbers), so an outage can be diagnosed from the error.
+  const fail = async (what, r) => {
+    let msg = '';
+    try { msg = String((await r.clone().json()).message || ''); } catch (e) {}
+    const rem = r.headers.get('x-ratelimit-remaining'), reset = r.headers.get('x-ratelimit-reset'), ra = r.headers.get('retry-after');
+    throw new Error('GitHub ' + what + ' ' + r.status + (msg ? ': ' + msg : '') + (rem !== null ? ' [left ' + rem + ', reset ' + reset + (ra ? ', retry ' + ra : '') + ']' : ''));
+  };
 
   return {
     async read(ref) {
       const r = await call('GET', '/contents/' + encPath + '?ref=' + encodeURIComponent(ref || branch));
       if (r.status === 404) return null;
-      if (!r.ok) throw new Error('GitHub read ' + r.status);
+      if (!r.ok) await fail('read', r);
       const j = await r.json();
       let text;
       if (j.content && j.encoding === 'base64') text = fromB64(j.content);
       else {
         // files over 1 MB come back without inline content
         const raw = await fetch(api + '/contents/' + encPath + '?ref=' + encodeURIComponent(ref || branch), { headers: { ...headers, 'Accept': 'application/vnd.github.raw+json' } });
-        if (!raw.ok) throw new Error('GitHub raw read ' + raw.status);
+        if (!raw.ok) await fail('raw read', raw);
         text = await raw.text();
       }
       return { sha: j.sha, doc: JSON.parse(text) };
@@ -172,26 +179,26 @@ function github(env) {
       if (sha) body.sha = sha;
       const r = await call('PUT', '/contents/' + encPath, body);
       if (r.status === 409 || r.status === 422) return 'conflict';
-      if (!r.ok) throw new Error('GitHub write ' + r.status);
+      if (!r.ok) await fail('write', r);
       return 'ok';
     },
     async ensureBranch() {
       const r = await call('GET', '/git/ref/heads/' + encodeURIComponent(branch));
       if (r.ok) return;
-      if (r.status !== 404) throw new Error('GitHub branch check ' + r.status);
+      if (r.status !== 404) await fail('branch check', r);
       const repo = await call('GET', '');
-      if (!repo.ok) throw new Error('GitHub repo ' + repo.status);
+      if (!repo.ok) await fail('repo', repo);
       const def = (await repo.json()).default_branch || 'main';
       const head = await call('GET', '/git/ref/heads/' + encodeURIComponent(def));
-      if (!head.ok) throw new Error('GitHub default branch ' + head.status);
+      if (!head.ok) await fail('default branch', head);
       const sha = (await head.json()).object.sha;
       const mk = await call('POST', '/git/refs', { ref: 'refs/heads/' + branch, sha });
-      if (!mk.ok && mk.status !== 422) throw new Error('GitHub create branch ' + mk.status);
+      if (!mk.ok && mk.status !== 422) await fail('create branch', mk);
     },
     async history() {
       const r = await call('GET', '/commits?sha=' + encodeURIComponent(branch) + '&path=' + encodeURIComponent(path) + '&per_page=40');
       if (r.status === 404 || r.status === 409) return [];
-      if (!r.ok) throw new Error('GitHub history ' + r.status);
+      if (!r.ok) await fail('history', r);
       const list = await r.json();
       return list.map(c => {
         const msg = (c.commit && c.commit.message) || '';
