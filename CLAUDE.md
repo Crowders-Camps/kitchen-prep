@@ -5,9 +5,21 @@ Crowders Camps' kitchen prep sheet tool and guest-facing menu. Static pages on G
 ## Layout
 - `index.html` — the live prep tool (crowders-camps.github.io/kitchen-prep/). One self-contained file: HTML, CSS, JS.
 - `preview/index.html` — next version of the prep tool. Change this first; copy over `index.html` only after the owner approves.
+- `manifest.webmanifest` + `icons/` — home screen app name, colours and icons (192, 512, maskable 512, Apple touch 180). No service worker: the tool has no offline mode.
 - `menu/index.html` — guest menu (Crowders Camps design system), embedded on Squarespace via iframe. Reads the relay's `/public` feed, falls back to `/live`.
 - `worker/worker.js` + `wrangler.jsonc` — the save relay (Cloudflare Worker `kitchen-prep`, https://kitchen-prep.nate-5ff.workers.dev). Cloudflare builds it from `main`.
 - Branch `live-data`, file `data/live.json` — every Push live is a commit here. Never edit by hand; use the site's Version history to roll back.
+
+## Look and assets
+- The prep tool follows the Crowders Camps Design System (parent brand): Aftika Soft, cream page, white cards, gradient header, camp colours (Ridge yellow, Springs lake blue, South Mountain green). Bright 500 fills carry ink text; dark action fills carry white text; text meets 4.5:1.
+- Dark mode follows the device (`prefers-color-scheme`, with the `data-theme` override). Dark coral text is `#F07A62` so it passes contrast on dark cards.
+- Fonts, logo and topo texture load from `/kitchen-prep/menu/assets/`. Keep asset paths absolute (`/kitchen-prep/...`) so the same file works from `/preview/` and the live page.
+- The printed PDFs (jsPDF) are not brand-styled; leave them plain.
+
+## Working on it
+- Make changes on a branch and open a pull request; the owner merges. The Cloudflare "Workers Builds" check fails instantly on every branch except `main` (branch builds are off). It runs for real after the merge.
+- Voice count for inventory lives in `preview/index.html` only and is off unless the link hash contains `voice` (e.g. `#inventory.ridge.voice`) or `localStorage.kpVoice === '1'`. It is a prototype awaiting real-phone testing; do not copy it to `index.html` until the owner says so.
+- When GitHub refuses the relay, the relay's error `detail` carries GitHub's message and rate-limit numbers. The relay's token never expires, which only works while the GitHub enterprise allows tokens with no expiry.
 
 ## Data model (live.json `state`)
 - `catalog` — the index: `{id, cbi, name, spc (servings per case), unit CS|PAN, size, meal, al[egg,dairy,gluten,sesame,soy], veg, vegan, retired}`.
